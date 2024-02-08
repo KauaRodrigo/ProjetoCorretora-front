@@ -1,22 +1,28 @@
 <template>
     <div id="container">
-        <form name="login">
+        <Form :actions="false" @submit="login" :formData="formData" name="login">
             <img src="/img/logo.png" alt="logo">
             <br><label for="e-mail">E-mail</label>
-            <br><input type="text" placeholder="Digite seu e-mail" name="e-mail">
+            <br><input type="email" v-model="formData.email" placeholder="Digite seu e-mail" name="e-mail">
             <br><label for="senha">Senha</label>
-            <br><input type="text" placeholder="Digite sua senha" name="senha">
+            <br><input type="password" v-model="formData.password" placeholder="Digite sua senha" name="senha">
             <div id="buttons">
-                <button id="entrar">Entrar</button>
+                <button type="submit" id="entrar">Entrar</button>
                 <button id="esqueci">Esqueci minha senha</button>
-            </div>
-        </form>
+            </div>            
+        </Form>
     </div>
 </template>
 <script setup lang="ts">
+import Form from '@/components/baseComponents/Form.vue';
+import { ref } from 'vue';
+const formData = ref({ email: '', password: '' })
+
+async function login() {
+    console.log('submit')
+}
 
 </script>
-
 <style scoped lang="scss">
     @import "../src/assets/__variables.scss";
     #container{
