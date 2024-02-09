@@ -1,26 +1,42 @@
 <template>
     <div id="container">
         <Form :actions="false" @submit="login" :formData="formData" name="login">
-            <img src="/img/logo.png" alt="logo">
-            <br><label for="e-mail">E-mail</label>
-            <br><input type="email" v-model="formData.email" placeholder="Digite seu e-mail" name="e-mail">
-            <br><label for="senha">Senha</label>
-            <br><input type="password" v-model="formData.password" placeholder="Digite sua senha" name="senha">
+            <img src="/img/logo 2.png" alt="logo">
+            <br><label for="email">E-mail</label>
+            <br><input type="email" v-model="formData.email" placeholder="Digite seu e-mail" name="email">
+            <div id="password-input">
+                <br><label for="password">Senha</label>
+                <br><input type="password" v-model="formData.password" placeholder="Digite sua senha" name="password" id="passwordInput">
+                <i class="bi bi-eye" id="passwordEye" @click="showPassword"></i>
+            </div>
             <div id="buttons">
-                <button type="submit" id="entrar">Entrar</button>
-                <button id="esqueci">Esqueci minha senha</button>
+                <button type="submit" id="login">Entrar</button>
+                <button id="forgot">Esqueci minha senha</button>
             </div>            
         </Form>
     </div>
 </template>
-<script setup lang="ts">
-import Form from '@/components/baseComponents/Form.vue';
-import { ref } from 'vue';
-const formData = ref({ email: '', password: '' })
 
-async function login() {
-    console.log('submit')
-}
+<script setup lang="ts">
+    import Form from '@/components/baseComponents/Form.vue';
+    import { ref } from 'vue';
+    const formData = ref({ email: '', password: '' })
+
+    async function login() {
+        console.log('submit')
+    }
+
+    function showPassword(){
+        var inputType = document.getElementById('passwordInput')
+        var eyeBtn = document.getElementById('passwordEye')
+        if(inputType.type === 'password'){
+            inputType.setAttribute('type', 'text')
+            eyeBtn.classList.replace('bi-eye', 'bi-eye-slash')
+        }else{
+            inputType.setAttribute('type', 'password')
+            eyeBtn.classList.replace('bi-eye-slash','bi-eye')
+        }
+    }
 
 </script>
 <style scoped lang="scss">
@@ -35,8 +51,8 @@ async function login() {
         margin: 0 auto 0 auto;
         background-color: #EEEEEE;
         border-radius: 25px;
-        width: 30vw;
-        padding: 4%;
+        width: 37vw;
+        padding: 6%;
         font-family: 'Inter', sans-serif;
         font-size: 80%;
         font-weight: bold;
@@ -44,35 +60,62 @@ async function login() {
     }
 
     form img{
-        width: 90%;
+        width: 76%;
         display: flex;
-        margin: 0 auto;
+        margin: 0 auto 30px auto;
     }
     
     form input{
         width: 100%;
-        height: 30px;
+        height: 50px;
         border: none;
         border-radius: 5px;
         box-sizing: border-box;
         padding: 0 2%;
+        font-size: 24px;
+    }
+
+    form input::placeholder{
+        font-size: 24px;
+    }
+
+    form input:focus-visible{
+        outline: none;
     }
 
     form label{
-        margin-top: 15px;
+        font-size: 28px;
+    }
+
+    #password-input{
+        position: relative;
+        margin-top: 20px;
+    }
+
+    #password-input i{
+        position: absolute;
+        right: 3%;
+        margin-top: 2%;
+        font-size: 25px;
+    }
+
+    #password-input input{
+        display: inline;
     }
 
     button{
         border: none;
-        margin-top: 30px;
+        margin-top: 60px;
+        font-size: 24px;
     }
 
-    #entrar{
+    #login{
         background-color: $secondary;
         box-sizing: border-box;
-        height: 30px;
-        padding: 0 5%;
+        padding: 0 3.5%;
         border-radius: 5px;
+        height: 50px;
+        transition: 0.1s;
     }
 
     #buttons{
@@ -80,14 +123,18 @@ async function login() {
         justify-content: space-between;
     }
 
-    @media screen and (max-width: 750px) {
+    .bi bi-eye{
+        color: black;
+    }
+
+    @media screen and (max-width: 780px) {
         form{
             width: 90vw;
         }
 
     }
 
-    @media screen and (min-width: 750px) and (max-width: 1025px) {
+    @media screen and (min-width: 780px) and (max-width: 1050px) {
         form{
             width: 50vw;
         }
