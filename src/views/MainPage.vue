@@ -16,6 +16,7 @@
     *{
         overflow-x: hidden;
     }
+    
     #container{
         width: 85vw;
         margin: 0 auto;

@@ -11,8 +11,7 @@
 </template>
 
 <script setup lang="ts">
-    import UpdateBox from './UpdateBox.vue';
-    var m:string = "awnodawiodaj"
+    import UpdateBox from './baseComponents/UpdateBox.vue';
 </script>
 
 <style scoped lang="scss">
