@@ -48,26 +48,25 @@
     }
 
     form{
-        margin: 0 auto 0 auto;
+        margin: 0 auto;
         background-color: #EEEEEE;
         border-radius: 25px;
-        width: 37vw;
-        padding: 6%;
-        font-family: 'Inter', sans-serif;
-        font-size: 80%;
+        width: 35vw;
+        max-width: 550px;
+        padding: 3% 4%;
         font-weight: bold;
         box-shadow: rgba(100, 100, 111, 0.1) 0px 0px 20px 0px;    
     }
 
     form img{
-        width: 76%;
+        width: 80%;
         display: flex;
         margin: 0 auto 30px auto;
     }
     
     form input{
         width: 100%;
-        height: 50px;
+        height: 45px;
         border: none;
         border-radius: 5px;
         box-sizing: border-box;
@@ -76,7 +75,7 @@
     }
 
     form input::placeholder{
-        font-size: 24px;
+        font-size: 19px;
     }
 
     form input:focus-visible{
@@ -84,18 +83,17 @@
     }
 
     form label{
-        font-size: 28px;
+        font-size: 21px;
     }
 
     #password-input{
         position: relative;
-        margin-top: 20px;
     }
 
     #password-input i{
         position: absolute;
         right: 3%;
-        margin-top: 2%;
+        margin-top: 1.5%;
         font-size: 25px;
     }
 
@@ -105,16 +103,16 @@
 
     button{
         border: none;
-        margin-top: 60px;
-        font-size: 24px;
+        margin-top: 40px;
+        font-size: 19px;
     }
 
     #login{
         background-color: $secondary;
         box-sizing: border-box;
-        padding: 0 3.5%;
+        padding: 0 2.5%;
         border-radius: 5px;
-        height: 50px;
+        height: 45px;
         transition: 0.1s;
     }
 
@@ -130,6 +128,7 @@
     @media screen and (max-width: 780px) {
         form{
             width: 90vw;
+            padding: 4%;
         }
 
     }
