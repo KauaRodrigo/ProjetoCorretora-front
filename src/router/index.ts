@@ -1,5 +1,7 @@
 import LoginView from '@/views/LoginView.vue'
 import MainPage from '@/views/MainPage.vue'
+import CustomerRegister from '@/views/CustomerRegister.vue'
+import AccidentRegister from '@/views/AccidentRegister.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -15,6 +17,16 @@ const router = createRouter({
       name: 'main',
       component: MainPage
     },
+    {
+      path: '/cadastrarCliente',
+      name: 'customerRegister',
+      component: CustomerRegister
+    },
+    {
+      path: '/registrarSinistro',
+      name: 'accidentRegister',
+      component: AccidentRegister
+    }
   ]
 })
 

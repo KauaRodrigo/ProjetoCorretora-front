@@ -1,6 +1,6 @@
 <template>
     <TheHeader></TheHeader> 
-    <div id="container">
+    <div class="container">
         <Summary></Summary>
         <Updates></Updates>
     </div>
@@ -17,9 +17,7 @@
         overflow-x: hidden;
     }
     
-    #container{
-        width: 85vw;
-        margin: 0 auto;
+    .container{
         margin-top: 20px;
     }
 
