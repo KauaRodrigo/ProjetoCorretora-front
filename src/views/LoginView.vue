@@ -20,10 +20,15 @@
 <script setup lang="ts">
     import Form from '@/components/baseComponents/Form.vue';
     import { ref } from 'vue';
+    import useUserStore from '../stores/UserStore'
+import api from '@/axios';
     const formData = ref({ email: '', password: '' })
+    const store = useUserStore()
 
     async function login() {
-        console.log('submit')
+        await store.auth(formData.value)
+
+        api.get('auth/profile')
     }
 
     function showPassword(){
