@@ -1,8 +1,10 @@
 <template>
-    <TheHeader></TheHeader> 
-    <div class="container">
-        <Summary></Summary>
-        <Updates></Updates>
+        <div>
+        <TheHeader></TheHeader> 
+        <div class="container">
+            <Summary></Summary>
+            <Updates></Updates>
+        </div>
     </div>
 </template>
 
@@ -18,7 +20,7 @@
     }
     
     .container{
-        margin-top: 20px;
+        padding-top: 20px;
     }
 
 </style>

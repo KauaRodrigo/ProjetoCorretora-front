@@ -21,7 +21,6 @@
         padding: 0 15px;
         align-items: center;
         display: flex;
-        margin-bottom: 20px;
     }
 
     .updateBox p{

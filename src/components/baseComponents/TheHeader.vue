@@ -3,19 +3,19 @@
         <nav class="navbar container navbar-expand">
             <div class="container">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" v-bind:href="mainAdress">Início</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sinistros</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Registrar</a>
-                            <a class="dropdown-item" href="#">Buscar</a>
+                            <a class="dropdown-item" v-bind:href="accidentRegister">Registrar</a>
+                            <a class="dropdown-item" v-bind:href="accidentSearch">Buscar</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Clientes</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Cadastrar</a>
-                            <a class="dropdown-item" href="#">Buscar</a>
+                            <a class="dropdown-item" v-bind:href="customerRegister">Cadastrar</a>
+                            <a class="dropdown-item" v-bind:href="customerSearch">Buscar</a>
                         </div>
                     </li>
                     
@@ -28,6 +28,14 @@
 </template>
 
 <script setup lang="ts">
+    const ipAdress = 'localhost'
+    const port = '5173'
+    
+    const mainAdress = 'http://'+ipAdress+':'+port+'/main'
+    const accidentRegister = 'http://'+ipAdress+':'+port+'/registrarSinistro'
+    const accidentSearch = 'http://'+ipAdress+':'+port+'/buscarSinistro'
+    const customerRegister = 'http://'+ipAdress+':'+port+'/cadastrarCliente'
+    const customerSearch = 'http://'+ipAdress+':'+port+'/buscarCliente'
 </script>
 <style scoped lang="scss">
     @import "../src/assets/__variables.scss";

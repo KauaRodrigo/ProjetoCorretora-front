@@ -1,7 +1,9 @@
 import LoginView from '@/views/LoginView.vue'
 import MainPage from '@/views/MainPage.vue'
 import CustomerRegister from '@/views/CustomerRegister.vue'
+import CustomerSearch from '@/views/CustomerSearch.vue'
 import AccidentRegister from '@/views/AccidentRegister.vue'
+import AccidentSearch from '@/views/AccidentSearch.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -18,15 +20,27 @@ const router = createRouter({
       component: MainPage
     },
     {
-      path: '/cadastrarCliente',
-      name: 'customerRegister',
-      component: CustomerRegister
-    },
-    {
       path: '/registrarSinistro',
       name: 'accidentRegister',
       component: AccidentRegister
-    }
+    },
+    {
+      path: '/buscarSinistro',
+      name: 'accidentSearch',
+      component: AccidentSearch
+    },
+    {
+      path: '/cadastrarCliente',
+      name: 'customerRegister',
+      component: CustomerRegister
+    },    
+    {
+      path: '/buscarCliente',
+      name: 'customerSearch',
+      component: CustomerSearch
+    },
+    
+
   ]
 })
 
