@@ -3,11 +3,22 @@
         <a href="#">Início</a>
         <a href="#">Sinistros</a>
         <a href="#">Clientes</a>
-        <button><i class="bi bi-box-arrow-in-right"></i></button>
+        <button @click="logout"><i class="bi bi-box-arrow-in-right"></i></button>
     </div>
 </template>
 
 <script setup lang="ts">
+import useUserStore from '@/stores/UserStore';
+import { useRouter } from 'vue-router';
+
+const store = useUserStore()
+const router = useRouter()
+
+function logout() {
+    store.logout()
+    router.push({ name: 'login' })
+}
+
 </script>
 <style scoped lang="scss">
     @import "../src/assets/__variables.scss";

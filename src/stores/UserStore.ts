@@ -6,10 +6,26 @@ const useUserStore = defineStore('users', {
         auth: async (payload: { email: string, password: string }) => {
             const { data } = await api.post('/auth/login', {
                 ...payload
-            })
-            api.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token
+            })            
+            localStorage.setItem('token', data.access_token)
+            api.defaults.headers['Authorization'] = 'Bearer ' + data.access_token
+            api.defaults.headers['Authorization'] = 'Bearer ' + data.user.id
             localStorage.setItem('user', data.user.id)
-            api.defaults.headers.common['user'] = +data.user.id 
+        },
+        getUserAndToken: (): boolean => {
+            const token = localStorage.getItem('token')
+            const user = localStorage.getItem('user')
+            if(token && user) {
+                api.defaults.headers['Authorization'] = 'Bearer ' + token
+                api.defaults.headers['user'] = user
+            } else {
+                return false
+            } 
+            return true
+        },
+        logout: () => {
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
         }
     }
 })
