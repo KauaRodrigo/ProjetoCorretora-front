@@ -9,8 +9,12 @@
                 <br><input type="password" v-model="formData.password" placeholder="Digite sua senha" name="password" id="passwordInput">
                 <i class="bi bi-eye" id="passwordEye" @click="showPassword"></i>
             </div>
+            <p>{{ message }}</p>
             <div id="buttons">
-                <button type="submit" id="login">Entrar</button>
+                <button type="submit" id="login">
+                    Entrar
+                    <Loader v-if="loading" small />
+                </button>
                 <button id="forgot">Esqueci minha senha</button>
             </div>            
         </Form>
@@ -18,30 +22,38 @@
 </template>
 
 <script setup lang="ts">
-    import Form from '@/components/baseComponents/Form.vue';
-    import { ref } from 'vue';
-    import useUserStore from '../stores/UserStore'
-import api from '@/axios';
-    const formData = ref({ email: '', password: '' })
-    const store = useUserStore()
+import Form from '@/components/baseComponents/Form.vue';
+import { ref } from 'vue';
+import useUserStore from '../stores/UserStore'
+import { useRouter } from 'vue-router';
+import Loader from '@/components/baseComponents/Loader.vue';
+const formData = ref({ email: '', password: '' })
+const store = useUserStore()
+const router = useRouter()
+const loading = ref(false)
+const message = ref('')
 
-    async function login() {
-        await store.auth(formData.value)
-
-        api.get('auth/profile')
+async function login() {
+    loading.value = true
+    const result = await store.auth(formData.value)
+    if(result.code != 400) {        
+        router.push({ name: 'main' })
     }
+    message.value = result.message
+    loading.value = false
+}
 
-    function showPassword(){
-        var inputType = document.getElementById('passwordInput')
-        var eyeBtn = document.getElementById('passwordEye')
-        if(inputType.type === 'password'){
-            inputType.setAttribute('type', 'text')
-            eyeBtn.classList.replace('bi-eye', 'bi-eye-slash')
-        }else{
-            inputType.setAttribute('type', 'password')
-            eyeBtn.classList.replace('bi-eye-slash','bi-eye')
-        }
+function showPassword(){
+    var inputType: any = document.getElementById('passwordInput')
+    var eyeBtn: any = document.getElementById('passwordEye')
+    if(inputType.type === 'password'){
+        inputType.setAttribute('type', 'text')
+        eyeBtn.classList.replace('bi-eye', 'bi-eye-slash')
+    }else{
+        inputType.setAttribute('type', 'password')
+        eyeBtn.classList.replace('bi-eye-slash','bi-eye')
     }
+}
 
 </script>
 <style scoped lang="scss">
@@ -61,6 +73,11 @@ import api from '@/axios';
         padding: 3% 4%;
         font-weight: bold;
         box-shadow: rgba(100, 100, 111, 0.1) 0px 0px 20px 0px;    
+    }
+    
+    p {
+        margin-top: 2%;
+        color: $danger;
     }
 
     form img{
@@ -115,10 +132,17 @@ import api from '@/axios';
     #login{
         background-color: $secondary;
         box-sizing: border-box;
-        padding: 0 2.5%;
+        padding: 2% 2.5%;
         border-radius: 5px;
         height: 45px;
         transition: 0.1s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #forgot:hover {
+        text-decoration: underline;
     }
 
     #buttons{

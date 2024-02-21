@@ -1,23 +1,23 @@
 <template>
     <div class="summary">
         <h1>Resumo</h1>
-            <ul>
-                <li>
-                    <SquareSummary open=200 indem=100 type="Veicular"/>
-                </li>
-                <li>
-                    <SquareSummary open="200" indem="100" type="Residencial"/>
-                </li>
-                <li>
-                    <SquareSummary open="200" indem="100" type="Vida"/>
-                </li>
-                <li>
-                    <SquareSummary open="200" indem="100" type="Empresarial"/>
-                </li>
-                <li>
-                    <SquareSummary open="200" indem="100" type="Viagem"/>
-                </li>
-            </ul>
+        <ul>
+            <li>
+                <SquareSummary open=200 indem=100 type="Veicular"/>
+            </li>
+            <li>
+                <SquareSummary open="200" indem="100" type="Residencial"/>
+            </li>
+            <li>
+                <SquareSummary open="200" indem="100" type="Vida"/>
+            </li>
+            <li>
+                <SquareSummary open="200" indem="100" type="Empresarial"/>
+            </li>
+            <li>
+                <SquareSummary open="200" indem="100" type="Viagem"/>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -28,11 +28,15 @@
 <style scoped lang="scss">
     @import "../src/assets/__variables.scss";
     
+    .summary {
+        margin-bottom: 10px;
+    }
+
     .summary h1{
         color: $primary;
         font-weight: bold;
         font-size: 20px;
-        margin-bottom: 5px;
+        margin-bottom: 20px;
     }
     
     ul{

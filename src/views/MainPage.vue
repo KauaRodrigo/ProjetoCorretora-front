@@ -1,28 +1,50 @@
 <template>
-    <TheHeader></TheHeader> 
-    <div id="container">
-        <Summary></Summary>
-        <Updates></Updates>
-    </div>
+    <TheHeader @openModalLogout="openModalLogout" />
+    <Page>
+        <div id="container">
+            <Summary />
+            <LastRecordsList />
+        </div>
+        <ModalLogout @closeModal="closeModalLogout" @logout="logout" v-if="showModalLogout" />
+    </Page>
 </template>
 
 <script setup lang="ts">
+import LastRecordsList from '@/components/lastRecords/LastRecordsList.vue'
+import Page from '@/components/baseComponents/Page.vue';
 import TheHeader from '@/components/baseComponents/TheHeader.vue'
+import ModalLogout from '@/components/ModalLogout.vue';
 import Summary from '@/components/Summary.vue'
 import Updates from '@/components/Updates.vue'
+import useSinistroStore from '@/stores/SinistroStore';
 import useUserStore from '@/stores/UserStore';
-import { onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const store = useUserStore()
+const sinistrosStore = useSinistroStore()
 const router = useRouter()
 
-onMounted(async () => {
-    const isAuth = store.getUserAndToken()
-    // if(!isAuth) {
-    //     router.push({ name: 'login' })
-    // }
-})
+const showModalLogout = ref(false)
+
+async function logout() {
+    const logedOut = await store.logout()
+    if(logedOut) {
+        router.push({ name: 'login' })
+    }
+}
+
+function getLastRecords() {
+    sinistrosStore.getLastRecords()
+}
+
+function openModalLogout() {
+    showModalLogout.value = true
+}
+
+function closeModalLogout() {
+    showModalLogout.value = false
+}
 
 </script>
 <style scoped lang="scss">

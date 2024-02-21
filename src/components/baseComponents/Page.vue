@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-        <Menu />
         <div class="content">
             <div class="d-flex justify-content-between align-items-center">
                 <h1>{{ title }}</h1>
@@ -15,14 +14,13 @@
     </div>
 </template>
 <script setup lang="ts">
-import Menu from './Menu.vue'
 defineProps<{ title?: string }>()
 </script>
-<style scoped lang="scss">
+<style scoped lang="scss">   
     .page {
-        height: 100%;
-        .content {
-            padding: 4%;
-        }
-    }
+        padding: 2%;
+    } 
+    .content {
+        padding: 0 2%;
+    }    
 </style>

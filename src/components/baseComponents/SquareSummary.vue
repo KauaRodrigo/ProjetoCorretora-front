@@ -6,25 +6,45 @@
             <i v-if="type=='Vida'" class="bi bi-heart-pulse"></i>
             <i v-if="type=='Empresarial'" class="bi bi-briefcase"></i>
             <i v-if="type=='Viagem'" class="bi bi-airplane"></i>
-            <div class="key">
+            <div v-if="data" class="key">
                 <h5>Em aberto</h5>
                 <h5>Indenizados</h5>
             </div>
-            <div class="value">
-                <h6>{{ open }}</h6>
-                <h6>{{ indem }}</h6>
+            <div v-if="data" class="value">
+                <h6>{{ data?.aberto }}</h6>
+                <h6>{{ data?.indenizado }}</h6>
             </div>
+            <Loader v-if="loading" text="Carregando..."/>
         </div>
         <h2>{{ type }}</h2>
     </div>
 </template>
 
 <script setup lang="ts">
-    defineProps<{
+import useSinistroStore from '@/stores/SinistroStore'
+import { onMounted, ref } from 'vue';
+import Loader from './Loader.vue';
+
+    const props = defineProps<{
         open:string,
         indem:string,
         type:string,
     }>()
+    
+    const store = useSinistroStore();
+
+    const loading = ref(false)
+    const data = ref()
+
+    async function getSquareData() {
+        loading.value = true
+        data.value = await store.getSquareData(props.type.toUpperCase());
+        loading.value = false
+    }
+
+    onMounted(async () => {
+        await getSquareData()
+    }) 
     
 </script>
 
@@ -46,7 +66,6 @@
     }
     
     .square{
-        margin: 0 auto;
         background-color: #EEEEEE;
         width: 150px;
         height: 150px;
@@ -58,13 +77,13 @@
     }
 
     .square h5{
-        font-size: 13px;
+        font-size: 16px;
         line-height: 26px;
     }
 
     .square h6{
         color: $secondary;
-        font-size: 22px;
+        font-size: 25px;
     }
 
     .square i{

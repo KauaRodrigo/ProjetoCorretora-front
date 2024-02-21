@@ -20,7 +20,7 @@
         color: $primary;
         font-weight: bold;
         font-size: 20px;
-        margin-bottom: 5px;
+        margin-bottom: 20px;
     }
 
 </style>
