@@ -28,7 +28,9 @@
                         </div>
                     </div>
                     <div>
-                        <input type="file">
+                        <label for="input-file" class="label-file">Anexar arquivo</label>
+                        <input type="file" id="input-file">
+                        <br><span class="span-file">PNG, JPG, MP4, MOV, PDF...</span>
                     </div>
                 </div>
                 <div class="col">
@@ -36,7 +38,7 @@
                         <label>Observações</label>
                         <TextareaBox placeHolder=""></TextareaBox>
                     </div>
-                    <button id="registerCustomer">Cadastrar Cliente</button>
+                    <button id="registerCustomer">Registrar Sinistro</button>
                 </div>
             </div>
         </Form>
@@ -108,10 +110,27 @@
         font-size: 16px;
     }
 
-    .col:nth-child(2){
-        //background-color: red;
-        //display: flex; 
-        //align-items: end;
+    #input-file{
+        width: 100px;
+	    height: 100px;
+        display: none;
+    }
+
+    .label-file {
+        text-align: center;
+        cursor: pointer;
+        background-color: $primary;
+        color: white;
+        font-weight: 100;
+        box-sizing: border-box;
+        padding: 10px 2.5%;
+        border-radius: 5px;
+        height: 45px;
+    }
+
+    .span-file{
+        color: #717171;
+        font-size: 14px;
     }
 
     #registerCustomer{

@@ -21,6 +21,7 @@
     
     .container{
         padding-top: 20px;
+        overflow: visible;
     }
 
 </style>

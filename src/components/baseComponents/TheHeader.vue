@@ -44,10 +44,9 @@
         width: 100%;
         height: 87px;
         background-color: $primary;
-        box-shadow: rgba(0,0,0,0.25) 0 4px 4px 0;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         overflow: visible;
         display: flex;
-        //align-items: center;
 
     }
 
