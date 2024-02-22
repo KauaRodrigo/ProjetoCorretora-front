@@ -1,12 +1,11 @@
 <template>
-    <TheHeader @openModalLogout="openModalLogout" />
-    <Page>
-        <div id="container">
-            <Summary />
-            <LastRecordsList />
+        <div>
+        <TheHeader></TheHeader> 
+        <div class="container">
+            <Summary></Summary>
+            <Updates></Updates>
         </div>
-        <ModalLogout @closeModal="closeModalLogout" @logout="logout" v-if="showModalLogout" />
-    </Page>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -53,10 +52,9 @@ function closeModalLogout() {
         overflow-x: hidden;
     }
     
-    #container{
-        width: 85vw;
-        margin: 0 auto;
-        margin-top: 20px;
+    .container{
+        padding-top: 20px;
+        overflow: visible;
     }
 
 </style>

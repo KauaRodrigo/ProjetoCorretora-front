@@ -28,15 +28,16 @@
 <style scoped lang="scss">
     @import "../src/assets/__variables.scss";
     
-    .summary {
-        margin-bottom: 10px;
-    }
+    .summary{
+        overflow: visible;
 
+    }
     .summary h1{
         color: $primary;
         font-weight: bold;
         font-size: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
+        overflow: visible;
     }
     
     ul{

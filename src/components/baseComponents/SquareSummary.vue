@@ -74,6 +74,7 @@ import Loader from './Loader.vue';
         align-items: center;
         justify-content: space-between;
         padding: 15px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 8px;
     }
 
     .square h5{
@@ -92,7 +93,7 @@ import Loader from './Loader.vue';
         position: absolute;
     }
 
-    @media screen and (max-width: 940px) {
+    @media screen and (max-width: 991px) {
         
         .squareSummary h2{
             font-size: 18px;

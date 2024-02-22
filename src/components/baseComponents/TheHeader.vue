@@ -1,54 +1,89 @@
 <template>
-    <div>
-        <div class="container link-wrapper">
-            <RouterLink :to="{ name: 'main'} ">Início</RouterLink>
-            <RouterLink :to="{ name: 'login'} ">Sinistro</RouterLink>
-            <RouterLink :to="{ name: 'login'} ">Clientes</RouterLink>
-            <button @click="emits('openModalLogout')"><i class="bi bi-box-arrow-in-right"></i></button>
-        </div>
-    </div>
+    <header>
+        <nav class="navbar container navbar-expand">
+            <div class="container">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" v-bind:href="mainAdress">Início</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sinistros</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" v-bind:href="accidentRegister">Registrar</a>
+                            <a class="dropdown-item" v-bind:href="accidentSearch">Buscar</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Clientes</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" v-bind:href="customerRegister">Cadastrar</a>
+                            <a class="dropdown-item" v-bind:href="customerSearch">Buscar</a>
+                        </div>
+                    </li>
+                    
+                </ul>
+                <button><i class="bi bi-box-arrow-in-right"></i></button>
+            </div>
+        </nav>
+        
+    </header>
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
-
-const emits = defineEmits(['openModalLogout'])
-
+    const ipAdress = 'localhost'
+    const port = '5173'
+    
+    const mainAdress = 'http://'+ipAdress+':'+port+'/main'
+    const accidentRegister = 'http://'+ipAdress+':'+port+'/registrarSinistro'
+    const accidentSearch = 'http://'+ipAdress+':'+port+'/buscarSinistro'
+    const customerRegister = 'http://'+ipAdress+':'+port+'/cadastrarCliente'
+    const customerSearch = 'http://'+ipAdress+':'+port+'/buscarCliente'
 </script>
 <style scoped lang="scss">
     @import "../src/assets/__variables.scss";
-    div{
+
+    header{
         width: 100%;
         height: 87px;
         background-color: $primary;
-        box-shadow: rgba(0,0,0,0.25) 0 4px 4px 0;
-    }
-    .link-wrapper {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        overflow: visible;
         display: flex;
-        align-items: center;
-        gap: 3%;
-        box-shadow: none;
+
     }
-    
-    div a{
+
+    nav li{
+        margin-right: 10px;
+    }
+
+    nav a{
         color: #EEEEEE;
         font-family: 'Inter', sans-serif;
         font-weight: bold;
         font-size: 20px;
-        text-decoration: none; 
+        text-decoration: none;
+        //margin: 0 3%;
     }
 
-    div a:hover, div button:hover{
+    nav a:hover, div button:hover{
         color: $secondary;
         cursor: pointer;
     }
 
-    div button{
-        position: absolute;   
-        right: 8vw;
+    nav button{
+        //position: absolute;   
+        //right: 8vw;
         font-size: 25px;
         border: none;
         background-color: $primary;
         color: #EEEEEE;
+    }
+
+    .dropdown-item{
+        color: $primary;
+    }
+
+    .dropdown-menu{
+        margin-top: -8px;
+        box-shadow: rgba($color: #64646F, $alpha: 0.1) 0 0 20px 0;
+        border: none;
     }
 </style>
