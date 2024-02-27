@@ -14,13 +14,25 @@
 defineProps<{ headers: string[], template: string }>()
 </script>
 <style scoped lang="scss">
+    @import '../../assets/_variables';
     .table-list {
         background-color: transparent;
         display: grid;
     }
-    th{
-        font-size: 14px;
+    thead {
+        border-radius: 10px 10px 0 0;
+        background-color: $primary;
+        padding: 0.5%;
+        th {
+            color: #EEEEEE;             
+            display: flex;
+            align-items: center;
+        }
     }
+    tbody {
+        border-radius: 0 0 10px 10px;
+    }
+      
     tr {
         display: grid;
         grid-template-columns: v-bind(template);

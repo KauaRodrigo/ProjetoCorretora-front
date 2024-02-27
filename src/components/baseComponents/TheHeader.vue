@@ -3,24 +3,26 @@
         <nav class="navbar container navbar-expand">
             <div class="container">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" v-bind:href="mainAdress">Início</a></li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item">
+                        <RouterLink class="nav-link" :to="{ name: 'main' }">Início</RouterLink>
+                    </li>
+                    <li class="nav-item dropdown"> 
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sinistros</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" v-bind:href="accidentRegister">Registrar</a>
-                            <a class="dropdown-item" v-bind:href="accidentSearch">Buscar</a>
+                            <RouterLink class="dropdown-item" :to="{ name: 'accidentRegister' }">Registrar</RouterLink>
+                            <RouterLink class="dropdown-item" :to="{ name: 'accidentSearch' }">Buscar</RouterLink>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Clientes</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" v-bind:href="customerRegister">Cadastrar</a>
-                            <a class="dropdown-item" v-bind:href="customerSearch">Buscar</a>
+                            <RouterLink class="dropdown-item" :to="{ name: 'customerRegister' }">Cadastrar</RouterLink>
+                            <RouterLink class="dropdown-item" :to="{ name: 'customerSearch' }">Buscar</RouterLink>
                         </div>
                     </li>
                     
                 </ul>
-                <button><i class="bi bi-box-arrow-in-right"></i></button>
+                <button @click="emits('openModalLogout')"><i class="bi bi-box-arrow-in-right"></i></button>
             </div>
         </nav>
         
@@ -28,6 +30,9 @@
 </template>
 
 <script setup lang="ts">
+    import { RouterLink } from 'vue-router';
+    const emits = defineEmits(['openModalLogout'])
+    
     const ipAdress = 'localhost'
     const port = '5173'
     

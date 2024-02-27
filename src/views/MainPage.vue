@@ -1,20 +1,19 @@
 <template>
-        <div>
-        <TheHeader></TheHeader> 
+    <div>
+        <TheHeader @openModalLogout="openModalLogout"></TheHeader> 
         <div class="container">
             <Summary></Summary>
-            <Updates></Updates>
+            <LastRecordsList />
         </div>
+        <ModalLogout @logout="logout" v-if="showModalLogout" />
     </div>
 </template>
 
 <script setup lang="ts">
 import LastRecordsList from '@/components/lastRecords/LastRecordsList.vue'
-import Page from '@/components/baseComponents/Page.vue';
 import TheHeader from '@/components/baseComponents/TheHeader.vue'
 import ModalLogout from '@/components/ModalLogout.vue';
 import Summary from '@/components/Summary.vue'
-import Updates from '@/components/Updates.vue'
 import useSinistroStore from '@/stores/SinistroStore';
 import useUserStore from '@/stores/UserStore';
 import { ref } from 'vue';

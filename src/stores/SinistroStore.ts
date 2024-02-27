@@ -16,6 +16,17 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
+        getAccidentsByFilters: async (filters: any): Promise<{ rows: any, count: number }> => {
+            try {
+                const { data } = await api.post('sinistros', {
+                    ...filters
+                })
+                return data;
+            } catch (error) {
+                throw(error)
+            }
+        },
+
         getLastRecords: async (): Promise<{ rows: any, count: number}> => {
             try {
                 const { data } = await api.get('sinistros/last-records')

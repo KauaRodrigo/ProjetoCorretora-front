@@ -1,18 +1,19 @@
 <template>
-    <TheHeader></TheHeader> 
+    <TheHeader />
+    <Page>
     <div class="container">
         <h1>Buscar sinistro</h1>
-        <Form>
+        <form>
             <div class="row">
                 <div class="col-md">
                     <label>Data</label>
                     <div class="date">
                         <div class="date-item">
-                            <InputBox placeHolder="Data de início" inputType="text"></InputBox>
+                            <InputBox placeHolder="xx/xx/xxxx" inputType="text"></InputBox>
                         </div>
                         <h6>Até</h6>
                         <div class="date-item">
-                            <InputBox placeHolder="Data final" inputType="text"></InputBox>
+                            <InputBox placeHolder="xx/xx/xxxx" inputType="text"></InputBox>
                         </div>
                     </div>
                     <div>
@@ -35,7 +36,7 @@
                     
                 </div>
             </div>
-        </Form>
+        </form>
             <div class="col">
                 <div class="row">
                     <div class="searchResult">
@@ -52,12 +53,15 @@
                 </div>
             </div>
         </div>
+    </Page>
 </template>
 
 <script setup lang="ts">
     import TheHeader from '@/components/baseComponents/TheHeader.vue'
     import InputBox from '@/components/baseComponents/InputBox.vue';
     import UpdateBox from '@/components/baseComponents/UpdateBox.vue';
+    import Page from '@/components/baseComponents/Page.vue';
+    import Form from '@/components/baseComponents/Form.vue';
 </script>
 <style scoped lang="scss">
     @import "./src/assets/__variables.scss";

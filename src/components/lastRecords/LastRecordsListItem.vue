@@ -6,14 +6,13 @@
         <span>{{ row.event }}</span>
         <span>{{ row.type }}</span> 
         <span>
-            <div class="tag tag-success">
-                {{ row.status }}
+            <div class="tag">
+                {{ row.status == 'ABERTO' ? 'Em aberto' : row.status }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
             </div>
         </span>
-        <span class="d-flex justify-content-end actions">
-            <div class="btn btn-success"></div>
-            <div class="btn btn-info"></div>
-            <div class="btn btn-danger"></div>
+        <span class="d-flex justify-content-start actions">            
+            <div class="btn edit">Editar</div>
+            <div class="btn close">Fechar</div>
         </span>       
     </div>
 </template>
@@ -23,34 +22,58 @@ defineProps<{ row: any }>()
 <style scoped lang="scss">
 @import '../../assets/_variables';
 .item {
+    padding: 0.8%;
     display: grid;    
-    background-color: transparent !important;    
-    grid-template-columns: 0.3fr 0.8fr 0.4fr 1fr 0.8fr 0.5fr 0.4fr;
+    background-color: #e2e2e2;    
+    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr;
+}
+.item:nth-child(2n) {
+    background-color: #EEEEEE;
+}
+.item:last-child {
+    border-radius: 0 0 10px 10px;
 }
 span {
     font-size: 16px;    
-    text-transform: capitalize;
-    padding: 3% 0;    
+    text-transform: capitalize;        
 }
 .actions {
-    gap: 10px;
-    div {
-        height: 25px;        
+    gap: 10px;    
+    div {            
+        display: flex;
+        align-items: center;
+        width: 35%;
+        height: 30px;
+        border: none;              
+        color: white;
+        justify-content: center;  
+        border-radius: 5px;    
+    }
+    .edit{
+        background-color: #0094FF;
+    }
+
+    .close{
+        background-color: #C00000;
     }
 }
 
 .tag {
-    font-size: 14px;    
-    color: black;
-    text-align: center;    
-    border-radius: 4px;
+    text-transform: capitalize;
     display: flex;
-    padding: 2% 4%;
-    width: fit-content;
+    gap: 10px;
     align-items: center;
+    i {
+        font-size: 10px;
+        color: #e5c122c3;
+    }
+    .closed {
+        color: #C00000;
+    }
+    .opened {
+        color: green;
+    }
 }
 
-.tag-success {
-    background: $secondary;
-}
+
 </style>
