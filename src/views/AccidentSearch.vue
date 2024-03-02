@@ -9,11 +9,11 @@
                     <label>Data</label>
                     <div class="date">
                         <div class="date-item">
-                            <InputBox placeHolder="xx/xx/xxxx" inputType="text"></InputBox>
+                            <InputBox placeHolder="DD/MM/AAAA" inputType="text"></InputBox>
                         </div>
                         <h6>Até</h6>
                         <div class="date-item">
-                            <InputBox placeHolder="xx/xx/xxxx" inputType="text"></InputBox>
+                            <InputBox placeHolder="DD/MM/AAAA" inputType="text"></InputBox>
                         </div>
                     </div>
                     <div>
@@ -30,7 +30,7 @@
                             <InputBox placeHolder="" inputType="text"></InputBox>
                         </div>
                     </div>
-                    <button id="registerCustomer">Buscar</button>
+                    <button id="searchAccident">Buscar</button>
                 </div>
                 <div class="col">
                     
@@ -110,7 +110,7 @@
     }
 
 
-    #registerCustomer{
+    #searchAccident{
         background-color: $secondary;
         box-sizing: border-box;
         padding: 0 2.5%;
@@ -118,7 +118,7 @@
         height: 45px;
         transition: 0.1s;
         border: none;
-        float: right;
+        margin-top: 20px;
     }
 
     .searchResult{

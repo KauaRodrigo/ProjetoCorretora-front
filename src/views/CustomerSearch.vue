@@ -1,20 +1,17 @@
 <template>
-    <TheHeader></TheHeader> 
+    <TheHeader />
+    <Page>
     <div class="container">
-        <h1>Registrar sinistro</h1>
-        <Form>
+        <h1>Buscar cliente</h1>
+        <form>
             <div class="row">
                 <div class="col-md">
                     <div>
-                        <label>Cliente <strong>*</strong></label>
+                        <label>Nome, CPF ou CNPJ</label>
                         <InputBox placeHolder="" inputType="text"></InputBox>
                     </div>
                     <div>
-                        <label>Endereço</label>
-                        <InputBox placeHolder="" inputType="text"></InputBox>
-                    </div>
-                    <div>
-                        <label>Veículo</label>
+                        <label>Placa do veículo ou RENAVAM</label>
                         <InputBox placeHolder="" inputType="text"></InputBox>
                     </div>
                     <div class="vehicle">
@@ -27,26 +24,38 @@
                             <InputBox placeHolder="" inputType="text"></InputBox>
                         </div>
                     </div>
-                    <div>
-                        <input type="file">
-                    </div>
+                    <button id="searchCustomer">Buscar</button>
                 </div>
                 <div class="col">
-                    <div>
-                        <label>Observações</label>
-                        <TextareaBox placeHolder=""></TextareaBox>
-                    </div>
-                    <button id="registerCustomer">Cadastrar Cliente</button>
+                    
                 </div>
             </div>
-        </Form>
-    </div>
+        </form>
+            <div class="col">
+                <div class="row">
+                    <div class="searchResult">
+                        <h1>Resultado da busca</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="result">
+                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
+                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
+                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
+                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Page>
 </template>
 
 <script setup lang="ts">
     import TheHeader from '@/components/baseComponents/TheHeader.vue'
     import InputBox from '@/components/baseComponents/InputBox.vue';
-    import TextareaBox from '@/components/baseComponents/TextareaBox.vue';
+    import UpdateBox from '@/components/baseComponents/UpdateBox.vue';
+    import Page from '@/components/baseComponents/Page.vue';
+    import Form from '@/components/baseComponents/Form.vue';
 </script>
 <style scoped lang="scss">
     @import "./src/assets/__variables.scss";
@@ -68,27 +77,20 @@
         margin-top: 15px;
     }
 
-    strong{
-        color: $secondary;
-    }
-
-    .adress-inputs{
+    .date{
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        align-items: center;
     }
 
-    .street {
-        width: 64%;
-        margin-bottom: 1%;
+    .date h6{
+        color: $primary;
+        font-size: 16px;
+        margin-top:8px;
     }
-
-    .adress-inputs div:nth-child(3){
-        width: 64%;
-    }
-
-    .adress-inputs div:nth-child(2), .adress-inputs div:nth-child(4){
-        width: 35%;
+    .date-item{
+        width: 45%;
     }
 
     .vehicle{
@@ -101,20 +103,8 @@
         width: 49.5%;
     }
 
-    i{
-        color: $primary;
-        float: right;
-        margin-left: auto;
-        font-size: 16px;
-    }
 
-    .col:nth-child(2){
-        //background-color: red;
-        //display: flex; 
-        //align-items: end;
-    }
-
-    #registerCustomer{
+    #searchCustomer{
         background-color: $secondary;
         box-sizing: border-box;
         padding: 0 2.5%;
@@ -122,12 +112,25 @@
         height: 45px;
         transition: 0.1s;
         border: none;
-        float: right;
-        //display: flex;
-        //align-items: end;
-        //bottom: 0;
-        //position: absolute;
+        margin-top: 20px;
     }
 
+    .searchResult{
+        margin-top: 15px;
+    }
+
+    .searchResult h1{
+        margin-bottom: 5px;
+    }
+
+    .result{
+        padding: 0 10px;
+        border: 1.5px solid #EEEEEE;
+        border-radius: 10px;
+    }
+
+    .spacing{
+        margin: 10px 0;
+    }
 
 </style>
