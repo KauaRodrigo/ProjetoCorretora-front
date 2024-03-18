@@ -13,7 +13,7 @@
                             <RouterLink class="dropdown-item" :to="{ name: 'accidentSearch' }">Buscar</RouterLink>
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li v-if="false" class="nav-item dropdown">
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Clientes</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <RouterLink class="dropdown-item" :to="{ name: 'customerRegister' }">Cadastrar</RouterLink>
@@ -65,12 +65,29 @@
         font-weight: bold;
         font-size: 20px;
         text-decoration: none;
+        padding: 6%;
         //margin: 0 3%;
+    }
+
+    .dropdown-item:first-child:hover {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .dropdown-item:last-child {
+        border-radius: 0 0 10px 10px;
+    }
+
+    .show {
+        color: $secondary !important;
     }
 
     nav a:hover, div button:hover{
         color: $secondary;
         cursor: pointer;
+    }
+
+    .dropdown-item:active {
+        background-color: #f8f9fa;
     }
 
     nav button{
@@ -88,6 +105,7 @@
 
     .dropdown-menu{
         margin-top: -8px;
+        padding: 0;
         box-shadow: rgba($color: #64646F, $alpha: 0.1) 0 0 20px 0;
         border: none;
     }

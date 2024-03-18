@@ -7,7 +7,7 @@
         <span>{{ row.type }}</span> 
         <span>
             <div class="tag">
-                {{ row.status == 'ABERTO' ? 'Em aberto' : row.status }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
+                {{ row.status }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
             </div>
         </span>
         <span class="d-flex justify-content-start actions">            

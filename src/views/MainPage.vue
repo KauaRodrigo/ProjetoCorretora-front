@@ -5,7 +5,7 @@
             <Summary></Summary>
             <LastRecordsList />
         </div>
-        <ModalLogout @logout="logout" v-if="showModalLogout" />
+        <ModalLogout @logout="logout" @closeModal="closeModalLogout" v-if="showModalLogout" />
     </div>
 </template>
 
