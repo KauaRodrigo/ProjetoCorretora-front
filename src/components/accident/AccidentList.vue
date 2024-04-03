@@ -3,6 +3,9 @@
         <Table v-if="rows && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
             <AccidentListItem v-for="(value, index) of rows" :key="index" :row="value"/>
         </Table>
+        <div class="empty" v-if="rows && !rows.length">
+            <h3>Nenhum sinistro cadastrado!</h3>
+        </div>
         <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
     </div>
 </template>
@@ -17,12 +20,24 @@
 <style scoped lang="scss">
 @import '../../assets/_variables.scss';
 
-.card-list {            
+.card-list {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 80%;
     background-color: #EEEEEE;
-    border-radius: 10px 10px 10px 10px;    
+    border-radius: 10px 10px 10px 10px;
+
+    .empty {
+        height: 20rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        h3 {
+            font-weight: 700;
+            font-family: Arial, serif;
+            color: $tertiary;
+        }
+    }
 }
 </style>

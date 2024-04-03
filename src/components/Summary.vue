@@ -26,11 +26,12 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../src/assets/__variables.scss";
+    @import "../assets/__variables.scss";
     
     .summary{
         overflow: visible;
-
+        margin-top: 2rem;
+        margin-bottom: 5rem;
     }
     .summary h1{
         color: $primary;

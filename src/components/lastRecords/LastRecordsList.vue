@@ -5,6 +5,9 @@
             <LastRecordsListItem v-for="(value, index) of lastRecordsRows.rows" :key="index" :row="value" />        
         </Table>
         <Loader class="align-self-center" v-else text="Carregando..." big/>
+        <div class="empty" v-if="lastRecordsRows && !lastRecordsRows.length">
+            <h3>Nenhum sinistro registrado <br> nos últimos 7 dias!</h3>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -30,7 +33,23 @@ onMounted(async () => {
     justify-content: center;
     height: 80%;
     background-color: #EEEEEE;
-    border-radius: 10px 10px 10px 10px;    
+    border-radius: 10px 10px 10px 10px;
+
+    .empty {
+        height: 20rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        h3 {
+            font-weight: 700;
+            //font-size: 22px;
+            font-family: Arial, serif;
+            color: $tertiary;
+        }
+    }
+
 }
 
 h1{

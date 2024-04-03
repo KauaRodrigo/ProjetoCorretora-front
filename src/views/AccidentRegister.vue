@@ -1,47 +1,50 @@
 <template>
-    <TheHeader></TheHeader> 
-    <div class="container">
-        <h1>Registrar sinistro</h1>
-        <Form>
-            <div class="row">
-                <div class="col-md">
-                    <div>
-                        <label>Cliente <strong>*</strong></label>
-                        <InputBox placeHolder="" inputType="text"></InputBox>
-                    </div>
-                    <div>
-                        <label>Endereço</label>
-                        <InputBox placeHolder="" inputType="text"></InputBox>
-                    </div>
-                    <div>
-                        <label>Veículo</label>
-                        <InputBox placeHolder="" inputType="text"></InputBox>
-                    </div>
-                    <div class="vehicle">
-                        <div class="vehicle-item">
-                            <label>Número da apólice</label>
-                            <InputBox placeHolder="" inputType="text"></InputBox>
+    <div>
+        <TheHeader />
+        <div class="container">
+            <h1>Registrar sinistro</h1>
+            <Form @submit="submit" :formData="formData">
+                <div class="row">
+                    <div class="col-md">
+                        <div>
+                            <label>Cliente <strong>*</strong></label>
+                            <input placeholder="" type="text" v-model="formData.nome"/>
                         </div>
-                        <div class="vehicle-item">
-                            <label>Seguradora</label>
-                            <InputBox placeHolder="" inputType="text"></InputBox>
+                        <div>
+                            <label>Endereço</label>
+                            <input placeholder="" type="text" />
+                        </div>
+                        <div>
+                            <label>Placa</label>
+                            <input placeholder="" type="text" v-model="formData.placa"/>
+                        </div>
+                        <div class="vehicle">
+                            <div class="vehicle-item">
+                                <label>Número da apólice</label>
+                                <input placeholder="" type="text" v-model="formData.codigo"/>
+                            </div>
+                            <div class="vehicle-item">
+                                <label>Seguradora</label>
+                                <input placeholder="" type="text" v-model="formData.seguradora"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="input-file" class="label-file">Anexar arquivo</label>
+                            <input type="file" id="input-file">
+                            <br><span class="span-file">PNG, JPG, MP4, MOV, PDF...</span>
                         </div>
                     </div>
-                    <div>
-                        <label for="input-file" class="label-file">Anexar arquivo</label>
-                        <input type="file" id="input-file">
-                        <br><span class="span-file">PNG, JPG, MP4, MOV, PDF...</span>
+                    <div class="col">
+                        <div>
+                            <label>Observações</label>
+                            <textarea v-model="formData.evento" placeHolder=""></textarea>
+                        </div>
+                        <button type="submit" id="registerCustomer">Registrar Sinistro</button>
                     </div>
                 </div>
-                <div class="col">
-                    <div>
-                        <label>Observações</label>
-                        <TextareaBox placeHolder=""></TextareaBox>
-                    </div>
-                    <button id="registerCustomer">Registrar Sinistro</button>
-                </div>
-            </div>
-        </Form>
+            </Form>
+            {{formData}}
+        </div>
     </div>
 </template>
 
@@ -49,9 +52,27 @@
     import TheHeader from '@/components/baseComponents/TheHeader.vue'
     import InputBox from '@/components/baseComponents/InputBox.vue';
     import TextareaBox from '@/components/baseComponents/TextareaBox.vue';
+    import { ref } from "vue";
+    import useSinistroStore from "@/stores/SinistroStore";
+
+    const sinistroStore = useSinistroStore();
+
+    const formData = ref({
+        nome: '',
+        endereco: '',
+        placa: '',
+        codigo: '',
+        seguradora: '',
+        evento: ''
+    });
+
+    async function submit() {
+        await sinistroStore.registrarSinistro(formData.value);
+    }
+
 </script>
 <style scoped lang="scss">
-    @import "./src/assets/__variables.scss";
+    @import "../assets/__variables.scss";
     .container{
         margin-top: 20px;
     }

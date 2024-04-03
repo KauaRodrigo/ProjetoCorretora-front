@@ -34,6 +34,17 @@ const useSinistroStore = defineStore('sinistro', {
             } catch (error) {
                 throw(error)
             }
+        },
+
+        registrarSinistro: async (payload: any): Promise<boolean> => {
+            try {
+                const { data } = await api.post('sinistros/criar', {
+                    ...payload
+                });
+                return data;
+            }catch (error) {
+                throw(error);
+            }
         }
     }
 })

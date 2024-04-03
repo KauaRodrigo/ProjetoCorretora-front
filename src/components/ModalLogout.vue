@@ -26,7 +26,7 @@ function logout() {
 }
 </script>
 <style scoped lang="scss">
-@import "../src/assets/__variables.scss";
+@import "../assets/__variables.scss";
 h1 {
     font-size: 28px;
     font-weight: 600;
