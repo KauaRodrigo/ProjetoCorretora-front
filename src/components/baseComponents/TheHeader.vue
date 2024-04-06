@@ -32,24 +32,15 @@
 <script setup lang="ts">
     import { RouterLink } from 'vue-router';
     const emits = defineEmits(['openModalLogout'])
-    
-    const ipAdress = 'localhost'
-    const port = '5173'
-    
-    const mainAdress = 'http://'+ipAdress+':'+port+'/main'
-    const accidentRegister = 'http://'+ipAdress+':'+port+'/registrarSinistro'
-    const accidentSearch = 'http://'+ipAdress+':'+port+'/buscarSinistro'
-    const customerRegister = 'http://'+ipAdress+':'+port+'/cadastrarCliente'
-    const customerSearch = 'http://'+ipAdress+':'+port+'/buscarCliente'
 </script>
 <style scoped lang="scss">
-    @import "../src/assets/__variables.scss";
+    @import "../../assets/__variables.scss";
 
     header{
         width: 100%;
         height: 87px;
         background-color: $primary;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
         overflow: visible;
         display: flex;
 
@@ -65,8 +56,6 @@
         font-weight: bold;
         font-size: 20px;
         text-decoration: none;
-        padding: 6%;
-        //margin: 0 3%;
     }
 
     .dropdown-item:first-child:hover {

@@ -1,28 +1,30 @@
 <template>
     <h1>Últimos registros</h1>
     <div class="card-list" :class="{'p-4': !lastRecordsRows }">
-        <Table v-if="lastRecordsRows" template="0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+        <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
             <LastRecordsListItem v-for="(value, index) of lastRecordsRows.rows" :key="index" :row="value" />        
         </Table>
-        <Loader class="align-self-center" v-else text="Carregando..." big/>
-        <div class="empty" v-if="lastRecordsRows && !lastRecordsRows.length">
-            <h3>Nenhum sinistro registrado <br> nos últimos 7 dias!</h3>
-        </div>
+        <Loader class="align-self-center" v-if="loading" text="Carregando..." big/>
+        <AccidentEmpty v-if="!lastRecordsRows?.rows?.length && !loading" />
     </div>
 </template>
 <script setup lang="ts">
 import LastRecordsListItem from './LastRecordsListItem.vue'
-import Table from '../baseComponents/Table.vue'
+import Table from '../baseComponents/TableComponent.vue'
 import useSinistroStore from '@/stores/SinistroStore';
 import { onMounted, ref } from 'vue';
 import Loader from '../baseComponents/Loader.vue';
+import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
 
 const store = useSinistroStore()
 
 const lastRecordsRows = ref()
+const loading = ref(false)
 
 onMounted(async () => {
-    lastRecordsRows.value = await store.getLastRecords()    
+    loading.value = true;
+    lastRecordsRows.value = await store.getLastRecords();
+    loading.value = false;
 })
 </script>
 <style scoped lang="scss">
@@ -34,21 +36,6 @@ onMounted(async () => {
     height: 80%;
     background-color: #EEEEEE;
     border-radius: 10px 10px 10px 10px;
-
-    .empty {
-        height: 20rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-
-        h3 {
-            font-weight: 700;
-            //font-size: 22px;
-            font-family: Arial, serif;
-            color: $tertiary;
-        }
-    }
 
 }
 

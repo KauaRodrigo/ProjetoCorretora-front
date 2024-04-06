@@ -1,18 +1,17 @@
 <template>    
     <div class="card-list" :class="{'p-4': loading }">
-        <Table v-if="rows && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+        <Table v-if="rows?.length > 0" template="0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
             <AccidentListItem v-for="(value, index) of rows" :key="index" :row="value"/>
         </Table>
-        <div class="empty" v-if="rows && !rows.length">
-            <h3>Nenhum sinistro cadastrado!</h3>
-        </div>
+        <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
         <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
     </div>
 </template>
 <script lang="ts" setup>
     import Loader from '../baseComponents/Loader.vue';
-    import Table from '../baseComponents/Table.vue'
+    import Table from '../baseComponents/TableComponent.vue'
     import AccidentListItem from './AccidentListItem.vue';
+    import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
 
     defineProps<{ rows?: any, loading?: boolean }>()
  

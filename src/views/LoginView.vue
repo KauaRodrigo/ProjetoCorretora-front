@@ -57,7 +57,7 @@ function showPassword(){
 
 </script>
 <style scoped lang="scss">
-    @import "../src/assets/__variables.scss";
+    @import "../assets/__variables.scss";
     #container{
         height: 100vh;
         display: flex;
@@ -93,7 +93,7 @@ function showPassword(){
         border-radius: 5px;
         box-sizing: border-box;
         padding: 0 2%;
-        font-size: 24px;
+        font-size: 20px;
     }
 
     form input::placeholder{

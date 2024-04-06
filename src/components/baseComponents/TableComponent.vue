@@ -27,6 +27,7 @@ defineProps<{ headers: string[], template: string }>()
             color: #EEEEEE;             
             display: flex;
             align-items: center;
+            padding: 2% 4%;
         }
     }
     tbody {
