@@ -34,6 +34,11 @@ const router = createRouter({
       component: AccidentRegister
     },
     {
+      path: '/editarSinistro/:id',
+      name: 'accidentEdit',
+      component: AccidentRegister
+    },
+    {
       path: '/buscarSinistro',
       name: 'accidentSearch',
       component: AccidentSearch

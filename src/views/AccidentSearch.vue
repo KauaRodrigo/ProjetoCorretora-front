@@ -6,7 +6,7 @@
             <form @submit.prevent="submit">
                 <div class="row justify-content-between">
                     <div class="col-5">
-                        <label>Nome, CPF, CNPJ ou placa</label>
+                        <label>Nome ou placa</label>
                         <input type="text" v-model="formData.searchFilter">
                     </div>
                     <div class="col-4">

@@ -19,6 +19,7 @@
         background-color: #f9f9f9;
         border: none;
         border-radius: 5px;
+        box-shadow: 5px 5px 10px 1px lightgray;
         padding: 0 13px;
     }
 

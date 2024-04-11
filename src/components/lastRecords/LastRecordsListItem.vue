@@ -2,12 +2,12 @@
     <div class="item" v-if="row">
         <span>{{ row.code }}</span>
         <span>{{ row.clientName }}</span>
-        <span>{{ row.company }}</span>
+        <span>{{ row.company.toLowerCase() }}</span>
         <span>{{ row.event }}</span>
-        <span>{{ row.type }}</span> 
+        <span>{{ row.type.toLowerCase() }}</span>
         <span>
             <div class="tag">
-                {{ row.status }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
+                {{ row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
             </div>
         </span>
         <span class="d-flex justify-content-start actions">            
@@ -34,7 +34,8 @@ defineProps<{ row: any }>()
     border-radius: 0 0 10px 10px;
 }
 span {
-    font-size: 16px;    
+    font-size: 16px;
+    padding: 2% 4%;
     text-transform: capitalize;        
 }
 .actions {

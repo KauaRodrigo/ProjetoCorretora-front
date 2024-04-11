@@ -93,7 +93,7 @@ function showPassword(){
         border-radius: 5px;
         box-sizing: border-box;
         padding: 0 2%;
-        font-size: 20px;
+        font-size: 16px;
     }
 
     form input::placeholder{

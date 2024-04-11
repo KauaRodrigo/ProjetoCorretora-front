@@ -10,20 +10,54 @@
                             <label>Cliente <strong>*</strong></label>
                             <input placeholder="" type="text" v-model="formData.nome"/>
                         </div>
-                        <div>
-                            <label>Endereço</label>
-                            <input placeholder="" type="text" />
-                        </div>
-                        <div>
-                            <label>Placa</label>
-                            <input placeholder="" type="text" v-model="formData.placa"/>
-                        </div>
-                        <div class="vehicle">
-                            <div class="vehicle-item">
-                                <label>Número da apólice</label>
-                                <input placeholder="" type="text" v-model="formData.codigo"/>
+<!--                        <div class="address">-->
+<!--                            <label>Endereço </label>-->
+<!--                            <div class="address-div">-->
+<!--                                <input name="cep" maxlength="9" @change="formatField('cep')" placeholder="Cep" type="text" v-model="formData.cep"/>-->
+<!--                                <input name="cidade" placeholder="Cidade" readonly type="text" v-model="formData.cidade"/>-->
+<!--                            </div>-->
+<!--                            <div class="address-div">-->
+<!--                                <input name="rua" placeholder="Logradouro (Rua, avenida)" type="text" v-model="formData.rua"/>-->
+<!--                                <input name="bairro" placeholder="Bairro ou comunidade" type="text" v-model="formData.bairro"/>-->
+<!--                            </div>-->
+<!--                            <div class="address-div">-->
+<!--                                <input name="numero" placeholder="Número" type="text" v-model="formData.numero"/>-->
+<!--                                <input name="complemento" placeholder="Complemento" type="text" v-model="formData.complemento"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="adtional-info">
+                            <div>
+                                <label>Tipo <strong>*</strong></label>
+                                <select name="tipo" v-model="formData.tipo">
+                                    <option value="">Selecione</option>
+                                    <option value="VEICULAR">Veicular</option>
+                                    <option value="VIAGEM">Viagem</option>
+                                    <option value="VIDA">Vida</option>
+                                    <option value="RESIDENCIAL">Residencial</option>
+                                    <option value="EMPRESARIAL">Empresarial</option>
+                                </select>
                             </div>
-                            <div class="vehicle-item">
+                            <div>
+                                <label>Terceiros Envolvidos <strong>*</strong></label>
+                                <input type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
+                            </div>
+                        </div>
+                        <div v-if="formData.tipo === 'VEICULAR'" class="vehicle">
+                            <div>
+                                <label>Placa <strong>*</strong></label>
+                                <input placeholder="" type="text" v-model="formData.placa"/>
+                            </div>
+<!--                            <div>-->
+<!--                                <label>Renavam <strong>*</strong></label>-->
+<!--                                <input placeholder="" type="text" v-model="formData.renavam"/>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="adtional-info">
+                            <div>
+                                <label>Número da apólice <strong>*</strong></label>
+                                <input name="apolice" placeholder="" type="text" v-model="formData.codigo"/>
+                            </div>
+                            <div>
                                 <label>Seguradora</label>
                                 <input placeholder="" type="text" v-model="formData.seguradora"/>
                             </div>
@@ -49,18 +83,24 @@
 
 <script setup lang="ts">
     import TheHeader from '@/components/baseComponents/TheHeader.vue'
-    import InputBox from '@/components/baseComponents/InputBox.vue';
-    import TextareaBox from '@/components/baseComponents/TextareaBox.vue';
-    import { ref } from "vue";
+    import {ref} from "vue";
     import useSinistroStore from "@/stores/SinistroStore";
 
     const sinistroStore = useSinistroStore();
 
     const formData = ref({
         nome: '',
-        endereco: '',
+        tipo: '',
+        terceiro: '',
         placa: '',
+        // cidade: '',
+        // cep: '',
+        // rua: '',
+        // numero: '',
+        // complemento: '',
+        // bairro: '',
         codigo: '',
+        // renavam: '',
         seguradora: '',
         evento: ''
     });
@@ -69,11 +109,27 @@
         await sinistroStore.registrarSinistro(formData.value);
     }
 
+    function formatField(type: string) {
+
+        switch (type) {
+            case 'cep':
+                if(formData.value.cep.length >= 5) {
+                    formData.value.cep = formData.value.cep.replace(/(\d{5})(\d{0,3})/gm, '$1-$2')
+                }
+                return formData.value
+        }
+    }
+
 </script>
 <style scoped lang="scss">
     @import "../assets/__variables.scss";
-    .container{
+    @import "../assets/inputbox";
+    @import "../assets/textarea";
+
+    .container {
         margin-top: 20px;
+        padding-top: 2rem;
+        padding-bottom: 4rem;
     }
 
     h1{
@@ -81,6 +137,11 @@
         font-weight: bold;
         font-size: 20px;
         margin-bottom: 0;
+    }
+
+    select {
+        width: 50%;
+        display: block;
     }
 
     label{
@@ -100,6 +161,40 @@
         justify-content: space-between;
     }
 
+    .adtional-info {
+        display: flex;
+        width: 100%;
+        gap: 2rem;
+
+        select {
+            width: 100%;
+        }
+
+        input[name="terceiro"] {
+            display: block;
+            width: 1rem;
+        }
+    }
+
+    .address-div {
+        display: flex;
+        gap: 1rem;
+        margin: 20px 0;
+    }
+
+    input[name="cep"] {
+        width: 50%;
+    }
+
+    input[name="numero"] {
+        width: 25%;
+    }
+
+    input[name="apolice"] {
+        width: 100%;
+        display: block;
+    }
+
     .street {
         width: 64%;
         margin-bottom: 1%;
@@ -115,12 +210,8 @@
 
     .vehicle{
         display: flex;
-        flex-wrap: wrap;
+        width: 100%;
         justify-content: space-between;
-    }
-
-    .vehicle-item{
-        width: 49.5%;
     }
 
     i{
@@ -162,10 +253,6 @@
         transition: 0.1s;
         border: none;
         float: right;
-        //display: flex;
-        //align-items: end;
-        //bottom: 0;
-        //position: absolute;
     }
 
 

@@ -1,7 +1,7 @@
 <template>
     <div class="empty">
         <i class="bi bi-car-front"></i>
-        <h3>Nenhum sinistro cadastrado!</h3>
+        <h3>Nenhum sinistro cadastrado <br/> nos últimos 7 dias!</h3>
     </div>
 </template>
 

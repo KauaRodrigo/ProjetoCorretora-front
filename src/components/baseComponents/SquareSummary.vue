@@ -49,7 +49,7 @@ import Loader from './Loader.vue';
 </script>
 
 <style scoped lang="scss">
-    @import "../src/assets/__variables.scss";
+    @import "../../assets/__variables.scss";
     *{
         font-weight: bold;
     }

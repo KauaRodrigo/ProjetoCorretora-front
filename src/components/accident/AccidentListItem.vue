@@ -11,15 +11,26 @@
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <div class="btn edit">Editar</div>
+            <div class="btn edit" @click="editRegister(row.id)">Editar</div>
             <div class="btn close">Fechar</div>
         </span>       
     </div>
 </template>
 <script setup lang="ts">
 import AccidentItem from '../../dtos/AccidentItem.dto'
+import {useRouter} from "vue-router";
 
 defineProps<{ row: AccidentItem }>()
+const router = useRouter();
+
+function editRegister(id: number) {
+    router.push({
+        name: 'accidentEdit',
+        params: {
+            id
+        }
+    })
+}
 </script>
 <style scoped lang="scss">
 .item {
@@ -35,7 +46,8 @@ defineProps<{ row: AccidentItem }>()
     border-radius: 0 0 10px 10px;
 }
 span {
-    font-size: 16px;    
+    font-size: 16px;
+    padding: 2% 4%;
     text-transform: capitalize;        
 }
 
