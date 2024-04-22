@@ -30,6 +30,7 @@
                     <div>
                         <label for="input-file" class="label-file">Anexar arquivo</label>
                         <input type="file" id="input-file">
+                        <button id="registerCustomer">Registrar Sinistro</button>
                         <br><span class="span-file">PNG, JPG, MP4, MOV, PDF...</span>
                     </div>
                 </div>
@@ -38,7 +39,6 @@
                         <label>Observações</label>
                         <TextareaBox placeHolder=""></TextareaBox>
                     </div>
-                    <button id="registerCustomer">Registrar Sinistro</button>
                 </div>
             </div>
         </Form>
@@ -54,13 +54,6 @@
     @import "./src/assets/__variables.scss";
     .container{
         margin-top: 20px;
-    }
-
-    h1{
-        color: $primary;
-        font-weight: bold;
-        font-size: 20px;
-        margin-bottom: 0;
     }
 
     label{
@@ -142,6 +135,7 @@
         transition: 0.1s;
         border: none;
         float: right;
+        margin-top: 15px;
         //display: flex;
         //align-items: end;
         //bottom: 0;

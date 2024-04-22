@@ -5,8 +5,8 @@
         <h1>Buscar cliente</h1>
         <form>
             <div class="row">
-                <div class="col-md">
-                    <div>
+                <div class="filter">
+                    <div class="spacing">
                         <label>Nome, CPF ou CNPJ</label>
                         <InputBox placeHolder="" inputType="text"></InputBox>
                     </div>
@@ -39,10 +39,13 @@
                 </div>
                 <div class="row">
                     <div class="result">
-                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
-                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
-                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
-                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
+                        <ClientCard class="spacing" src="" cpf="123.456.789-10" name="Anderson Celulari" phone="(47) 91234-5678" adress="Rua São Paulo, 1563, Bairro dos Estados, Apto. 1101 - Rio do Sul/SC"></ClientCard>
+                        <ClientCard class="spacing" src="" cpf="123.456.789-10" name="Anderson Celulari" phone="(47) 91234-5678" adress="Rua São Paulo, 1563, Bairro dos Estados, Apto. 1101 - Rio do Sul/SC"></ClientCard>
+                        <ClientCard class="spacing" src="" cpf="123.456.789-10" name="Anderson Celulari" phone="(47) 91234-5678" adress="Rua São Paulo, 1563, Bairro dos Estados, Apto. 1101 - Rio do Sul/SC"></ClientCard>
+                        <ClientCard class="spacing" src="" cpf="123.456.789-10" name="Anderson Celulari" phone="(47) 91234-5678" adress="Rua São Paulo, 1563, Bairro dos Estados, Apto. 1101 - Rio do Sul/SC"></ClientCard>
+                        <ClientCard class="spacing" src="" cpf="123.456.789-10" name="Anderson Celulari" phone="(47) 91234-5678" adress="Rua São Paulo, 1563, Bairro dos Estados, Apto. 1101 - Rio do Sul/SC"></ClientCard>
+                        <ClientCard class="spacing" src="" cpf="123.456.789-10" name="Anderson Celulari" phone="(47) 91234-5678" adress="Rua São Paulo, 1563, Bairro dos Estados, Apto. 1101 - Rio do Sul/SC"></ClientCard>
+                        <ClientCard class="spacing" src="" cpf="123.456.789-10" name="Anderson Celulari" phone="(47) 91234-5678" adress="Rua São Paulo, 1563, Bairro dos Estados, Apto. 1101 - Rio do Sul/SC"></ClientCard>
                     </div>
                 </div>
             </div>
@@ -51,7 +54,8 @@
 </template>
 
 <script setup lang="ts">
-    import TheHeader from '@/components/baseComponents/TheHeader.vue'
+    import ClientCard from '@/components/baseComponents/ClientCard.vue';
+    import TheHeader from '@/components/baseComponents/TheHeader.vue';
     import InputBox from '@/components/baseComponents/InputBox.vue';
     import UpdateBox from '@/components/baseComponents/UpdateBox.vue';
     import Page from '@/components/baseComponents/Page.vue';
@@ -68,6 +72,11 @@
         font-weight: bold;
         font-size: 20px;
         margin-bottom: 0;
+    }
+
+    .filter{
+        width: 50vw;
+        max-width: 800px;
     }
 
     label{
@@ -124,13 +133,32 @@
     }
 
     .result{
-        padding: 0 10px;
-        border: 1.5px solid #EEEEEE;
-        border-radius: 10px;
+        //padding: 0;
+        //background-color: red;
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        box-sizing: border-box;
+        //margin: 0 auto;
+        column-gap: 20px;
+        row-gap: 20px;
     }
 
-    .spacing{
-        margin: 10px 0;
+    //.spacing{
+    //    margin: 10px 0;
+    //}
+
+    @media screen and (max-width: 767px){
+        .filter{
+            width: 100%;
+        }
+        .result{
+            grid-template-columns: auto auto auto;
+        }
+        @media screen and (max-width: 570px){
+            .result{
+                grid-template-columns: auto auto;
+            }
+        }
     }
 
 </style>

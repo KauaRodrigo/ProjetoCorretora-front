@@ -1,4 +1,5 @@
 @import "bootstrap/scss/bootstrap";
+@import "./src/assets/__variables.scss";
 
 * {
   margin: 0;
@@ -10,4 +11,11 @@
 body, html, #app {
   height: 100%;
   width: 100%;
+}
+
+h1{
+  color: $primary;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 0;
 }

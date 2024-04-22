@@ -45,10 +45,15 @@
                 </div>
                 <div class="row">
                     <div class="result">
-                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
-                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
-                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
-                        <UpdateBox class="spacing" msg="Lorem ipsun"></UpdateBox>
+                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
+                        <NewUpdateBox class="spacing" src="" cod="202401011234" name="Anderson Celulari" status="Fechado" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
+                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
+                        <NewUpdateBox class="spacing" src="" cod="202401011234" name="Anderson Celulari" status="Fechado" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
+                        <NewUpdateBox class="spacing" src="" cod="202401011234" name="Anderson Celulari" status="Fechado" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
+                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
+                        <NewUpdateBox class="spacing" src="" cod="202401011234" name="Anderson Celulari" status="Fechado" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
+                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
+                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
                     </div>
                 </div>
             </div>
@@ -60,6 +65,7 @@
     import TheHeader from '@/components/baseComponents/TheHeader.vue'
     import InputBox from '@/components/baseComponents/InputBox.vue';
     import UpdateBox from '@/components/baseComponents/UpdateBox.vue';
+    import NewUpdateBox from '@/components/baseComponents/NewUpdateBox.vue';
     import Page from '@/components/baseComponents/Page.vue';
     import Form from '@/components/baseComponents/Form.vue';
 </script>
@@ -130,13 +136,20 @@
     }
 
     .result{
-        padding: 0 10px;
-        border: 1.5px solid #EEEEEE;
-        border-radius: 10px;
+        //padding: 0;
+        //background-color: red;
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        box-sizing: border-box;
+        //margin: 0 auto;
+        column-gap: 20px;
+        row-gap: 20px;
     }
 
     .spacing{
-        margin: 10px 0;
+        margin: 0 auto;
+        //justify-content: space-between
+        //margin: 10px 0;
     }
 
 </style>
