@@ -1,67 +1,69 @@
 <template>
-    <TheHeader />
-    <Page>
-        <div class="container">
-            <h1>Buscar sinistro</h1>
-            <form @submit.prevent="submit">
-                <div class="row justify-content-between">
-                    <div class="col-5">
-                        <label>Nome ou placa</label>
-                        <input type="text" v-model="formData.searchFilter">
-                    </div>
-                    <div class="col-4">
-                        <label>Data</label>
-                        <div class="date">
-                            <div class="date-item">
-                                <input type="date" v-model="formData.dataFilter.init">
+    <div>
+        <TheHeader />
+        <Page>
+            <div class="container">
+                <h1>Buscar sinistro</h1>
+                <form @submit.prevent="submit">
+                    <div class="row justify-content-between">
+                        <div class="col-5">
+                            <label>Nome ou placa</label>
+                            <input type="text" v-model="formData.searchFilter">
+                        </div>
+                        <div class="col-4">
+                            <label>Data</label>
+                            <div class="date">
+                                <div class="date-item">
+                                    <input type="date" v-model="formData.dataFilter.init">
+                                </div>
+                                <h6>Até</h6>
+                                <div class="date-item">
+                                    <input type="date" v-model="formData.dataFilter.end">
+                                </div>
                             </div>
-                            <h6>Até</h6>
-                            <div class="date-item">
-                                <input type="date" v-model="formData.dataFilter.end">
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="vehicle col-6">
+                            <div class="vehicle-item col-4">
+                                <label>Número da apólice</label>
+                                <input type="text" v-model="formData.policyNumberFilter">
+                            </div>
+                            <div class="vehicle-item">
+                                <label>Seguradora</label>
+                                <input type="text" v-model="formData.companyFilter"/>
+                            </div>
+                        </div>
+                        <div class="col-3 selects">
+                            <div>
+                                <label>Tipo seguro</label>
+                                <select name="status" v-model="formData.typeFilter">
+                                    <option value="">Não Filtrar</option>
+                                    <option value="VEICULAR">Veicular</option>
+                                    <option value="VIDA">Vida</option>
+                                    <option value="VIAGEM">Viagem</option>
+                                    <option value="EMPRESARIAL">Empresarial</option>
+                                    <option value="RESIDENCIAL">Residencial</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Status</label>
+                                <select name="status" v-model="formData.statusFilter">
+                                    <option value="">Não Filtrar</option>
+                                    <option value="ABERTO">Aberto</option>
+                                    <option value="INDENIZADO">Indenizado</option>
+                                    <option value="FECHADO">Fechado</option>
+                                    <option value="ARQUIVADO">Arquivado</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row justify-content-between">
-                    <div class="vehicle col-6">
-                        <div class="vehicle-item col-4">
-                            <label>Número da apólice</label>
-                            <input type="text" v-model="formData.policyNumberFilter">
-                        </div>
-                        <div class="vehicle-item">
-                            <label>Seguradora</label>
-                            <input type="text" v-model="formData.companyFilter"/>
-                        </div>
-                    </div>
-                    <div class="col-3 selects">
-                        <div>
-                            <label>Tipo seguro</label>
-                            <select name="status" v-model="formData.typeFilter">
-                                <option value="">Não Filtrar</option>
-                                <option value="VEICULAR">Veicular</option>
-                                <option value="VIDA">Vida</option>
-                                <option value="VIAGEM">Viagem</option>
-                                <option value="EMPRESARIAL">Empresarial</option>
-                                <option value="RESIDENCIAL">Residencial</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Status</label>
-                            <select name="status" v-model="formData.statusFilter">
-                                <option value="">Não Filtrar</option>
-                                <option value="ABERTO">Aberto</option>
-                                <option value="INDENIZADO">Indenizado</option>
-                                <option value="FECHADO">Fechado</option>
-                                <option value="ARQUIVADO">Arquivado</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <button id="registerCustomer">Buscar</button>
-            </form>
-            <AccidentList :rows="accidentList?.rows" :loading="loading"/>
-        </div>
-    </Page>
+                    <button id="registerCustomer">Buscar</button>
+                </form>
+                <AccidentList :rows="accidentList?.rows" :loading="loading"/>
+            </div>
+        </Page>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -76,8 +78,7 @@ import useSinistroStore from '@/stores/SinistroStore';
 
     const formData = ref({
         policyNumberFilter: '',
-        companyFilter: '',
-        searchFilter: '',
+        companyFilter: '',        
         dataFilter: {
             init: '',
             end: ''

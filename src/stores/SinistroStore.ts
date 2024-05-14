@@ -41,7 +41,8 @@ const useSinistroStore = defineStore('sinistro', {
             try {
                 const { data } = await api.post('sinistros', {
                     ...filters
-                })
+                })            
+                console.log(data)    
                 return data;
             } catch (error) {
                 throw(error)

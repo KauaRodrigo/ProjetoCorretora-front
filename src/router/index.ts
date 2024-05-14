@@ -4,7 +4,7 @@ import CustomerRegister from '@/views/CustomerRegister.vue'
 import CustomerSearch from '@/views/CustomerSearch.vue'
 import AccidentRegister from '@/views/AccidentRegister.vue'
 import AccidentSearch from '@/views/AccidentSearch.vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 
 const isAuth = () => {
   const token = localStorage.getItem('token')
@@ -16,7 +16,7 @@ const isAuth = () => {
 }
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -59,6 +59,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  console.log('here')
   if(to.name !== 'login' && !isAuth()) next({ name: 'login' })
   else next()
 })

@@ -1,7 +1,7 @@
 <template>
-    <div class="item" v-if="row">
+    <RouterLink :to="{name: 'sinistroView', params: { id: 16 }}" class="item" v-if="row">
         <span>{{ row.code }}</span>
-        <span>{{ row.clientName }}</span>
+        <span>{{ row.client }}</span>
         <span>{{ row.company.toLowerCase() }}</span>
         <span>{{ row.event ?? 'Não informado' }}</span>
         <span>{{ row.type.toLowerCase() }}</span>
@@ -14,7 +14,7 @@
             <div class="btn edit" @click="editRegister(row.id)">Editar</div>
             <div class="btn close">Fechar</div>
         </span>       
-    </div>
+    </RouterLink>
 </template>
 <script setup lang="ts">
 import AccidentItem from '../../dtos/AccidentItem.dto'
