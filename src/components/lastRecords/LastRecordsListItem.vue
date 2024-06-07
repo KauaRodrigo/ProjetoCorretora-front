@@ -1,9 +1,9 @@
 <template>
     <div class="item" v-if="row">
         <span>{{ row.code }}</span>
-        <span>{{ row.clientName }}</span>
+        <span>{{ row.cliente }}</span>
         <span>{{ row.company.toLowerCase() }}</span>
-        <span>{{ row.event }}</span>
+        <span :title="row.event">{{ row.event }}</span>
         <span>{{ row.type.toLowerCase() }}</span>
         <span>
             <div class="tag">
@@ -13,7 +13,7 @@
         <span class="d-flex justify-content-start actions">            
             <div class="btn edit">Editar</div>
             <div class="btn close">Fechar</div>
-        </span>       
+        </span>
     </div>
 </template>
 <script setup lang="ts">
@@ -36,7 +36,10 @@ defineProps<{ row: any }>()
 span {
     font-size: 16px;
     padding: 2% 4%;
-    text-transform: capitalize;        
+    text-transform: capitalize;
+    text-wrap: nowrap;    
+    overflow: hidden;
+    text-overflow: ellipsis;    
 }
 .actions {
     gap: 10px;    

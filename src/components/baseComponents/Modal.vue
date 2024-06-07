@@ -1,7 +1,10 @@
 <template>
     <Overlay />
     <div class="modal-wrapper">
-        <div class="modal-box">
+        <div class="modal-box" :style="{
+            'width': `${width}px`,
+            'height': `${height}px`
+        }">
             <slot></slot>
         </div>
     </div>
@@ -9,6 +12,7 @@
 <script setup lang="ts">
 import Overlay from './Overlay.vue';
 
+const props = defineProps<{ height: string, width: string}>();
 
 </script>
 <style scoped lang="scss">

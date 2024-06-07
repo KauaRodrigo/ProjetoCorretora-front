@@ -1,9 +1,9 @@
 <template>
-    <RouterLink :to="{name: 'sinistroView', params: { id: 16 }}" class="item" v-if="row">
+    <RouterLink to="#" :class="{ item: type === 'LIST', 'card-item': type === 'CARD' }" v-if="row">
         <span>{{ row.code }}</span>
         <span>{{ row.client }}</span>
         <span>{{ row.company.toLowerCase() }}</span>
-        <span>{{ row.event ?? 'Não informado' }}</span>
+        <span :title="row.event">{{ row.event || 'Não informado' }}</span>
         <span>{{ row.type.toLowerCase() }}</span>
         <span>
             <div class="tag">
@@ -11,19 +11,24 @@
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <div class="btn edit" @click="editRegister(row.id)">Editar</div>
-            <div class="btn close">Fechar</div>
+            <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="editRegister(row.id)">Editar</RouterLink>
+            <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn close">Fechar</RouterLink>
         </span>       
     </RouterLink>
 </template>
 <script setup lang="ts">
-import AccidentItem from '../../dtos/AccidentItem.dto'
+import type { AccidentItem } from '../../dtos/AccidentItem.dto';
 import {useRouter} from "vue-router";
 
-defineProps<{ row: AccidentItem }>()
+defineProps<{ 
+    row: AccidentItem,
+    type: string
+}>()
+
 const router = useRouter();
 
 function editRegister(id: number) {
+    router
     router.push({
         name: 'accidentEdit',
         params: {
@@ -33,11 +38,32 @@ function editRegister(id: number) {
 }
 </script>
 <style scoped lang="scss">
+
+.card-item {
+    padding: 0.8%;
+    display: flex;    
+    border-radius: 10px;    
+    min-width: 20%;    
+    margin: 0 1% 3% 0;
+    flex-direction: column;    
+    background-color: #EEE;        
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 8px;
+    color: black;    
+}
+
+.card-item:nth-child(4n) {
+    margin-right: 0;
+}
+
 .item {
+    z-index: -1;
     padding: 0.8%;
     display: grid;    
     background-color: #e2e2e2;    
-    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr;
+    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr;
+    text-decoration: none;
+    color: black;    
 }
 .item:nth-child(2n) {
     background-color: #EEEEEE;
@@ -48,12 +74,15 @@ function editRegister(id: number) {
 span {
     font-size: 16px;
     padding: 2% 4%;
-    text-transform: capitalize;        
+    text-transform: capitalize;     
+    text-wrap: nowrap;    
+    overflow: hidden;
+    text-overflow: ellipsis;       
 }
 
 .actions {
     gap: 10px;    
-    div {            
+    a {            
         display: flex;
         align-items: center;
         width: 35%;

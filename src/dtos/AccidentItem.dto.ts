@@ -1,10 +1,10 @@
 import type { AccidentStatus } from "@/enums/accidentStatus"
 import type { AccidentType } from "@/enums/accidentType"
 
-export default class AccidentItem {
+export type AccidentItem = {
     id: number
     code: number
-    clientName: string
+    client: string
     company: string
     event: string
     type: AccidentType

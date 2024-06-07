@@ -1,18 +1,14 @@
 <template>
-    <div>
-        <TheHeader @openModalLogout="openModalLogout"></TheHeader> 
+    <div>        
         <div class="container">
             <Summary />
-            <LastRecordsList />
-        </div>
-        <ModalLogout @logout="logout" @closeModal="closeModalLogout" v-if="showModalLogout" />
+            <LastRecordsList />            
+        </div>        
     </div>
 </template>
 
 <script setup lang="ts">
 import LastRecordsList from '@/components/lastRecords/LastRecordsList.vue'
-import TheHeader from '@/components/baseComponents/TheHeader.vue'
-import ModalLogout from '@/components/ModalLogout.vue';
 import Summary from '@/components/Summary.vue'
 import useUserStore from '@/stores/UserStore';
 import { ref } from 'vue';
@@ -41,10 +37,7 @@ function closeModalLogout() {
 </script>
 <style scoped lang="scss">
     @import "../assets/__variables.scss";
-    *{
-        overflow-x: hidden;
-    }
-    
+
     .container{
         padding-top: 20px;
         overflow: visible;

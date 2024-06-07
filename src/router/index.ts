@@ -21,7 +21,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
-      component: LoginView
+      component: LoginView,
     },
     {
       path: '/main',
@@ -58,10 +58,9 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  console.log('here')
+router.beforeEach((to, from, next) => {  
   if(to.name !== 'login' && !isAuth()) next({ name: 'login' })
-  else next()
+  next()
 })
 
 export default router

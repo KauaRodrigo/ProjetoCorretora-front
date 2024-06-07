@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <TheHeader />
+    <div>        
         <Page>
             <div class="container">
                 <h1>Buscar sinistro</h1>
@@ -61,46 +60,79 @@
                     <button id="registerCustomer">Buscar</button>
                 </form>
                 <AccidentList :rows="accidentList?.rows" :loading="loading"/>
-            </div>
-        </Page>
+                <div class="d-flex pagination justify-content-between">
+                    <select class="perPage" name="perPage" id="perPage" @change="changePerPage()" v-model="formData.perPage">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                    <div class="page d-flex">
+                        <button :disabled="formData.page === 0" @click="prevPage()">&lt;</button>
+                        <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()">&gt;</button>
+                    </div>
+                </div>
+            </div>                        
+        </Page>        
     </div>
 </template>
 
 <script setup lang="ts">
-    import TheHeader from '@/components/baseComponents/TheHeader.vue'
-    import Page from '@/components/baseComponents/Page.vue';
-    import Form from '@/components/baseComponents/Form.vue';
-    import AccidentList from '@/components/accident/AccidentList.vue';
-    import { onMounted, ref } from 'vue';
+import Page from '@/components/baseComponents/Page.vue';
+import AccidentList from '@/components/accident/AccidentList.vue';
+import { onMounted, ref } from 'vue';
 import useSinistroStore from '@/stores/SinistroStore';
 
-    const sinistroStore = useSinistroStore()  
+const sinistroStore = useSinistroStore()  
 
-    const formData = ref({
-        policyNumberFilter: '',
-        companyFilter: '',        
-        dataFilter: {
-            init: '',
-            end: ''
-        },
-        statusFilter: '',
-        typeFilter: ''
-    })    
+const formData = ref({
+    policyNumberFilter: '',
+    companyFilter: '',        
+    dataFilter: {
+        init: '',
+        end: ''
+    },
+    statusFilter: '',
+    typeFilter: '',
+    page: 0,
+    perPage: 5
+})    
 
-    const loading = ref(true)
+const loading = ref(true)
+const maxPage = ref(0)
+const accidentList: any = ref({})
 
-    const accidentList: any = ref({})
-
-    onMounted(async () => {        
-        accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)        
-        loading.value = false
-    })
-
-    async function submit() {
-        loading.value = true
-        accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)        
-        loading.value = false
+onMounted(async () => {        
+    if(sinistroStore.filters) {
+        console.log(sinistroStore.filters)
+        formData.value.typeFilter = sinistroStore.filters.type 
     }
+    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)   
+    console.log(accidentList.value.count, formData.value.perPage)     
+    maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage)
+    loading.value = false
+})
+
+function nextPage() {
+    ++formData.value.page; 
+    submit();
+}
+
+function prevPage() {
+    --formData.value.page; 
+    submit();
+}
+
+function changePerPage() {
+    formData.value.page = 0;
+    submit()
+}
+
+async function submit() {
+    loading.value = true
+    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)        
+    loading.value = false
+    maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage)
+}
 
 </script>
 <style scoped lang="scss">
@@ -109,6 +141,40 @@ import useSinistroStore from '@/stores/SinistroStore';
         display: flex;
         gap: 5px;
         justify-content: end;
+    }
+
+    .pagination {
+        width: 100%;
+        margin-top: 20px;
+        .perPage {
+            width: fit-content;
+            cursor: pointer;
+        }
+        .page {            
+            gap: 10%;
+            button {
+                padding: 5%;                
+                border: none;
+                width: 3rem;
+                box-shadow: rgba(0,0,0,0.2) 0px 0px 10px;                
+                border-radius: 5px;
+                font-weight: bold;
+                color: $primary;
+                transition: background-color .5s;
+                background-color: #FFF;
+            }
+
+            button[disabled], button[disabled]:hover {
+                background-color: #EEE; 
+                color: $primary;                
+            }
+
+            button:hover {
+                transition: background-color .5s;
+                background-color: $secondary;
+                color: white;
+            }
+        }
     }
 
     h1{

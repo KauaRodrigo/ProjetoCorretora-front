@@ -1,30 +1,14 @@
 <template>
-    <div>
-        <TheHeader />
+    <div>        
         <div class="container">
             <h1>Registrar sinistro</h1>
-            <Form @submit="submit" :formData="formData">
+            <Form @submit.prevent="submit" :formData="formData">
                 <div class="row">
                     <div class="col-md">
                         <div>
                             <label>Cliente <strong>*</strong></label>
                             <input placeholder="" type="text" v-model="formData.nome"/>
                         </div>
-<!--                        <div class="address">-->
-<!--                            <label>Endereço </label>-->
-<!--                            <div class="address-div">-->
-<!--                                <input name="cep" maxlength="9" @change="formatField('cep')" placeholder="Cep" type="text" v-model="formData.cep"/>-->
-<!--                                <input name="cidade" placeholder="Cidade" readonly type="text" v-model="formData.cidade"/>-->
-<!--                            </div>-->
-<!--                            <div class="address-div">-->
-<!--                                <input name="rua" placeholder="Logradouro (Rua, avenida)" type="text" v-model="formData.rua"/>-->
-<!--                                <input name="bairro" placeholder="Bairro ou comunidade" type="text" v-model="formData.bairro"/>-->
-<!--                            </div>-->
-<!--                            <div class="address-div">-->
-<!--                                <input name="numero" placeholder="Número" type="text" v-model="formData.numero"/>-->
-<!--                                <input name="complemento" placeholder="Complemento" type="text" v-model="formData.complemento"/>-->
-<!--                            </div>-->
-<!--                        </div>-->
                         <div class="adtional-info">
                             <div>
                                 <label>Tipo <strong>*</strong></label>
@@ -47,10 +31,6 @@
                                 <label>Placa <strong>*</strong></label>
                                 <input placeholder="" type="text" v-model="formData.placa"/>
                             </div>
-<!--                            <div>-->
-<!--                                <label>Renavam <strong>*</strong></label>-->
-<!--                                <input placeholder="" type="text" v-model="formData.renavam"/>-->
-<!--                            </div>-->
                         </div>
                         <div class="adtional-info">
                             <div>
@@ -76,48 +56,54 @@
                         <button type="submit" id="registerCustomer">Registrar Sinistro</button>
                     </div>
                 </div>
-            </Form>
+            </Form>            
+            <div class="comments">
+                <h1>Atualizações</h1>
+                <Comment />
+            </div>
         </div>
     </div>
 </template>
 
-<script setup lang="ts">
-    import TheHeader from '@/components/baseComponents/TheHeader.vue'
-    import {ref} from "vue";
-    import useSinistroStore from "@/stores/SinistroStore";
+<script setup lang="ts">    
+import {onMounted, ref} from "vue";
+import useSinistroStore from "@/stores/SinistroStore";
+import Comment from "../components/accident/Comment.vue" 
+import { useRoute } from "vue-router";
 
-    const sinistroStore = useSinistroStore();
+const route = useRoute();
+const sinistroStore = useSinistroStore();
 
-    const formData = ref({
-        nome: '',
-        tipo: '',
-        terceiro: '',
-        placa: '',
-        // cidade: '',
-        // estado: '',
-        // cep: '',
-        // rua: '',
-        // bairro: '',
-        codigo: '',
-        // renavam: '',
-        seguradora: '',
-        evento: ''
-    });
+const formData = ref({
+    nome: '',
+    tipo: '',
+    terceiro: false,
+    placa: '',        
+    codigo: '',        
+    seguradora: '',
+    evento: ''
+});
 
-    async function submit() {
-        await sinistroStore.registrarSinistro(formData.value);
+async function submit() {
+    await sinistroStore.registrarSinistro(formData.value);
+}
+
+function formatField(type: string) {
+
+    switch (type) {
+        case 'cep':
+            if(formData.value.cep.length >= 5) {
+                formData.value.cep = formData.value.cep.replace(/(\d{5})(\d{0,3})/gm, '$1-$2')
+            }
+            return formData.value
     }
+}
 
-    function formatField(type: string) {
-
-        switch (type) {
-            case 'cep':
-                if(formData.value.cep.length >= 5) {
-                    formData.value.cep = formData.value.cep.replace(/(\d{5})(\d{0,3})/gm, '$1-$2')
-                }
-                return formData.value
-        }
+onMounted(async () => {
+    if(route.name == 'accidentEdit') {
+        formData.value = await sinistroStore.getAccidentSingle(+route.params.id);
     }
+})
 
 </script>
 <style scoped lang="scss">
@@ -129,6 +115,14 @@
         margin-top: 20px;
         padding-top: 2rem;
         padding-bottom: 4rem;
+    }
+
+    .comments {
+        margin-top: 30px;
+        color: $primary;
+        h1 {
+            font-size: 1.8rem;
+        }
     }
 
     h1{

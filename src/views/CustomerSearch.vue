@@ -1,5 +1,4 @@
-<template>
-    <TheHeader></TheHeader> 
+<template>    
     <div class="container">
         <h1>Registrar sinistro</h1>
         <Form>
@@ -43,8 +42,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
-    import TheHeader from '@/components/baseComponents/TheHeader.vue'
+<script setup lang="ts">    
     import InputBox from '@/components/baseComponents/InputBox.vue';
     import TextareaBox from '@/components/baseComponents/TextareaBox.vue';
 </script>

@@ -9,7 +9,7 @@
                     <li class="nav-item dropdown"> 
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sinistros</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <RouterLink class="dropdown-item" :to="{ name: 'accidentRegister' }">Registrar</RouterLink>
+                            <RouterLink v-if="hasAccess(['ATENDIMENTO'])" class="dropdown-item" :to="{ name: 'accidentRegister' }">Registrar</RouterLink>
                             <RouterLink class="dropdown-item" :to="{ name: 'accidentSearch' }">Buscar</RouterLink>
                         </div>
                     </li>
@@ -22,7 +22,10 @@
                     </li>
                     
                 </ul>
-                <button @click="emits('openModalLogout')"><i class="bi bi-box-arrow-in-right"></i></button>
+                <div class="d-flex login">                                            
+                    <p>Olá, <b>{{ user.username }}</b></p>                                                                        
+                    <button @click="emits('openModalLogout')"><i class="bi bi-box-arrow-in-right"></i></button>
+                </div>
             </div>
         </nav>
         
@@ -30,20 +33,47 @@
 </template>
 
 <script setup lang="ts">
-    import { RouterLink } from 'vue-router';
-    const emits = defineEmits(['openModalLogout'])
+import { onMounted, ref } from 'vue';
+import { RouterLink } from 'vue-router';
+const emits = defineEmits(['openModalLogout'])
+const user = ref<{ id?: number, username?: string, roles?: string[] }>({});
+
+onMounted(() => {
+    user.value = JSON.parse(localStorage.getItem('user') ?? '')    
+})
+
+function hasAccess(roles: string[]) {
+    return user.value.roles?.some(role => {
+        if(roles.includes(role)) {            
+            return true
+        }
+    });
+}
+
 </script>
 <style scoped lang="scss">
-    @import "../../assets/__variables.scss";
+    @import "../../assets/__variables.scss";    
+    
+    .login {
+        width: auto;
+        align-items: center;
+        gap: 10%;
 
-    header{
-        width: 100%;
+        p {
+            font-family: 'Inter', sans-serif;
+            text-wrap: nowrap;            
+            margin: 0;       
+            width: 100%;     
+            color: white;
+        }
+    }                    
+
+    header{        
         height: 87px;
         background-color: $primary;
-        box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;        
+        display: flex;        
         overflow: visible;
-        display: flex;
-
     }
 
     nav li{
@@ -56,32 +86,29 @@
         font-weight: bold;
         font-size: 20px;
         text-decoration: none;
-    }
+        transition: all .5s;
+    }    
 
-    .dropdown-item:first-child:hover {
-        border-radius: 10px 10px 0 0;
-    }
-
-    .dropdown-item:last-child {
-        border-radius: 0 0 10px 10px;
-    }
-
-    .show {
-        color: $secondary !important;
+    div button {
+        transition: all .5s;
+        color: white;
     }
 
     nav a:hover, div button:hover{
-        color: $secondary;
+        transition: all .5s;
+        color: $secondary !important;
         cursor: pointer;
+    }    
+
+    nav a {
+        color: white !important;
     }
 
     .dropdown-item:active {
         background-color: #f8f9fa;
     }
 
-    nav button{
-        //position: absolute;   
-        //right: 8vw;
+    nav button{        
         font-size: 25px;
         border: none;
         background-color: $primary;
@@ -89,13 +116,14 @@
     }
 
     .dropdown-item{
-        color: $primary;
-    }
+        color: $primary !important;
+        border-radius: 10px 10px 10px 10px;
+    }    
 
-    .dropdown-menu{
-        margin-top: -8px;
-        padding: 0;
-        box-shadow: rgba($color: #64646F, $alpha: 0.1) 0 0 20px 0;
+    .dropdown-menu{                
+        box-shadow: 0 0 20px 0 #64646F;
         border: none;
+        z-index: 1000;     
+        padding: 0;   
     }
 </style>

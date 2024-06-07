@@ -2,6 +2,10 @@ import api from "@/axios";
 import { defineStore } from "pinia";
 
 const useSinistroStore = defineStore('sinistro', {
+    state: () => ({
+        filters: null
+    }),
+
     actions: {
         getSquareData: async (type: string): Promise<{ aberto: number, indenizado: number }> => {
             try {
@@ -14,6 +18,10 @@ const useSinistroStore = defineStore('sinistro', {
             } catch (error) {
                 throw(error)
             }
+        },
+
+        getFilters(payload: any) {
+            this.filters = payload; 
         },
 
         updateRegister: async (id: number, payload: any): Promise<any> => {
@@ -41,17 +49,20 @@ const useSinistroStore = defineStore('sinistro', {
             try {
                 const { data } = await api.post('sinistros', {
                     ...filters
-                })            
-                console.log(data)    
+                })                            
                 return data;
             } catch (error) {
                 throw(error)
             }
         },
 
-        getLastRecords: async (): Promise<{ rows: any, count: number}> => {
+        getLastRecords: async (payload: any): Promise<{ rows: any, count: number}> => {
             try {
-                const { data } = await api.get('sinistros/last-records')
+                const { data } = await api.get('sinistros/last-records', {
+                    params: {
+                        ...payload
+                    }
+                })
                 return data
             } catch (error) {
                 throw(error)

@@ -1,25 +1,80 @@
-<template>    
-    <div class="card-list" :class="{'p-4': loading }">
-        <Table v-if="rows?.length > 0" template="0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
-            <AccidentListItem v-for="(value, index) of rows" :key="index" :row="value"/>
-        </Table>
-        <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
-        <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
+<template>  
+    <div>
+        <div v-if="false" class="d-flex actions">
+            <button @click="changeViewType('LIST')">
+                <i class="bi bi-list"></i>
+            </button>    
+            <button @click="changeViewType('CARD')">
+                <i class="bi bi-card-heading"></i>
+            </button>
+        </div>
+        <div v-if="viewType == 'LIST'" class="list" :class="{'p-4': loading }">
+            <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+                <AccidentListItem :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
+            </Table>
+            <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
+            <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
+        </div>
+        <div class="card-list" :class="{'p-4': loading }" v-else>
+            <AccidentListItem :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
-    import Loader from '../baseComponents/Loader.vue';
-    import Table from '../baseComponents/TableComponent.vue'
-    import AccidentListItem from './AccidentListItem.vue';
-    import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
 
-    defineProps<{ rows?: any, loading?: boolean }>()
+import { ref } from 'vue';
+import Loader from '../baseComponents/Loader.vue';
+import Table from '../baseComponents/TableComponent.vue'
+import AccidentListItem from './AccidentListItem.vue';
+import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
+import useUserStore from '@/stores/UserStore';
+
+const store = useUserStore();
+
+const viewType = ref(store.typeView);
+
+defineProps<{ rows?: any, loading?: boolean }>()
+
+function changeViewType(type: string) {
+    viewType.value = store.changeViewType(type);    
+}
  
 </script>
 <style scoped lang="scss">
 @import '../../assets/_variables.scss';
 
 .card-list {
+    display: flex;    
+    justify-content: flex-start;    
+    flex-wrap: wrap;   
+}
+
+.actions {
+    padding: 2% 0;    
+    width: 10%;
+    justify-content: end;
+    margin-left: auto;
+    gap: 10%;
+
+    button {
+        border: none;                        
+        background: $primary;
+        height: 50px;
+        width: 50px;                
+        font-size: 1.5rem;
+        color: $secondary;
+        font-weight: bold;
+        border-radius: 10px;        
+        transition: all 0.5s;
+    }    
+
+    button:hover {         
+        transition: all 0.5s;
+        transform: scale(1.1);
+    }
+}
+
+.list {
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -1,6 +1,6 @@
 <template>
     <div class="squareSummary">
-        <div class="square">
+        <div class="square" @click="setFilterRedirect()">
             <i v-if="type=='Veicular'" class="bi bi-car-front"></i>
             <i v-if="type=='Residencial'" class="bi bi-house"></i>
             <i v-if="type=='Vida'" class="bi bi-heart-pulse"></i>
@@ -24,6 +24,7 @@
 import useSinistroStore from '@/stores/SinistroStore'
 import { onMounted, ref } from 'vue';
 import Loader from './Loader.vue';
+import { useRouter } from 'vue-router';
 
     const props = defineProps<{
         open:string,
@@ -31,20 +32,26 @@ import Loader from './Loader.vue';
         type:string,
     }>()
     
-    const store = useSinistroStore();
+    const store  = useSinistroStore();
+    const router = useRouter();
 
     const loading = ref(false)
-    const data = ref()
+    const data    = ref()
 
     async function getSquareData() {
         loading.value = true
-        data.value = await store.getSquareData(props.type.toUpperCase());
+        data.value    = await store.getSquareData(props.type.toUpperCase());
         loading.value = false
     }
 
     onMounted(async () => {
         await getSquareData()
     }) 
+
+    function setFilterRedirect() {        
+        store.getFilters({ type: props.type.toUpperCase() });
+        router.push({ name: 'accidentSearch' })
+    }
     
 </script>
 
@@ -55,8 +62,15 @@ import Loader from './Loader.vue';
     }
     
     .squareSummary{
-        display: inline-block;
+        display: inline-block;        
+        transition: all 0.4s;
     }
+
+    .squareSummary:hover {
+        transition: all 0.4s;
+        transform: scale(1.15);
+    }
+
     .squareSummary h2{
         text-align: center;
         font-weight: 200;
@@ -74,7 +88,8 @@ import Loader from './Loader.vue';
         align-items: center;
         justify-content: space-between;
         padding: 15px;
-        box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 8px;
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 8px;
     }
 
     .square h5{
@@ -91,7 +106,7 @@ import Loader from './Loader.vue';
         color: rgba(0, 50, 99, 0.1);
         font-size: 120px;
         position: absolute;
-    }
+    }    
 
     @media screen and (max-width: 991px) {
         
