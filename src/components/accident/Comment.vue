@@ -6,11 +6,9 @@
     </div>
 </template>
 <script setup lang="ts">
-const comment = {
-    usuario: "Marcos Antônio",
-    conteudo: "Veículo encaminhado para a oficina: DJL Auto Center",
-    dataComentario: '06/06/2024'
-}
+
+defineProps<{ comment: any }>()
+
 </script>
 <style lang="scss" scoped>
 div {

@@ -40,7 +40,7 @@ import { useRouter } from 'vue-router';
 
     async function getSquareData() {
         loading.value = true
-        data.value    = await store.getSquareData(props.type.toUpperCase());
+        data.value    = await store.getSquareData(props.type.toUpperCase());        
         loading.value = false
     }
 
@@ -100,6 +100,7 @@ import { useRouter } from 'vue-router';
     .square h6{
         color: $secondary;
         font-size: 25px;
+        text-align: right;
     }
 
     .square i{
@@ -133,7 +134,7 @@ import { useRouter } from 'vue-router';
             .square{
                 width: 150px;
                 height: 150px;
-                text-align: left;
+                text-align: right;
             }
 
             .square i{

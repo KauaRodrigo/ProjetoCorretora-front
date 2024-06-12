@@ -46,7 +46,7 @@ function changeViewType(type: string) {
 .card-list {
     display: flex;    
     justify-content: flex-start;    
-    flex-wrap: wrap;   
+    flex-wrap: wrap;       
 }
 
 .actions {
@@ -80,6 +80,7 @@ function changeViewType(type: string) {
     justify-content: center;
     background-color: #EEEEEE;
     border-radius: 10px 10px 10px 10px;
+    margin-top: 2.5rem;
 
     .empty {
         height: 20rem;

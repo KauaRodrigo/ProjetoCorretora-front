@@ -1,9 +1,8 @@
 <template>
     <div>        
         <Page>
-            <div class="container">
-                <h1>Buscar sinistro</h1>
-                <form @submit.prevent="submit">
+            <div class="container">                
+                <form @change="changeFilters" @submit.prevent="submit">
                     <div class="row justify-content-between">
                         <div class="col-5">
                             <label>Nome ou placa</label>
@@ -56,9 +55,18 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <button id="registerCustomer">Buscar</button>
-                </form>
+                    </div>                    
+                </form>          
+                <div id="orderBy">
+                    <label for="orderBy">Ordenar por</label>
+                    <select name="orderBy" @change="changeFilters" v-model="formData.orderBy">
+                        <option value="codigo">Código</option>
+                        <option value="cliente">Cliente</option>
+                        <option value="seguradora">Seguradora</option>
+                        <option value="tipo">Tipo</option>
+                        <option value="status">Status</option>
+                    </select>
+                </div>      
                 <AccidentList :rows="accidentList?.rows" :loading="loading"/>
                 <div class="d-flex pagination justify-content-between">
                     <select class="perPage" name="perPage" id="perPage" @change="changePerPage()" v-model="formData.perPage">
@@ -67,8 +75,8 @@
                         <option value="15">15</option>
                     </select>
                     <div class="page d-flex">
-                        <button :disabled="formData.page === 0" @click="prevPage()">&lt;</button>
-                        <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()">&gt;</button>
+                        <button :disabled="formData.page === 0" @click="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                 </div>
             </div>                        
@@ -94,7 +102,8 @@ const formData = ref({
     statusFilter: '',
     typeFilter: '',
     page: 0,
-    perPage: 5
+    perPage: 5,
+    orderBy: 'codigo'
 })    
 
 const loading = ref(true)
@@ -102,12 +111,10 @@ const maxPage = ref(0)
 const accidentList: any = ref({})
 
 onMounted(async () => {        
-    if(sinistroStore.filters) {
-        console.log(sinistroStore.filters)
+    if(sinistroStore.filters) {        
         formData.value.typeFilter = sinistroStore.filters.type 
     }
-    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)   
-    console.log(accidentList.value.count, formData.value.perPage)     
+    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)       
     maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage)
     loading.value = false
 })
@@ -127,8 +134,13 @@ function changePerPage() {
     submit()
 }
 
-async function submit() {
+function changeFilters() {
     loading.value = true
+    formData.value.page = 0;
+    submit();
+}
+
+async function submit() {    
     accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)        
     loading.value = false
     maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage)
@@ -141,6 +153,13 @@ async function submit() {
         display: flex;
         gap: 5px;
         justify-content: end;
+    }
+
+    #orderBy {        
+        text-align: right;
+        display: block;
+        margin-left: auto;           
+        width: fit-content;
     }
 
     .pagination {
@@ -259,7 +278,7 @@ async function submit() {
         margin-bottom: 5px;
     }
 
-    .result{
+    .result{        
         padding: 0 10px;
         border: 1.5px solid #EEEEEE;
         border-radius: 10px;
