@@ -70,6 +70,10 @@ async function submit() {
 </script>
 <style scoped lang="scss">
 @import '../../assets/_variables';
+.lastRecContainer {
+    padding: 2% 0;
+}
+
 .card-list {            
     display: flex;
     flex-direction: column;

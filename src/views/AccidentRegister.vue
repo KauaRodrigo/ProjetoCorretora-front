@@ -1,92 +1,104 @@
 <template>
-    <div>        
-        <div class="container">
-            <h1 v-if="isCadastrar">Registrar sinistro</h1>
-            <Form @submit.prevent="submit" :formData="formData">
-                <div class="row">
-                    <div class="col-md">
+    <div> 
+        <Page>
+            <div class="container">
+                <h1 v-if="isCadastrar">Registrar sinistro</h1>
+                <Form @submit.prevent="submit" :formData="formData">
+                    <div class="row">
+                        <div class="col-md">
+                            <div>
+                                <label>Cliente <strong>*</strong></label>
+                                <input placeholder="" type="text" v-model="formData.nome"/>
+                            </div>
+                            <div class="adtional-info">
+                                <div>
+                                    <label>Tipo <strong>*</strong></label>
+                                    <select name="tipo" v-model="formData.tipo">
+                                        <option value="">Selecione</option>
+                                        <option value="VEICULAR">Veicular</option>
+                                        <option value="VIAGEM">Viagem</option>
+                                        <option value="VIDA">Vida</option>
+                                        <option value="RESIDENCIAL">Residencial</option>
+                                        <option value="EMPRESARIAL">Empresarial</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Terceiros Envolvidos <strong>*</strong></label>
+                                    <input type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
+                                </div>
+                            </div>
+                            <div v-if="formData.tipo === 'VEICULAR'" class="vehicle">
+                                <div>
+                                    <label>Placa <strong>*</strong></label>
+                                    <input placeholder="" type="text" v-model="formData.placa"/>
+                                </div>
+                            </div>                        
+                        </div>
+                        <div class="col">
+                            <div class="secure-info">
+                                <div>
+                                    <label>Número da apólice <strong>*</strong></label>
+                                    <input name="apolice" placeholder="" type="text" v-model="formData.codigo"/>
+                                </div>
+                                <div>
+                                    <label>Seguradora</label>
+                                    <input placeholder="" type="text" v-model="formData.seguradora"/>
+                                </div>
+                            </div>                            
+                        </div>
                         <div>
-                            <label>Cliente <strong>*</strong></label>
-                            <input placeholder="" type="text" v-model="formData.nome" :disabled="isDisabled()"/>
+                            <label for="evento">Observações</label>
+                            <textarea name="evento" v-model="formData.evento" placeHolder=""></textarea>
                         </div>
-                        <div class="adtional-info">
-                            <div>
-                                <label>Tipo <strong>*</strong></label>
-                                <select name="tipo" v-model="formData.tipo" :disabled="isDisabled()">
-                                    <option value="">Selecione</option>
-                                    <option value="VEICULAR">Veicular</option>
-                                    <option value="VIAGEM">Viagem</option>
-                                    <option value="VIDA">Vida</option>
-                                    <option value="RESIDENCIAL">Residencial</option>
-                                    <option value="EMPRESARIAL">Empresarial</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>Terceiros Envolvidos <strong>*</strong></label>
-                                <input type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro" :disabled="isDisabled()">
-                            </div>
-                        </div>
-                        <div v-if="formData.tipo === 'VEICULAR'" class="vehicle">
-                            <div>
-                                <label>Placa <strong>*</strong></label>
-                                <input placeholder="" type="text" v-model="formData.placa" :disabled="isDisabled()"/>
-                            </div>
-                        </div>
-                        <div class="adtional-info">
-                            <div>
-                                <label>Número da apólice <strong>*</strong></label>
-                                <input name="apolice" placeholder="" type="text" v-model="formData.codigo" :disabled="isDisabled()"/>
-                            </div>
-                            <div>
-                                <label>Seguradora</label>
-                                <input placeholder="" type="text" v-model="formData.seguradora" :disabled="isDisabled()"/>
-                            </div>
-                        </div>                        
-                    </div>
-                    <div class="col">
                         <div>
-                            <label>Observações</label>
-                            <textarea v-model="formData.evento" placeHolder="" :disabled="isDisabled()"></textarea>
+                            <button type="submit" id="registerCustomer">
+                                {{ isCadastrar ? 'Registrar Sinistro' : 'Atualizar Sinistro'}}
+                            </button>
                         </div>
-                        <button type="submit" id="registerCustomer">Registrar Sinistro</button>
-                    </div>
-                    <div class="fotos">
-                        <img src="../assets/uploads/testes.jpeg" alt="" />
-                        <img src="../assets/uploads/testes2.jpeg" alt="" />
-                        <img src="../assets/uploads/testes 3.jpeg" alt="" />
-                        <img src="../assets/uploads/testes.jpeg" alt="" />                        
-                        <img src="../assets/uploads/testes2.jpeg" alt="" />
-                        <img src="../assets/uploads/testes 3.jpeg" alt="" />
-                        <img src="../assets/uploads/testes.jpeg" alt="" />                        
-                        <img src="../assets/uploads/testes2.jpeg" alt="" />
-                        <img src="../assets/uploads/testes 3.jpeg" alt="" />
-                        <div class="upload-wrapper">
-                            <label for="input-file" class="label-file"><i class="fa-solid fa-plus"></i></label>
-                            <input type="file" id="input-file">                            
+                        <div v-if="false" class="fotos">
+                            <img src="../assets/uploads/testes.jpeg" alt="" />
+                            <img src="../assets/uploads/testes2.jpeg" alt="" />
+                            <img src="../assets/uploads/testes 3.jpeg" alt="" />
+                            <img src="../assets/uploads/testes.jpeg" alt="" />                        
+                            <img src="../assets/uploads/testes2.jpeg" alt="" />
+                            <img src="../assets/uploads/testes 3.jpeg" alt="" />
+                            <img src="../assets/uploads/testes.jpeg" alt="" />                        
+                            <img src="../assets/uploads/testes2.jpeg" alt="" />
+                            <img src="../assets/uploads/testes 3.jpeg" alt="" />
+                            <div class="upload-wrapper">
+                                <label for="input-file" class="label-file"><i class="fa-solid fa-plus"></i></label>
+                                <input type="file" id="input-file">                            
+                            </div>
                         </div>
                     </div>
+                </Form>            
+                <div v-if="!isCadastrar" class="comments">
+                    <h1>Atualizações</h1>
+                    <Comment v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
+                    <div id="addComment">
+                        <textarea placeholder="Descreva a atualização..." name="comment" id="comment"></textarea>
+                        <button class="btn" id="registerCustomer">Adicionar</button>
+                    </div>                    
                 </div>
-            </Form>            
-            <div v-if="!isCadastrar" class="comments">
-                <h1>Atualizações</h1>
-                <Comment v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
             </div>
-        </div>
+        </Page>      
     </div>
 </template>
 
 <script setup lang="ts">    
-import {onMounted, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
+import Page from "@/components/baseComponents/Page.vue";
 
 const route = useRoute();
 const sinistroStore = useSinistroStore();
 
+const openAlert = inject('openAlert');
 const isCadastrar = ref(false)
 const comments = ref({
-    rows: [{ usuario: 'Marcos Antônio', conteudo: 'Comentário de teste', dataComentario: '07/06/2024' }, { usuario: 'Sara Ansini', conteudo: 'Comentário de teste', dataComentario: '07/05/2024' }],
+    rows: [{ usuario: 'Marcos Antônio', conteudo: 'Comentário de teste', dataComentario: '07/06/2024' }],
     count: 0
 })
 
@@ -101,7 +113,12 @@ const formData = ref({
 });
 
 async function submit() {
-    await sinistroStore.registrarSinistro(formData.value);
+    if(isCadastrar.value) {
+        await sinistroStore.registrarSinistro(formData.value).then(() => {
+            openAlert();
+        })
+    }
+    await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
 function formatField(type: string) {
@@ -125,7 +142,11 @@ onMounted(async () => {
 })
 
 function isDisabled() {
-    return true;
+    if(route.name == 'accidentEdit') {        
+        return true;
+    } else if (route.name == 'accidentRegister') {        
+        return false;
+    }    
 }
 
 </script>
@@ -134,6 +155,14 @@ function isDisabled() {
     @import "../assets/inputbox";
     @import "../assets/textarea";
 
+    input, select, textarea {
+        box-shadow: rgba(0,0,0,0.5) 2px 2px 3px;
+    }
+
+    input[type='checkbox'] {
+        box-shadow: none;                
+    }
+ 
     .container {
         margin-top: 20px;
         padding-top: 2rem;
@@ -155,6 +184,19 @@ function isDisabled() {
             width: 17%;                       
             box-shadow: rgba(0,0,0,0.5) 0px 2px 8px;
             border-radius: 5px;
+        }
+    }
+
+    #addComment {
+        width: 50%;
+        padding: 2%;
+        background-color: #EEE;
+        border-radius: 10px;
+        margin-top: 20px;
+
+        #comment {
+            width: 100%;
+            resize: none;            
         }
     }
 
@@ -185,6 +227,10 @@ function isDisabled() {
         margin-top: 15px;
     }
 
+    label[for='evento'] {
+        display: block;
+    }
+
     strong{
         color: $secondary;
     }
@@ -207,6 +253,19 @@ function isDisabled() {
         input[name="terceiro"] {
             display: block;
             width: 1rem;
+        }
+    }
+
+    .secure-info {
+        width: 50%;
+        gap: 2rem;
+
+        input {
+            width: 30ch;
+        }
+
+        select {
+            width: 100%;
         }
     }
 
@@ -295,15 +354,20 @@ function isDisabled() {
         font-size: 14px;
     }
 
-    #registerCustomer{
-        background-color: $secondary;
-        box-sizing: border-box;
+    #registerCustomer {
+        background-color: $secondary;        
         padding: 0 2.5%;
         border-radius: 5px;
         height: 45px;
         transition: 0.1s;
-        border: none;
-        float: right;
+        border: none;        
+        margin-top: 20px;   
+        width: 15%;
+    }
+
+    #registerCustomer:hover {
+        transition: all 0.5s;
+        box-shadow: rgba(0,0,0,0.5) 2px 2px 3px;
     }
 
 

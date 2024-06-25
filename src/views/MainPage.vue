@@ -1,13 +1,16 @@
 <template>
-    <div>        
-        <div class="container">
-            <Summary />
-            <LastRecordsList />            
-        </div>        
+    <div> 
+        <Page>
+            <div class="container">
+                <Summary />
+                <LastRecordsList />            
+            </div>
+        </Page>               
     </div>
 </template>
 
 <script setup lang="ts">
+import Page from '@/components/baseComponents/Page.vue';
 import LastRecordsList from '@/components/lastRecords/LastRecordsList.vue'
 import Summary from '@/components/Summary.vue'
 import useUserStore from '@/stores/UserStore';
@@ -36,11 +39,6 @@ function closeModalLogout() {
 
 </script>
 <style scoped lang="scss">
-    @import "../assets/__variables.scss";
-
-    .container{
-        padding-top: 20px;
-        overflow: visible;
-    }
+    @import "../assets/__variables.scss";    
 
 </style>
