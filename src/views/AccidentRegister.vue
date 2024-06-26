@@ -76,8 +76,8 @@
                     <h1>Atualizações</h1>
                     <Comment v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
                     <div id="addComment">
-                        <textarea placeholder="Descreva a atualização..." name="comment" id="comment"></textarea>
-                        <button class="btn" id="registerCustomer">Adicionar</button>
+                        <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
+                        <button class="btn" id="registerCustomer" @click="addComment()">Adicionar</button>
                     </div>                    
                 </div>
             </div>
@@ -97,9 +97,11 @@ const sinistroStore = useSinistroStore();
 
 const openAlert = inject('openAlert');
 const isCadastrar = ref(false)
+const newComment = ref({
+    content: ''
+})
 const comments = ref({
-    rows: [{ usuario: 'Marcos Antônio', conteudo: 'Comentário de teste', dataComentario: '07/06/2024' }],
-    count: 0
+    rows: [{ usuario: 'Marcos Antônio', conteudo: 'Comentário de teste', dataComentario: '07/06/2024' }]    
 })
 
 const formData = ref({
@@ -111,6 +113,11 @@ const formData = ref({
     seguradora: '',
     evento: ''
 });
+
+async function addComment() {
+    await sinistroStore.addComment(+route.params.id, newComment.value.content);
+    comments.value = await sinistroStore.getComments(+route.params.id);
+}
 
 async function submit() {
     if(isCadastrar.value) {
@@ -134,7 +141,8 @@ function formatField(type: string) {
 
 onMounted(async () => {
     if(route.name == 'accidentEdit') {        
-        formData.value = await sinistroStore.getAccidentSingle(+route.params.id);                
+        formData.value = await sinistroStore.getAccidentSingle(+route.params.id);     
+        comments.value = await sinistroStore.getComments(+route.params.id);                
         isDisabled();
     } else if (route.name == 'accidentRegister') {
         isCadastrar.value = true

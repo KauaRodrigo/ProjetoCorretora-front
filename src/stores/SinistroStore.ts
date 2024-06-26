@@ -7,6 +7,25 @@ const useSinistroStore = defineStore('sinistro', {
     }),
 
     actions: {
+        addComment: async (id: number, content: string): Promise<boolean> => {
+            try {
+                return api.post(`sinistros/`+id+`/comment`, {
+                    content
+                })
+            } catch (error) {
+                throw(error);
+            }
+        },
+
+        getComments: async (id: number): Promise<{ rows: any }> => {
+            try {
+                const { data } = await api.get(`sinistros/`+id+`/comments`);
+                return data;
+            } catch(error) {
+                throw(error);
+            }
+        },
+
         getSquareData: async (type: string): Promise<{ aberto: number, indenizado: number }> => {
             try {
                 const { data } = await api.get('sinistros/resumo', {
