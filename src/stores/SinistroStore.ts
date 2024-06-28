@@ -17,6 +17,14 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
+        deleteAccident: async (id: number): Promise<boolean> => {
+            try {
+                return api.post(`sinistros/excluir/`+id)
+            } catch (error) {
+                throw(error);
+            }
+        },
+
         getComments: async (id: number): Promise<{ rows: any }> => {
             try {
                 const { data } = await api.get(`sinistros/`+id+`/comments`);
@@ -44,6 +52,7 @@ const useSinistroStore = defineStore('sinistro', {
         },
 
         updateRegister: async (id: number, payload: any): Promise<any> => {
+            console.log('helooooo')
             try {
                 const { data } = await api.post('sinistros/editar/'+id, {
                     ...payload

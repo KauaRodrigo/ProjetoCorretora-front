@@ -1,6 +1,6 @@
 <template>
-    <RouterLink to="#" :class="{ item: type === 'LIST', 'card-item': type === 'CARD' }" v-if="row">
-        <span>{{ row.code }}</span>
+    <div :class="{ item: type === 'LIST', 'card-item': type === 'CARD' }" v-if="row">
+        <span>{{  row.code }}</span>
         <span>{{ row.client }}</span>
         <span>{{ row.company.toLowerCase() }}</span>
         <span :title="row.event">{{ row.event || 'Não informado' }}</span>
@@ -11,24 +11,30 @@
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="editRegister(row.id)">Editar</RouterLink>
-            <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn close">Fechar</RouterLink>
+            <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="editRegister(row.id)"><i class="fa fa-pencil"></i></RouterLink>
+            <button @click="deleteRegister(row.id)" class="btn close"><i class="fa fa-trash"></i></button>
         </span>       
-    </RouterLink>
+    </div>
 </template>
 <script setup lang="ts">
+import useSinistroStore from '@/stores/SinistroStore';
 import type { AccidentItem } from '../../dtos/AccidentItem.dto';
-import {useRouter} from "vue-router";
+import { useRouter } from "vue-router";
+import { inject } from 'vue';
 
-defineProps<{ 
-    row: AccidentItem,
-    type: string
-}>()
+const sinistroStore = useSinistroStore();
+
+defineProps<{ row: AccidentItem,type: string}>();
+const reload = inject('reload');
 
 const router = useRouter();
 
-function editRegister(id: number) {
-    router
+async function deleteRegister(id: number) {
+    await sinistroStore.deleteAccident(id);    
+    reload();    
+}
+
+function editRegister(id: number) {    
     router.push({
         name: 'accidentEdit',
         params: {
@@ -61,7 +67,7 @@ function editRegister(id: number) {
     padding: 0.8%;
     display: grid;    
     background-color: #e2e2e2;    
-    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr;
+    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.7fr 0.5fr;
     text-decoration: none;
     color: black;    
 }
@@ -82,7 +88,7 @@ span {
 
 .actions {
     gap: 10px;    
-    a {            
+    a, button {            
         display: flex;
         align-items: center;
         width: 35%;
@@ -91,6 +97,9 @@ span {
         color: white;
         justify-content: center;  
         border-radius: 5px;    
+    }
+    button {
+        z-index: 9999;
     }
     .edit{
         background-color: #0094FF;

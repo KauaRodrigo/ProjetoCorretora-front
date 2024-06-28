@@ -87,7 +87,7 @@
 <script setup lang="ts">
 import Page from '@/components/baseComponents/Page.vue';
 import AccidentList from '@/components/accident/AccidentList.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, provide, ref } from 'vue';
 import useSinistroStore from '@/stores/SinistroStore';
 
 const sinistroStore = useSinistroStore()  
@@ -118,6 +118,12 @@ onMounted(async () => {
     maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage)
     loading.value = false
 })
+
+provide('reload', reload)
+
+async function reload() {
+    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)       
+}
 
 function nextPage() {
     ++formData.value.page; 
