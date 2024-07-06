@@ -164,7 +164,7 @@ function isDisabled() {
     @import "../assets/textarea";
 
     input, select, textarea {
-        box-shadow: rgba(0,0,0,0.5) 2px 2px 3px;
+        box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
     }
 
     input[type='checkbox'] {
@@ -172,8 +172,7 @@ function isDisabled() {
     }
  
     .container {
-        margin-top: 20px;
-        padding-top: 2rem;
+        margin-top: 20px;        
         padding-bottom: 4rem;
     }
 
@@ -190,7 +189,7 @@ function isDisabled() {
         img {                        
             display: block;        
             width: 17%;                       
-            box-shadow: rgba(0,0,0,0.5) 0px 2px 8px;
+            box-shadow: rgba(0,0,0,0.2) 0px 0px 10px;  
             border-radius: 5px;
         }
     }

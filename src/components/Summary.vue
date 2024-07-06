@@ -30,7 +30,7 @@
     
     .summary{
         overflow: visible;
-        margin-top: 2rem;
+        margin-top: 1rem;
         margin-bottom: 5rem;
     }
     .summary h1{

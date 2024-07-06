@@ -49,8 +49,7 @@
                                 <select name="status" v-model="formData.statusFilter">
                                     <option value="">Não Filtrar</option>
                                     <option value="ABERTO">Aberto</option>
-                                    <option value="INDENIZADO">Indenizado</option>
-                                    <option value="FECHADO">Fechado</option>
+                                    <option value="INDENIZADO/FECHADO">Indenizado/Fechado</option>                                    
                                     <option value="ARQUIVADO">Arquivado</option>
                                 </select>
                             </div>

@@ -31,7 +31,7 @@ const router = useRouter();
 
 async function deleteRegister(id: number) {
     await sinistroStore.deleteAccident(id);    
-    reload();    
+    reload();
 }
 
 function editRegister(id: number) {    

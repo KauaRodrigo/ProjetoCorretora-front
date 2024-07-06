@@ -2,12 +2,18 @@
     <div>
         <h1>{{ comment.usuario }}</h1>
         <p>{{ comment.conteudo }}</p>
-        <i>{{ comment.dataComentario }}</i>
+        <i>Adicionado em {{ formatCommentDate(comment.dataComentario, 'dd/MM/yyyy') }} as {{ formatCommentDate(comment.dataComentario, 'hh:mm:ss') }}</i>
     </div>
 </template>
 <script setup lang="ts">
+import { format } from 'date-fns';
+
 
 defineProps<{ comment: any }>()
+
+function formatCommentDate(date: Date, sFormat: string){
+    return format(date, sFormat);
+}
 
 </script>
 <style lang="scss" scoped>
