@@ -52,7 +52,6 @@ const useSinistroStore = defineStore('sinistro', {
         },
 
         updateRegister: async (id: number, payload: any): Promise<any> => {
-            console.log('helooooo')
             try {
                 const { data } = await api.post('sinistros/editar/'+id, {
                     ...payload

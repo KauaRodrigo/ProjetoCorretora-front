@@ -126,16 +126,19 @@ async function reload() {
 }
 
 function nextPage() {
+    loading.value = true
     ++formData.value.page; 
     submit();
 }
 
 function prevPage() {
+    loading.value = true
     --formData.value.page; 
     submit();
 }
 
 function changePerPage() {
+    loading.value = true
     formData.value.page = 0;
     submit()
 }

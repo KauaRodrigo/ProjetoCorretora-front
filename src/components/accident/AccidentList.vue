@@ -8,15 +8,12 @@
                 <i class="bi bi-card-heading"></i>
             </button>
         </div>
-        <div v-if="viewType == 'LIST'" class="list" :class="{'p-4': loading }">
+        <div class="list" :class="{'p-4': loading }">
             <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
                 <AccidentListItem :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
             </Table>
             <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
-        </div>
-        <div class="card-list" :class="{'p-4': loading }" v-else>
-            <AccidentListItem :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
         </div>
     </div>
 </template>
@@ -42,12 +39,6 @@ function changeViewType(type: string) {
 </script>
 <style scoped lang="scss">
 @import '../../assets/_variables.scss';
-
-.card-list {
-    display: flex;    
-    justify-content: flex-start;    
-    flex-wrap: wrap;       
-}
 
 .actions {
     padding: 2% 0;    

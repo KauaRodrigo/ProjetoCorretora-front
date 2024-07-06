@@ -15,6 +15,17 @@ if (token && user) {
   api.defaults.headers['Authorization'] = 'Bearer ' + token
   api.defaults.headers['user'] = user
 }
+
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (window.location.href != '/' && error.response && error.response.status === 401) {
+      window.location.href = '/';
+    }
+    return Promise.reject(error);
+  }
+);
+
              
 
 export default api;
