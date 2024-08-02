@@ -3,7 +3,9 @@ import { defineStore } from "pinia";
 
 const useSinistroStore = defineStore('sinistro', {
     state: () => ({
-        filters: null
+        filters: {
+            type: ''
+        }
     }),
 
     actions: {

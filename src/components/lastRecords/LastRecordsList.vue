@@ -8,7 +8,7 @@
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big/>
             <AccidentEmpty v-if="!lastRecordsRows?.rows?.length && !loading" />
         </div>
-        <div class="d-flex pagination justify-content-between">
+        <div v-if="lastRecordsRows?.rows?.length > formData.perPage" class="d-flex pagination justify-content-between">
             <select class="perPage" name="perPage" id="perPage" @change="changePerPage()" v-model="formData.perPage">
                 <option value="5">5</option>
                 <option value="10">10</option>

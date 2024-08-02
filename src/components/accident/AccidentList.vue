@@ -10,30 +10,44 @@
         </div>
         <div class="list" :class="{'p-4': loading }">
             <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
-                <AccidentListItem :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
+                <AccidentListItem @deleteSinistro="openModalConfirmaExclusao(value.id)" :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
             </Table>
             <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
         </div>
+        <ModalConfirmaExclusaoSinistro :sinistro="sinistro" />
     </div>
 </template>
 <script lang="ts" setup>
 
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import Loader from '../baseComponents/Loader.vue';
 import Table from '../baseComponents/TableComponent.vue'
 import AccidentListItem from './AccidentListItem.vue';
 import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
 import useUserStore from '@/stores/UserStore';
+import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
 
 const store = useUserStore();
 
-const viewType = ref(store.typeView);
+const viewType: Ref<string> = ref(store.typeView);
+const sinistro: Ref<number> = ref(0)
 
 defineProps<{ rows?: any, loading?: boolean }>()
 
 function changeViewType(type: string) {
     viewType.value = store.changeViewType(type);    
+}
+
+function openModalConfirmaExclusao(iCodigo: number) {
+    console.log(iCodigo)
+    sinistro.value = iCodigo;
+    const modal = document.getElementById('modalExclusaoSinistro');
+
+    if(modal) {
+        console.log(modal)
+        modal.style.display = 'block';
+    }
 }
  
 </script>

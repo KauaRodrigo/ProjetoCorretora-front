@@ -56,16 +56,25 @@
                         </div>
                     </div>                    
                 </form>          
-                <div id="orderBy">
-                    <label for="orderBy">Ordenar por</label>
-                    <select name="orderBy" @change="changeFilters" v-model="formData.orderBy">
-                        <option value="codigo">Código</option>
-                        <option value="cliente">Cliente</option>
-                        <option value="seguradora">Seguradora</option>
-                        <option value="tipo">Tipo</option>
-                        <option value="status">Status</option>
-                    </select>
-                </div>      
+                <div id="ordenacao">
+                    <div id="orderBy">
+                        <label for="orderBy">Ordenar por</label>
+                        <select name="orderBy" @change="changeFilters" v-model="formData.orderBy">
+                            <option value="codigo">Código</option>
+                            <option value="cliente">Cliente</option>
+                            <option value="seguradora">Seguradora</option>
+                            <option value="tipo">Tipo</option>
+                            <option value="status">Status</option>
+                        </select>
+                    </div>
+                    <div id="order">
+                        <label for="order">Ordenar por</label>
+                        <select name="order" @change="changeFilters" v-model="formData.order">
+                            <option value="asc">Crescente</option>
+                            <option value="desc">Descrescente</option>                        
+                        </select>
+                    </div>
+                </div>                      
                 <AccidentList :rows="accidentList?.rows" :loading="loading"/>
                 <div class="d-flex pagination justify-content-between">
                     <select class="perPage" name="perPage" id="perPage" @change="changePerPage()" v-model="formData.perPage">
@@ -79,7 +88,7 @@
                     </div>
                 </div>
             </div>                        
-        </Page>        
+        </Page>                
     </div>
 </template>
 
@@ -102,7 +111,8 @@ const formData = ref({
     typeFilter: '',
     page: 0,
     perPage: 5,
-    orderBy: 'codigo'
+    orderBy: 'codigo',
+    order: 'asc'
 })    
 
 const loading = ref(true)
@@ -159,15 +169,25 @@ async function submit() {
     @import "../assets/__variables.scss";
     .selects {
         display: flex;
-        gap: 5px;
+        gap: 1rem;
         justify-content: end;
     }
 
-    #orderBy {        
+    #ordenacao {        
         text-align: right;
-        display: block;
-        margin-left: auto;           
-        width: fit-content;
+        display: flex;
+        justify-content: right;
+        gap: 1rem;
+        margin-left: auto; 
+        width: 40%;
+
+        #orderBy {
+            width: 50%;
+        }          
+
+        #order {
+            width: 25%;
+        }          
     }
 
     .pagination {
@@ -256,11 +276,11 @@ async function submit() {
     .vehicle{
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        gap: 1rem;        
     }
 
     .vehicle-item{
-        width: 49.5%;
+        width: 45%;
     }
 
 
@@ -275,6 +295,7 @@ async function submit() {
         margin: 2% 0;        
         border: none;        
     }
+
     form {
         margin-bottom: 4%;
     }
@@ -291,10 +312,6 @@ async function submit() {
         padding: 0 10px;
         border: 1.5px solid #EEEEEE;
         border-radius: 10px;
-    }
-
-    .spacing{
-        margin: 10px 0;
-    }
+    }    
 
 </style>

@@ -12,26 +12,23 @@
         </span>
         <span class="d-flex justify-content-end actions">            
             <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="editRegister(row.id)"><i class="fa fa-pencil"></i></RouterLink>
-            <button @click="deleteRegister(row.id)" class="btn close"><i class="fa fa-trash"></i></button>
+            <button v-if="row.status != AccidentStatus.INDENIZADO" @click="deleteSinistro()" class="btn close"><i class="fa fa-trash"></i></button>
         </span>       
     </div>
 </template>
 <script setup lang="ts">
-import useSinistroStore from '@/stores/SinistroStore';
+
+import { AccidentStatus } from '@/enums/accidentStatus';
 import type { AccidentItem } from '../../dtos/AccidentItem.dto';
 import { useRouter } from "vue-router";
-import { inject } from 'vue';
-
-const sinistroStore = useSinistroStore();
 
 defineProps<{ row: AccidentItem,type: string}>();
-const reload = inject('reload');
+const emits = defineEmits(['deleteSinistro']);
 
 const router = useRouter();
 
-async function deleteRegister(id: number) {
-    await sinistroStore.deleteAccident(id);    
-    reload();
+function deleteSinistro() {    
+    emits('deleteSinistro');
 }
 
 function editRegister(id: number) {    

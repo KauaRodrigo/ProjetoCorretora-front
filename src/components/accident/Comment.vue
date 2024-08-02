@@ -12,7 +12,11 @@ import { format } from 'date-fns';
 defineProps<{ comment: any }>()
 
 function formatCommentDate(date: Date, sFormat: string){
-    return format(date, sFormat);
+    if(date) {
+        // return format(date, sFormat);
+    }
+
+    return 'Sem Informação'
 }
 
 </script>

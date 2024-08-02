@@ -1,6 +1,6 @@
 export enum AccidentStatus {
     ABERTO = "ABERTO",
-    INDENIZADO = "INDENIZADO",
+    INDENIZADO = "INDENIZADO/FECHADO",
     FECHADO = "FECHADO",
     ARQUIVADO = "ARQUIVADO"
 }
