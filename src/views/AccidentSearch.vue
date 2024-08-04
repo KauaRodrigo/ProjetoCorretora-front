@@ -95,7 +95,7 @@
 <script setup lang="ts">
 import Page from '@/components/baseComponents/Page.vue';
 import AccidentList from '@/components/accident/AccidentList.vue';
-import { onMounted, provide, ref } from 'vue';
+import { onBeforeUnmount, onMounted, provide, ref } from 'vue';
 import useSinistroStore from '@/stores/SinistroStore';
 
 const sinistroStore = useSinistroStore()  
@@ -123,9 +123,9 @@ onMounted(async () => {
     if(sinistroStore.filters) {        
         formData.value.typeFilter = sinistroStore.filters.type 
     }
-    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)       
-    maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage)
-    loading.value = false
+    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value);
+    maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage);
+    loading.value = false;
 })
 
 provide('reload', reload)
@@ -164,13 +164,17 @@ async function submit() {
     maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage)
 }
 
+onBeforeUnmount(() => {
+    sinistroStore.filters.type = '';
+})
+
 </script>
 <style scoped lang="scss">
     @import "../assets/__variables.scss";
     .selects {
         display: flex;
         gap: 1rem;
-        justify-content: end;
+        justify-content: end;           
     }
 
     #ordenacao {        
@@ -237,7 +241,7 @@ async function submit() {
         background-color: #f9f9f9;
         border: none;
         border-radius: 5px;
-        padding: 0 13px;
+        padding: 0 13px;        
         box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
     }
 

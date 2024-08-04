@@ -77,7 +77,7 @@
                     <Comment v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
                     <div id="addComment">
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
-                        <button class="btn" id="registerCustomer" @click="addComment()">Adicionar</button>
+                        <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
                     </div>                    
                 </div>
             </div>
@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">    
-import {inject, onMounted, ref} from "vue";
+import {inject, onMounted, onUpdated, ref} from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
@@ -95,13 +95,13 @@ import Page from "@/components/baseComponents/Page.vue";
 const route = useRoute();
 const sinistroStore = useSinistroStore();
 
-const openAlert = inject('openAlert');
+const openAlert: any = inject('openAlert');
 const isCadastrar = ref(false)
 const newComment = ref({
     content: ''
 })
 const comments = ref({
-    rows: [{ usuario: 'Marcos Antônio', conteudo: 'Comentário de teste', dataComentario: '07/06/2024' }]    
+    rows: []    
 })
 
 const formData = ref({
@@ -117,51 +117,33 @@ const formData = ref({
 async function addComment() {
     await sinistroStore.addComment(+route.params.id, newComment.value.content);
     comments.value = await sinistroStore.getComments(+route.params.id);
+    newComment.value.content = '';
 }
 
 async function submit() {
+    document.getElementById('registerCustomer')?.setAttribute('disabled', 'true');
     if(isCadastrar.value) {
         await sinistroStore.registrarSinistro(formData.value).then(() => {
-            openAlert();
+            openAlert('accidentSearch');            
         })
     }
     await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
-function formatField(type: string) {
-
-    switch (type) {
-        case 'cep':
-            if(formData.value.cep.length >= 5) {
-                formData.value.cep = formData.value.cep.replace(/(\d{5})(\d{0,3})/gm, '$1-$2')
-            }
-            return formData.value
-    }
-}
-
 onMounted(async () => {
-    if(route.name == 'accidentEdit') {        
+    if(route.name == 'accidentEdit') {                
         formData.value = await sinistroStore.getAccidentSingle(+route.params.id);     
         comments.value = await sinistroStore.getComments(+route.params.id);                
-        isDisabled();
     } else if (route.name == 'accidentRegister') {
         isCadastrar.value = true
     }    
 })
 
-function isDisabled() {
-    if(route.name == 'accidentEdit') {        
-        return true;
-    } else if (route.name == 'accidentRegister') {        
-        return false;
-    }    
-}
-
 </script>
 <style scoped lang="scss">
     @import "../assets/__variables.scss";
     @import "../assets/inputbox";
-    @import "../assets/textarea";
+    @import "../assets/textarea.scss";
 
     input, select, textarea {
         box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
@@ -202,6 +184,7 @@ function isDisabled() {
         margin-top: 20px;
 
         #comment {
+            padding: 2%;
             width: 100%;
             resize: none;            
         }
@@ -226,6 +209,11 @@ function isDisabled() {
         width: 50%;
         display: block;
     }
+    
+    select:focus{
+        border: 1px solid $secondary;  
+        outline: none;
+    }
 
     label{
         font-size: 18px;
@@ -236,6 +224,11 @@ function isDisabled() {
 
     label[for='evento'] {
         display: block;
+    }
+
+    textarea[name='evento'] {
+        resize: none;
+        padding: 1%;
     }
 
     strong{
@@ -361,21 +354,34 @@ function isDisabled() {
         font-size: 14px;
     }
 
-    #registerCustomer {
+    #registerCustomer, #registerComment {
         background-color: $secondary;        
-        padding: 0 2.5%;
+        padding: 0 1%;
         border-radius: 5px;
         height: 45px;
         transition: 0.1s;
         border: none;        
-        margin-top: 20px;   
-        width: 15%;
+        margin-top: 20px;    
+               
+    }
+    
+    #registerCustomer:disabled, #registerCustomer:disabled:hover {
+        background-color: #EEE;
+        color: black;
+        opacity: 0.3;
+        box-shadow: none;
     }
 
-    #registerCustomer:hover {
-        transition: all 0.5s;
+    #registerCustomer:hover, #registerComment:hover {
+        transition: all 0.2s;
+        background-color: $secondaryDark;
+        color: white;
         box-shadow: rgba(0,0,0,0.5) 2px 2px 3px;
     }
+
+    #registerComment {
+        padding: 2%;            
+    }    
 
 
 </style>

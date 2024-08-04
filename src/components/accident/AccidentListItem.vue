@@ -7,12 +7,12 @@
         <span>{{ row.type.toLowerCase() }}</span>
         <span>
             <div class="tag">
-                {{ row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
+                {{ row.status == 'RETORNO_REPARO' ? row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="editRegister(row.id)"><i class="fa fa-pencil"></i></RouterLink>
-            <button v-if="row.status != AccidentStatus.INDENIZADO" @click="deleteSinistro()" class="btn close"><i class="fa fa-trash"></i></button>
+            <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="editRegister(row.id)"><i class="fa-solid fa-pen-nib"></i></RouterLink>
+            <button v-if="row.status != AccidentStatus.INDENIZADO" @click="deleteSinistro()" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
         </span>       
     </div>
 </template>
@@ -94,10 +94,7 @@ span {
         color: white;
         justify-content: center;  
         border-radius: 5px;    
-    }
-    button {
-        z-index: 9999;
-    }
+    }    
     .edit{
         background-color: #0094FF;
     }

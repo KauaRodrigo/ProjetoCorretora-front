@@ -6,7 +6,7 @@
 <script setup lang="ts">
 </script>
 <style scoped lang="css">
-    div {
+    div {        
         height: 100%;
         position: fixed;
         top: 0;

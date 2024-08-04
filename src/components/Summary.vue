@@ -3,19 +3,19 @@
         <h1>Resumo</h1>
         <ul>
             <li>
-                <SquareSummary open=200 indem=100 type="Veicular"/>
+                <SquareSummary type="Veicular"/>
             </li>
             <li>
-                <SquareSummary open="200" indem="100" type="Residencial"/>
+                <SquareSummary type="Residencial"/>
             </li>
             <li>
-                <SquareSummary open="200" indem="100" type="Vida"/>
+                <SquareSummary type="Vida"/>
             </li>
             <li>
-                <SquareSummary open="200" indem="100" type="Empresarial"/>
+                <SquareSummary type="Empresarial"/>
             </li>
             <li>
-                <SquareSummary open="200" indem="100" type="Viagem"/>
+                <SquareSummary type="Viagem"/>
             </li>
         </ul>
     </div>

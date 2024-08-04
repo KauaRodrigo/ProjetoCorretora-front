@@ -1,5 +1,12 @@
+<template>  
+  <TheHeader v-if="showElement()" @openModalLogout="openModalLogout"></TheHeader> 
+  <RouterView />
+  <ModalLogout @logout="logout" @closeModal="closeModalLogout" v-if="showModalLogout && showElement()" />  
+  <Alert v-if="showAlert" title="Sinistro Registrado!" content="Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!" :route="backRoute"/>
+</template> 
+
 <script setup lang="ts">
-import { onMounted, provide, ref } from 'vue';
+import { onMounted, provide, ref, type Ref } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import ModalLogout from '@/components/ModalLogout.vue';
 import TheHeader from '@/components/baseComponents/TheHeader.vue'
@@ -9,6 +16,7 @@ import Alert from './components/Alert.vue';
 const store = useUserStore()
 const router = useRouter()
 const route = useRoute()
+const backRoute: Ref<string> = ref('');
 
 const showModalLogout = ref(false)
 
@@ -20,9 +28,9 @@ async function logout() {
 }
 
 const showAlert = ref();
-const openAlert = () => {
-    console.log('hello')
-    showAlert.value = true;
+const openAlert = (route: string) => {    
+    showAlert.value = true;    
+    backRoute.value = route;
 }
 
 provide('openAlert', openAlert)
@@ -47,12 +55,6 @@ onMounted(async () => {
 })
 </script>
 
-<template>  
-  <TheHeader v-if="showElement()" @openModalLogout="openModalLogout"></TheHeader> 
-  <RouterView />
-  <ModalLogout @logout="logout" @closeModal="closeModalLogout" v-if="showModalLogout && showElement()" />  
-  <Alert v-if="showAlert" title="Sinistro Registrado!" content="Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!"/>
-</template> 
 
 <style scoped>
 </style>

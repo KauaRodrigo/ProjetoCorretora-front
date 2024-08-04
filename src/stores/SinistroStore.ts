@@ -36,14 +36,14 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
-        getSquareData: async (type: string): Promise<{ aberto: number, indenizado: number }> => {
+        getSquareData: async (type: string): Promise<{ aberto: number, retorno_reparo: number }> => {
             try {
                 const { data } = await api.get('sinistros/resumo', {
                     params: {
                         tipo: type
                     }
-                })
-                return data
+                })            
+                return data;
             } catch (error) {
                 throw(error)
             }

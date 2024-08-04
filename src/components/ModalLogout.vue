@@ -1,6 +1,6 @@
 <template>
-    <Modal height="400" width="500">
-        <i class="fas fa-car-side"></i>
+    <!--<Modal height="200" width="500"> -->
+    <Modal>
         <div v-if="!loading">
             <h1>Tem certeza de que deseja sair?</h1>
             <div class="actions">
@@ -29,28 +29,20 @@ function logout() {
 </script>
 <style scoped lang="scss">
 @import "../assets/__variables.scss";
-h1 {
-    font-size: 28px;
-    font-weight: 600;
-    color: $primary;
-    margin-bottom: 10%;
-    max-width: 70%;
-    margin: 0 auto;
-    text-align: center;
-}
+
 .actions {
     display: flex;
-    align-items: center;
+    //align-items: center;
     justify-content: center;
-    position: relative;
-    transform: translate(0%, 12rem);
+    //position: relative;
+    //transform: translate(0%, 1.5rem);
     gap: 20px;
     
     button {
         height: 3rem;
         padding: 0 20px;
         font-weight: bold;
-        box-shadow: rgba(0,0,0,0.5) 0px 2px 8px;
+        box-shadow: rgba(0,0,0,0.4) 0px 2px 5px;
     }
 }
 i {

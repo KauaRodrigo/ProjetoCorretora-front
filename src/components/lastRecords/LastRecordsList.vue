@@ -2,21 +2,21 @@
     <div class="lastRecContainer">
         <h1>Últimos registros</h1>
         <div class="card-list" :class="{'p-4': !lastRecordsRows }">
-            <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+            <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr" :headers="['Apólice', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
                 <LastRecordsListItem v-for="(value, index) of lastRecordsRows.rows" :key="index" :row="value" />        
             </Table>
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big/>
             <AccidentEmpty v-if="!lastRecordsRows?.rows?.length && !loading" />
         </div>
-        <div v-if="lastRecordsRows?.rows?.length > formData.perPage" class="d-flex pagination justify-content-between">
+        <div v-if="lastRecordsRows?.count >= formData.perPage" class="d-flex pagination justify-content-between">            
             <select class="perPage" name="perPage" id="perPage" @change="changePerPage()" v-model="formData.perPage">
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
             </select>
             <div class="page d-flex">
-                <button :disabled="formData.page === 0" @click="prevPage()">&lt;</button>
-                <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()">&gt;</button>
+                <button :disabled="formData.page === 0" @click="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+                <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
     </div>

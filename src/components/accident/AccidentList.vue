@@ -9,7 +9,7 @@
             </button>
         </div>
         <div class="list" :class="{'p-4': loading }">
-            <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr" :headers="['Código', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+            <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr" :headers="['Apólice', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
                 <AccidentListItem @deleteSinistro="openModalConfirmaExclusao(value.id)" :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
             </Table>
             <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
@@ -39,13 +39,11 @@ function changeViewType(type: string) {
     viewType.value = store.changeViewType(type);    
 }
 
-function openModalConfirmaExclusao(iCodigo: number) {
-    console.log(iCodigo)
+function openModalConfirmaExclusao(iCodigo: number) {    
     sinistro.value = iCodigo;
     const modal = document.getElementById('modalExclusaoSinistro');
 
-    if(modal) {
-        console.log(modal)
+    if(modal) {    
         modal.style.display = 'block';
     }
 }

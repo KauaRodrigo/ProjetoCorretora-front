@@ -1,4 +1,5 @@
 @import "bootstrap/scss/bootstrap";
+@import "./_variables.scss";
 
 * {
   margin: 0;
@@ -10,4 +11,16 @@
 body, html, #app {
   height: 100%;
   width: 100%;
+}
+
+.modal-box { 
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: $primary;
+    //max-width: 70%;
+    //margin: 0 auto;
+    margin-bottom: 30px;
+    text-align: center;
+  }
 }

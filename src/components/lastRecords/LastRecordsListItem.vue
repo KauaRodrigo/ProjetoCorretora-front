@@ -7,12 +7,12 @@
         <span>{{ row.type.toLowerCase() }}</span>
         <span>
             <div class="tag">
-                {{ row.status?.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
+                {{ row.status == 'RETORNO_REPARO' ?  row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
             </div>
         </span>
-        <span class="d-flex justify-content-start actions">            
-            <div class="btn edit">Editar</div>
-            <div class="btn close">Fechar</div>
+        <span class="d-flex justify-content-end actions">            
+            <div class="btn edit"><i class="fa-solid fa-pen-nib"></i></div>
+            <div class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></div>
         </span>
     </div>
 </template>
@@ -25,7 +25,7 @@ defineProps<{ row: any }>()
     padding: 0.8%;
     display: grid;    
     background-color: #e2e2e2;    
-    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.7fr 0.8fr 0.5fr 0.7fr;
+    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr;
 }
 .item:nth-child(2n) {
     background-color: #EEEEEE;
@@ -46,7 +46,7 @@ span {
     div {            
         display: flex;
         align-items: center;
-        width: 35%;
+        //width: 35%;
         height: 30px;
         border: none;              
         color: white;
@@ -57,8 +57,12 @@ span {
         background-color: #0094FF;
     }
 
+    i{
+        font-size: 15px;
+    }
+
     .close{
-        background-color: #C00000;
+        background-color: #e5c122c3;
     }
 }
 

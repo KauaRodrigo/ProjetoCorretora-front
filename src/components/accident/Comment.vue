@@ -2,22 +2,24 @@
     <div>
         <h1>{{ comment.usuario }}</h1>
         <p>{{ comment.conteudo }}</p>
-        <i>Adicionado em {{ formatCommentDate(comment.dataComentario, 'dd/MM/yyyy') }} as {{ formatCommentDate(comment.dataComentario, 'hh:mm:ss') }}</i>
+        <i>Adicionado em {{ oDataHora.data }} às {{ oDataHora.hora }}</i>
     </div>
 </template>
 <script setup lang="ts">
-import { format } from 'date-fns';
+import { onMounted, ref, type Ref } from 'vue';
 
+const oDataHora: Ref<{ data: string, hora: string }> = ref({
+    data: '',
+    hora: ''
+})
 
-defineProps<{ comment: any }>()
+const props = defineProps<{ comment: any }>()
 
-function formatCommentDate(date: Date, sFormat: string){
-    if(date) {
-        // return format(date, sFormat);
-    }
-
-    return 'Sem Informação'
-}
+onMounted(() => {
+    const oDataHoraComment = props.comment.dataComentario.split(' ');
+    oDataHora.value.data = oDataHoraComment[0];
+    oDataHora.value.hora = oDataHoraComment[1]
+})
 
 </script>
 <style lang="scss" scoped>

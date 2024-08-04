@@ -1,0 +1,12 @@
+@import './_variables';
+@import './inputbox';
+
+select {
+    width: 50%;
+    display: block;
+}
+    
+select:focus{
+    border: 1px solid $secondary;  
+    outline: none;
+}

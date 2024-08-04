@@ -8,11 +8,16 @@
             <i v-if="type=='Viagem'" class="bi bi-airplane"></i>
             <div v-if="data" class="key">
                 <h5>Em aberto</h5>
-                <h5>Indenizados</h5>
+                <h5 v-if="type=='Veicular'">Retorno rep.</h5>
+                <h5 v-if="type=='Residencial'">Retorno rep.</h5>
+                <h5 v-if="type=='Empresarial'">Retorno rep.</h5>
             </div>
             <div v-if="data" class="value">
                 <h6>{{ data?.aberto }}</h6>
-                <h6>{{ data?.indenizado }}</h6>
+                <h6 v-if="type=='Veicular'">{{ data?.retorno_reparo }}</h6>
+                <h6 v-if="type=='Residencial'">{{ data?.retorno_reparo }}</h6>
+                <h6 v-if="type=='Empresarial'">{{ data?.retorno_reparo }}</h6>
+                <!--<h6>{{ data?.retorno_reparo }}</h6>-->
             </div>
             <Loader v-if="loading" text="Carregando..."/>
         </div>
@@ -27,8 +32,6 @@ import Loader from './Loader.vue';
 import { useRouter } from 'vue-router';
 
     const props = defineProps<{
-        open:string,
-        indem:string,
         type:string,
     }>()
     

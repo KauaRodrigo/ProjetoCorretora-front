@@ -1,11 +1,23 @@
 <template>
     <div id="modalExclusaoSinistro">
-        <Modal height="250" width="500">
-            <h1>Tem Certeza?</h1>
-            <h5>Deseja marcar o sinistro {{ sinistro }} como <strong>'Indenizado/Fechado'</strong></h5>
+        <Modal>
+            <h1>Atualizar status</h1>
+            <h5>Selecione o novo status do sinistro:</h5>
+            <select name="status" id="new_status">
+                <option value="ABERTO">Aberto</option>
+                <option value="REPARO">Reparo</option>
+                <option value="RETORNO_REPARO">Retorno reparo</option>
+                <option value="INDENIZADO">Indenizado</option>
+                <option value="FECHADO">Fechado</option>
+                <option value="CANCELADO">Cancelado</option>
+            </select>
+            <div class="comment_box">
+                <h5>Observações<strong>*</strong></h5>
+                <textarea name="comment" id="comment" placeholder="Digite a atualização"></textarea>
+            </div>
             <div class="actions"> 
-                <button id="confirmar" @click="deleteRegister()" class="btn">Confirmar</button>
-                <button id="cancelar" @click="close()" class="btn">Cancelar</button>
+                <button id="confirmar" @click="deleteRegister()" class="btn btn-success">Confirmar</button>
+                <button id="cancelar" @click="close()" class="btn btn-danger">Cancelar</button>
             </div>            
         </Modal>
     </div>
@@ -38,43 +50,43 @@ function close() {
 </script>
 <style lang="scss" scoped>
 @import "../assets/__variables.scss";
-#modalExclusaoSinistro {
-    text-align: center;
-    display: none;
+@import "../assets/textarea.scss";
+@import "../assets/select.scss";
+
+#modalExclusaoSinistro {           
+    display: none;              
 
     h1 {
         font-weight: 600;
         color: $primary;
     }
 
-    h1, h5 {
+    h1 {
         margin-bottom: 1rem;
     }    
-
+    
     #confirmar, #cancelar {
-        color: white;                        
-        transition: all 0.5s;
+        color: white;        
         font-weight: bold;
-    }
+        border: none;   
+    }            
     
-    #confirmar:hover, #cancelar:hover {
-        transition: all 0.5s;   
+    select {        
+        margin-bottom: 2rem;
     }
 
-    #confirmar {
-        background: $tertiary;
-    }    
-
-    #confirmar:hover {
-        background-color: $primary;
-    }
-
-    #cancelar {
-        background-color: rgb(252, 64, 64);          
-    }
-    
-    #cancelar:hover {
-        background-color: darkred;
+    .comment_box {
+        h5 { text-align: left }        
+        margin: auto;        
+        margin-bottom: 2rem;
+        strong{
+            color: $secondary;
+            margin-left: 1%;
+        }
+        #comment {
+            padding: 2%;
+            width: 100%;
+        }
     }
 
     .actions {        
@@ -83,6 +95,10 @@ function close() {
         gap: 2rem;
         width: 60%;
         margin: auto;
+    }
+
+    strong {
+        color: $secondary;
     }
 
 }
