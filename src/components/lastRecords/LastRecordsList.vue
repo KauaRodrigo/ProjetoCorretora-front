@@ -3,7 +3,7 @@
         <h1>Últimos registros</h1>
         <div class="card-list" :class="{'p-4': !lastRecordsRows }">
             <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr" :headers="['Apólice', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
-                <LastRecordsListItem v-for="(value, index) of lastRecordsRows.rows" :key="index" :row="value" />        
+                <LastRecordsListItem @atualizaSinistro="openModalAtualizaSinistro(value)" @deleteSinistro="openModalConfirmaExclusao(value)" v-for="(value, index) of lastRecordsRows.rows" :key="index" :row="value" />        
             </Table>
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big/>
             <AccidentEmpty v-if="!lastRecordsRows?.rows?.length && !loading" />
@@ -19,15 +19,19 @@
                 <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
+        <ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" />
+        <ModalAtualizaStatus v-if="sinistro" :sinistro="sinistro" />
     </div>
 </template>
 <script setup lang="ts">
 import LastRecordsListItem from './LastRecordsListItem.vue'
 import Table from '../baseComponents/TableComponent.vue'
 import useSinistroStore from '@/stores/SinistroStore';
-import { onMounted, ref } from 'vue';
+import { inject, onMounted, provide, ref } from 'vue';
 import Loader from '../baseComponents/Loader.vue';
 import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
+import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
+import ModalAtualizaStatus from '../ModalAtualizaStatus.vue';
 
 const store = useSinistroStore()
 
@@ -38,6 +42,9 @@ const formData = ref({
 const maxPage = ref();
 const lastRecordsRows = ref()
 const loading = ref(false)
+const sinistro: any = ref({});
+
+const getData: any = inject('getData');
 
 onMounted(async () => {
     loading.value = true;
@@ -45,6 +52,13 @@ onMounted(async () => {
     maxPage.value = Math.ceil(lastRecordsRows.value.count / formData.value.perPage)
     loading.value = false;
 })
+
+provide('reload', reload)
+
+async function reload() {
+    lastRecordsRows.value = await store.getLastRecords(formData.value)       
+    getData;
+}
 
 function nextPage() {
     ++formData.value.page; 
@@ -67,6 +81,28 @@ async function submit() {
     loading.value = false
     maxPage.value = Math.ceil(lastRecordsRows.value.count / formData.value.perPage)
 }
+
+function openModalConfirmaExclusao(row: any) {      
+    sinistro.value.id = row.id;
+    sinistro.value.status = row.status;
+    const modal = document.getElementById('modalExclusaoSinistro');
+
+    if(modal) {    
+        modal.style.display = 'block';
+    }
+}
+
+function openModalAtualizaSinistro(row: any) {    
+    sinistro.value.id = row.id;
+    sinistro.value.status = row.status;
+    sinistro.value.type = row.type
+    const modal = document.getElementById('modalAtualizaStatus');    
+
+    if(modal) {    
+        modal.style.display = 'block';
+    }
+}
+
 </script>
 <style scoped lang="scss">
 @import '../../assets/_variables';
@@ -89,7 +125,9 @@ input, select{
     background-color: #f9f9f9;
     border: none;
     border-radius: 5px;
-    padding: 0 13px;
+    padding: 0 13px;            ;                        
+    padding: 0 13px;        
+    box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
 }
 
 .pagination {

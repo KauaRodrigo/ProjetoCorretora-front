@@ -7,12 +7,13 @@
         <span>{{ row.type.toLowerCase() }}</span>
         <span>
             <div class="tag">
-                {{ row.status == 'RETORNO_REPARO' ? row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
+                {{ row.status == 'RETORNO_REPARO' ? row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO' || row.status == 'CANCELADO', 'opened': row.status == 'ABERTO' || row.status == 'INDENIZADO'}"></i>
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
             <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="editRegister(row.id)"><i class="fa-solid fa-pen-nib"></i></RouterLink>
-            <button v-if="row.status != AccidentStatus.INDENIZADO" @click="deleteSinistro()" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button @click="atualizaSinistro" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button v-if="mostraBotaoCancelar(row.status)" @click="deleteSinistro()" class="btn bg-danger"><i class="fa-solid fa-xmark"></i></button>
         </span>       
     </div>
 </template>
@@ -23,12 +24,29 @@ import type { AccidentItem } from '../../dtos/AccidentItem.dto';
 import { useRouter } from "vue-router";
 
 defineProps<{ row: AccidentItem,type: string}>();
-const emits = defineEmits(['deleteSinistro']);
+const emits = defineEmits(['deleteSinistro', 'atualizaSinistro']);
 
 const router = useRouter();
 
 function deleteSinistro() {    
     emits('deleteSinistro');
+}
+
+function atualizaSinistro() {
+    emits('atualizaSinistro');
+}
+
+function mostraBotaoCancelar(status: string): boolean {
+    let removeBotao = [
+        'CANCELADO',
+        'INDENIZADO',
+        'FECHADO'
+    ]
+
+    if(removeBotao.includes(status)) {
+        return false
+    }
+    return true;
 }
 
 function editRegister(id: number) {    
@@ -87,8 +105,9 @@ span {
     gap: 10px;    
     a, button {            
         display: flex;
-        align-items: center;
-        width: 35%;
+        align-items: center;        
+        min-width: 40px;
+        max-width: 40px;
         height: 30px;
         border: none;              
         color: white;

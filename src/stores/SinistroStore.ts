@@ -1,4 +1,5 @@
 import api from "@/axios";
+import type { AccidentStatus } from "@/enums/accidentStatus";
 import { defineStore } from "pinia";
 
 const useSinistroStore = defineStore('sinistro', {
@@ -19,9 +20,19 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
-        deleteAccident: async (id: number): Promise<boolean> => {
+        deleteAccident: async (payload: any): Promise<boolean> => {
             try {
-                return api.post(`sinistros/excluir/`+id)
+                return api.post(`sinistros/excluir/${payload.id}`)
+            } catch (error) {
+                throw(error);
+            }
+        },
+
+        updateStatus: async (payload: { id: number, status: AccidentStatus }): Promise<boolean> => {
+            try {
+                return api.post(`sinistros/atualizar/${payload.id}`, {
+                    status: payload.status
+                })
             } catch (error) {
                 throw(error);
             }

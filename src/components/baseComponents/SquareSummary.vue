@@ -16,8 +16,7 @@
                 <h6>{{ data?.aberto }}</h6>
                 <h6 v-if="type=='Veicular'">{{ data?.retorno_reparo }}</h6>
                 <h6 v-if="type=='Residencial'">{{ data?.retorno_reparo }}</h6>
-                <h6 v-if="type=='Empresarial'">{{ data?.retorno_reparo }}</h6>
-                <!--<h6>{{ data?.retorno_reparo }}</h6>-->
+                <h6 v-if="type=='Empresarial'">{{ data?.retorno_reparo }}</h6>                
             </div>
             <Loader v-if="loading" text="Carregando..."/>
         </div>
@@ -27,33 +26,35 @@
 
 <script setup lang="ts">
 import useSinistroStore from '@/stores/SinistroStore'
-import { onMounted, ref } from 'vue';
+import { onMounted, provide, ref } from 'vue';
 import Loader from './Loader.vue';
 import { useRouter } from 'vue-router';
 
     const props = defineProps<{
         type:string,
-    }>()
+    }>();
     
     const store  = useSinistroStore();
     const router = useRouter();
 
-    const loading = ref(false)
-    const data    = ref()
+    const loading = ref(false);
+    const data    = ref();
 
-    async function getSquareData() {
-        loading.value = true
+    provide('getData', getSquareData);
+
+    async function getSquareData() {        
+        loading.value = true;
         data.value    = await store.getSquareData(props.type.toUpperCase());        
-        loading.value = false
+        loading.value = false;
     }
 
     onMounted(async () => {
-        await getSquareData()
+        await getSquareData();
     }) 
 
-    function setFilterRedirect() {        
+    function setFilterRedirect() {
         store.getFilters({ type: props.type.toUpperCase() });
-        router.push({ name: 'accidentSearch' })
+        router.push({ name: 'accidentSearch' });
     }
     
 </script>

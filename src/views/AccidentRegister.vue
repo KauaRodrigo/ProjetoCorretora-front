@@ -8,12 +8,12 @@
                         <div class="col-md">
                             <div>
                                 <label>Cliente <strong>*</strong></label>
-                                <input placeholder="" type="text" v-model="formData.nome"/>
+                                <input :disabled="!isCadastrar" placeholder="" type="text" v-model="formData.nome"/>
                             </div>
                             <div class="adtional-info">
                                 <div>
                                     <label>Tipo <strong>*</strong></label>
-                                    <select name="tipo" v-model="formData.tipo">
+                                    <select :disabled="!isCadastrar" name="tipo" v-model="formData.tipo">
                                         <option value="">Selecione</option>
                                         <option value="VEICULAR">Veicular</option>
                                         <option value="VIAGEM">Viagem</option>
@@ -24,13 +24,13 @@
                                 </div>
                                 <div>
                                     <label>Terceiros Envolvidos <strong>*</strong></label>
-                                    <input type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
+                                    <input :disabled="!isCadastrar" type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
                                 </div>
                             </div>
                             <div v-if="formData.tipo === 'VEICULAR'" class="vehicle">
                                 <div>
                                     <label>Placa <strong>*</strong></label>
-                                    <input placeholder="" type="text" v-model="formData.placa"/>
+                                    <input :disabled="!isCadastrar" placeholder="" type="text" v-model="formData.placa"/>
                                 </div>
                             </div>                        
                         </div>
@@ -38,21 +38,21 @@
                             <div class="secure-info">
                                 <div>
                                     <label>Número da apólice <strong>*</strong></label>
-                                    <input name="apolice" placeholder="" type="text" v-model="formData.codigo"/>
+                                    <input :disabled="!isCadastrar" name="apolice" placeholder="" type="text" v-model="formData.codigo"/>
                                 </div>
                                 <div>
                                     <label>Seguradora</label>
-                                    <input placeholder="" type="text" v-model="formData.seguradora"/>
+                                    <input :disabled="!isCadastrar" placeholder="" type="text" v-model="formData.seguradora"/>
                                 </div>
                             </div>                            
                         </div>
                         <div>
                             <label for="evento">Observações</label>
-                            <textarea name="evento" v-model="formData.evento" placeHolder=""></textarea>
+                            <textarea :disabled="!isCadastrar" name="evento" v-model="formData.evento" placeHolder=""></textarea>
                         </div>
-                        <div>
+                        <div v-if="isCadastrar">
                             <button type="submit" id="registerCustomer">
-                                {{ isCadastrar ? 'Registrar Sinistro' : 'Atualizar Sinistro'}}
+                                Registrar Sinistro
                             </button>
                         </div>
                         <div v-if="false" class="fotos">

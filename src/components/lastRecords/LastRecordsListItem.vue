@@ -7,17 +7,53 @@
         <span>{{ row.type.toLowerCase() }}</span>
         <span>
             <div class="tag">
-                {{ row.status == 'RETORNO_REPARO' ?  row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO', 'opened': row.status == 'ABERTO'}"></i>
+                {{ row.status == 'RETORNO_REPARO' ?  row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO' || row.status == 'CANCELADO', 'opened': row.status == 'ABERTO' || row.status == 'INDENIZADO'}"></i>
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <div class="btn edit"><i class="fa-solid fa-pen-nib"></i></div>
-            <div class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></div>
+            <div class="btn edit" @click="editRegister(row.id)"><i class="fa-solid fa-pen-nib"></i></div>
+            <div class="btn bg-warning" @click="atualizaSinistro()"><i class="fa-solid fa-arrows-rotate"></i></div>
+            <div v-if="mostraBotaoCancelar(row.status)" class="btn bg-danger" @click="deleteSinistro()"><i class="fa-solid fa-xmark"></i></div>
         </span>
     </div>
 </template>
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
 defineProps<{ row: any }>()
+const emits = defineEmits(['deleteSinistro', 'atualizaSinistro']);
+const router = useRouter();
+
+function deleteSinistro() {    
+    emits('deleteSinistro');
+}
+
+function atualizaSinistro() {
+    emits('atualizaSinistro');
+}
+
+function mostraBotaoCancelar(status: string): boolean {
+    let removeBotao = [
+        'CANCELADO',
+        'INDENIZADO',
+        'FECHADO'
+    ]
+
+    if(removeBotao.includes(status)) {
+        return false
+    }
+    return true;
+}
+
+function editRegister(id: number) {    
+    router.push({
+        name: 'accidentEdit',
+        params: {
+            id
+        }
+    })
+}
+
 </script>
 <style scoped lang="scss">
 @import '../../assets/_variables';

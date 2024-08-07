@@ -10,12 +10,13 @@
         </div>
         <div class="list" :class="{'p-4': loading }">
             <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr" :headers="['Apólice', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
-                <AccidentListItem @deleteSinistro="openModalConfirmaExclusao(value.id)" :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
+                <AccidentListItem @atualizaSinistro="openModalAtualizaSinistro(value)" @deleteSinistro="openModalConfirmaExclusao(value)" :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
             </Table>
             <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
         </div>
         <ModalConfirmaExclusaoSinistro :sinistro="sinistro" />
+        <ModalAtualizaStatus :sinistro="sinistro" />
     </div>
 </template>
 <script lang="ts" setup>
@@ -27,11 +28,16 @@ import AccidentListItem from './AccidentListItem.vue';
 import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
 import useUserStore from '@/stores/UserStore';
 import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
+import ModalAtualizaStatus from '../ModalAtualizaStatus.vue';
 
 const store = useUserStore();
 
 const viewType: Ref<string> = ref(store.typeView);
-const sinistro: Ref<number> = ref(0)
+const sinistro: Ref<{ id: number, status: string, type: ''}> = ref({
+    id: 0,
+    status: '',
+    type: ''
+})
 
 defineProps<{ rows?: any, loading?: boolean }>()
 
@@ -39,9 +45,21 @@ function changeViewType(type: string) {
     viewType.value = store.changeViewType(type);    
 }
 
-function openModalConfirmaExclusao(iCodigo: number) {    
-    sinistro.value = iCodigo;
+function openModalConfirmaExclusao(row: any) {    
+    sinistro.value.id = row.id;
+    sinistro.value.status = row.status;
+    sinistro.value.type = row.type;
     const modal = document.getElementById('modalExclusaoSinistro');
+
+    if(modal) {    
+        modal.style.display = 'block';
+    }
+}
+
+function openModalAtualizaSinistro(row: any) {    
+    sinistro.value.id = row.id;
+    sinistro.value.status = row.status;
+    const modal = document.getElementById('modalAtualizaStatus');    
 
     if(modal) {    
         modal.style.display = 'block';

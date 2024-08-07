@@ -1,20 +1,7 @@
 <template>
     <div id="modalExclusaoSinistro">
         <Modal>
-            <h1>Atualizar status</h1>
-            <h5>Selecione o novo status do sinistro:</h5>
-            <select name="status" id="new_status">
-                <option value="ABERTO">Aberto</option>
-                <option value="REPARO">Reparo</option>
-                <option value="RETORNO_REPARO">Retorno reparo</option>
-                <option value="INDENIZADO">Indenizado</option>
-                <option value="FECHADO">Fechado</option>
-                <option value="CANCELADO">Cancelado</option>
-            </select>
-            <div class="comment_box">
-                <h5>Observações<strong>*</strong></h5>
-                <textarea name="comment" id="comment" placeholder="Digite a atualização"></textarea>
-            </div>
+            <h1>Tem certeza que deseja cancelar o sinistro?</h1>            
             <div class="actions"> 
                 <button id="confirmar" @click="deleteRegister()" class="btn btn-success">Confirmar</button>
                 <button id="cancelar" @click="close()" class="btn btn-danger">Cancelar</button>
@@ -30,7 +17,7 @@ import { inject } from 'vue';
 const reload: any = inject('reload');
 const sinistroStore = useSinistroStore();
 
-const props = defineProps<{ sinistro: number}>()
+const props = defineProps<{ sinistro: any}>()
 
 async function deleteRegister() {
     await sinistroStore.deleteAccident(props.sinistro);    
