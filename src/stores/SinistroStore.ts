@@ -28,10 +28,12 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
-        updateStatus: async (payload: { id: number, status: AccidentStatus }): Promise<boolean> => {
+        updateStatus: async (payload: { id: number, status: AccidentStatus, descricao: string }): Promise<boolean> => {
+            console.log(payload)
             try {
                 return api.post(`sinistros/atualizar/${payload.id}`, {
-                    status: payload.status
+                    status: payload.status,
+                    descricao: payload.descricao
                 })
             } catch (error) {
                 throw(error);

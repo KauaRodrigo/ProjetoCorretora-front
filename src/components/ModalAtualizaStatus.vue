@@ -13,7 +13,7 @@
             </select>
             <div class="comment_box">
                 <h5>Observações<strong>*</strong></h5>
-                <textarea name="comment" id="comment" placeholder="Digite a atualização"></textarea>
+                <textarea name="comment" id="comment" placeholder="Digite a atualização" v-model="sinistro.descricao"></textarea>
             </div>
             <div class="actions"> 
                 <button id="confirmar" @click="atualizaSinistro()" class="btn btn-success">Confirmar</button>
@@ -32,7 +32,7 @@ const sinistroStore = useSinistroStore();
 
 const props = defineProps<{ sinistro: any}>()
 
-async function atualizaSinistro() {
+async function atualizaSinistro() {    
     await sinistroStore.updateStatus(props.sinistro);    
     console.log(props.sinistro)
     reload();
