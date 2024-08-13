@@ -39,7 +39,9 @@ const emits = defineEmits(['openModalLogout'])
 const user = ref<{ id?: number, username?: string, roles?: string[] }>({});
 
 onMounted(() => {
-    user.value = JSON.parse(localStorage.getItem('user') ?? '')    
+    if(localStorage.getItem('user')) {
+        user.value = JSON.parse(localStorage.getItem('user'));
+    }
 })
 
 function hasAccess(roles: string[]) {

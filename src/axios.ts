@@ -18,9 +18,9 @@ if (token && user) {
 
 api.interceptors.response.use(
   response => response,
-  error => {
-    if (window.location.href != '/' && error.response && error.response.status === 401) {
-      window.location.href = '/';
+  error => {  
+    if (window.location.pathname != '/' && error.response && error.response.status === 401) {
+      window.location.pathname = '/';
     }
     return Promise.reject(error);
   }

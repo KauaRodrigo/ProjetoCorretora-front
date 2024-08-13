@@ -18,8 +18,7 @@ const useUserStore = defineStore('users', {
                 localStorage.setItem('token', data.access_token)
                 localStorage.setItem('user',  JSON.stringify(data.user))
                 return true
-            } catch(error) {
-                console.log(error)
+            } catch(error) {                
                 return({
                     message: 'Email ou senha incorretos!',
                     code: 400

@@ -1,12 +1,14 @@
 <template>  
-  <TheHeader v-if="showElement()" @openModalLogout="openModalLogout"></TheHeader> 
-  <RouterView />
-  <ModalLogout @logout="logout" @closeModal="closeModalLogout" v-if="showModalLogout && showElement()" />  
-  <Alert v-if="showAlert" title="Sinistro Registrado!" content="Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!" :route="backRoute"/>
+    <div class="app" id="app" v-if="route">
+        <TheHeader v-if="isLogin" @openModalLogout="openModalLogout"></TheHeader>         
+        <RouterView />
+        <ModalLogout @logout="logout" @closeModal="closeModalLogout" v-if="showModalLogout && showElement()" />  
+        <Alert v-if="showAlert" title="Sinistro Registrado!" content="Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!" :route="backRoute"/>
+    </div>
 </template> 
 
 <script setup lang="ts">
-import { onMounted, provide, ref, type Ref } from 'vue';
+import { computed, onBeforeMount, onMounted, provide, ref, type Ref } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import ModalLogout from '@/components/ModalLogout.vue';
 import TheHeader from '@/components/baseComponents/TheHeader.vue'
@@ -17,6 +19,7 @@ const store = useUserStore()
 const router = useRouter()
 const route = useRoute()
 const backRoute: Ref<string> = ref('');
+const isLogin = computed(() => showElement())
 
 const showModalLogout = ref(false)
 
@@ -43,8 +46,8 @@ function closeModalLogout() {
     showModalLogout.value = false
 }
 
-function showElement() {
-  return route.name != 'login';      
+function showElement() {    
+    return route.name != 'login' ? true : false;      
 }
 
 onMounted(async () => {
