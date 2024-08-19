@@ -6,7 +6,7 @@
                     <div class="row justify-content-between">
                         <div class="col-5">
                             <label>Nome ou placa</label>
-                            <input type="text" v-model="formData.searchFilter.value" @blur="defineType()">
+                            <input type="text" v-model="formData.searchFilter.value" @blur="defineFilterType()">
                         </div>
                         <div class="col-4">
                             <label>Data</label>
@@ -85,7 +85,6 @@
                     <div class="page d-flex">
                         <button :disabled="formData.page === 0" @click="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
                         <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
-                        <!--<button @click="defineType()"></button>-->
                     </div>
                 </div>
             </div>                        
@@ -139,15 +138,16 @@ async function reload() {
     accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)       
 }
 
-function defineType(){
+function defineFilterType(){
+    if(formData.value.searchFilter.value.length > 1){
         const regex: RegExp = /\d/
         if(regex.test(formData.value.searchFilter.value)) {
             formData.value.searchFilter.type = 'placa'
-            console.log(formData.value.searchFilter.type)
             return
         }
         formData.value.searchFilter.type = 'cliente'
-        console.log(formData.value.searchFilter.type)
+        return
+        }
     }
 
 function nextPage() {
