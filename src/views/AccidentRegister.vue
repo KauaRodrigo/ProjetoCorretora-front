@@ -78,7 +78,7 @@
                     <div id="addComment">
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
                         <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </Page>      
@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">    
-import {inject, onMounted, onUpdated, ref} from "vue";
+import {inject, onMounted, onUpdated, ref, type Ref} from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
@@ -122,12 +122,18 @@ async function addComment() {
 
 async function submit() {
     document.getElementById('registerCustomer')?.setAttribute('disabled', 'true');
-    if(isCadastrar.value) {
-        await sinistroStore.registrarSinistro(formData.value).then(() => {
-            openAlert('accidentSearch');            
-        })
+    if(formData.value.nome && formData.value.tipo && formData.value.codigo){
+        if(isCadastrar.value) {
+            await sinistroStore.registrarSinistro(formData.value).then(() => {
+                openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
+            })
+        }
+        await sinistroStore.updateRegister(+route.params.id, formData.value)
     }
-    await sinistroStore.updateRegister(+route.params.id, formData.value)
+    else{
+        openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
+        document.getElementById('registerCustomer')?.removeAttribute('disabled');
+     }
 }
 
 onMounted(async () => {

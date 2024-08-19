@@ -3,7 +3,7 @@
         <TheHeader v-if="isLogin" @openModalLogout="openModalLogout"></TheHeader>         
         <RouterView />
         <ModalLogout @logout="logout" @closeModal="closeModalLogout" v-if="showModalLogout && showElement()" />  
-        <Alert v-if="showAlert" title="Sinistro Registrado!" content="Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!" :route="backRoute"/>
+        <Alert v-if="showAlert" :title="title" :content="content" :route="backRoute"/>
     </div>
 </template> 
 
@@ -19,6 +19,8 @@ const store = useUserStore()
 const router = useRouter()
 const route = useRoute()
 const backRoute: Ref<string> = ref('');
+const title = ref('');
+const content = ref('');
 const isLogin = computed(() => showElement())
 
 const showModalLogout = ref(false)
@@ -31,9 +33,14 @@ async function logout() {
 }
 
 const showAlert = ref();
-const openAlert = (route: string) => {    
-    showAlert.value = true;    
+const openAlert = (route:string, inTitle:string, inContent:string) => {    
+    setTimeout(() => {
+        showAlert.value = true;
+    }, 0)
     backRoute.value = route;
+    title.value = inTitle;
+    content.value = inContent
+    showAlert.value = false;
 }
 
 provide('openAlert', openAlert)
