@@ -7,13 +7,13 @@
         <span>{{ row.type.toLowerCase() }}</span>
         <span>
             <div class="tag">
-                {{ row.status == 'RETORNO_REPARO' ?  row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO' || row.status == 'CANCELADO', 'opened': row.status == 'ABERTO' || row.status == 'INDENIZADO'}"></i>
+                {{ row.status == 'RETORNO_REPARO' ?  row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO' || row.status == 'CANCELADO', 'opened': row.status == 'ABERTO'}"></i>
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <div class="btn edit" @click="editRegister(row.id)"><i class="fa-solid fa-pen-nib"></i></div>
-            <div class="btn bg-warning" @click="atualizaSinistro()"><i class="fa-solid fa-arrows-rotate"></i></div>
-            <div v-if="mostraBotaoCancelar(row.status)" class="btn bg-danger" @click="deleteSinistro()"><i class="fa-solid fa-xmark"></i></div>
+            <button class="btn edit" @click="editRegister(row.id)"><i class="fa-solid fa-pen-nib"></i></button>
+            <button class="btn bg-warning" :disabled="!validaPermiteAtualizar(row.status)" @click="atualizaSinistro()"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button :disabled="!mostraBotaoCancelar(row.status)" class="btn bg-danger" @click="deleteSinistro()"><i class="fa-solid fa-xmark"></i></button>
         </span>
     </div>
 </template>
@@ -30,6 +30,10 @@ function deleteSinistro() {
 
 function atualizaSinistro() {
     emits('atualizaSinistro');
+}
+
+function validaPermiteAtualizar(status: string) {
+    return status != 'CANCELADO';
 }
 
 function mostraBotaoCancelar(status: string): boolean {
@@ -79,7 +83,7 @@ span {
 }
 .actions {
     gap: 10px;    
-    div {            
+    button {            
         display: flex;
         align-items: center;
         //width: 35%;

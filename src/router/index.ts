@@ -30,6 +30,11 @@ const router = createRouter({
       component: AccidentRegister
     },
     {
+      path: '/visualizarSinistro/:id',
+      name: 'visualizarSinistro',
+      component: AccidentRegister
+    },
+    {
       path: '/buscarSinistro',
       name: 'accidentSearch',
       component: AccidentSearch

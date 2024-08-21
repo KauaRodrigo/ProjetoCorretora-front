@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import useSinistroStore from '@/stores/SinistroStore'
-import { onMounted, provide, ref } from 'vue';
+import { computed, onMounted, provide, ref } from 'vue';
 import Loader from './Loader.vue';
 import { useRouter } from 'vue-router';
 
@@ -38,13 +38,11 @@ import { useRouter } from 'vue-router';
     const router = useRouter();
 
     const loading = ref(false);
-    const data    = ref();
-
-    provide('getData', getSquareData);
+    const data    = computed(() => store.squareData(props.type.toUpperCase()));
 
     async function getSquareData() {        
         loading.value = true;
-        data.value    = await store.getSquareData(props.type.toUpperCase());        
+        await store.getSquareData(props.type.toUpperCase());        
         loading.value = false;
     }
 

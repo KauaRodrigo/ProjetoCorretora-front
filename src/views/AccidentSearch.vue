@@ -2,7 +2,7 @@
     <div>        
         <Page>
             <div class="container">                
-                <form @change="changeFilters" @submit.prevent="submit">
+                <form @submit.prevent="submit">
                     <div class="row justify-content-between">
                         <div class="col-5">
                             <label>Nome ou placa</label>
@@ -25,17 +25,17 @@
                         <div class="vehicle col-6">
                             <div class="vehicle-item col-4">
                                 <label>Número da apólice</label>
-                                <input type="text" v-model="formData.policyNumberFilter">
+                                <input @blur="changeFilters()" type="text" v-model="formData.policyNumberFilter">
                             </div>
                             <div class="vehicle-item">
                                 <label>Seguradora</label>
-                                <input type="text" v-model="formData.companyFilter"/>
+                                <input @blur="changeFilters()" type="text" v-model="formData.companyFilter"/>
                             </div>
                         </div>
                         <div class="col-3 selects">
                             <div>
                                 <label>Tipo seguro</label>
-                                <select name="status" v-model="formData.typeFilter">
+                                <select name="status" @blur="changeFilters()" v-model="formData.typeFilter">
                                     <option value="">Não Filtrar</option>
                                     <option value="VEICULAR">Veicular</option>
                                     <option value="VIDA">Vida</option>
@@ -46,11 +46,14 @@
                             </div>
                             <div>
                                 <label>Status</label>
-                                <select name="status" v-model="formData.statusFilter">
+                                <select name="status" @blur="changeFilters()" v-model="formData.statusFilter">
                                     <option value="">Não Filtrar</option>
                                     <option value="ABERTO">Aberto</option>
-                                    <option value="INDENIZADO/FECHADO">Indenizado/Fechado</option>                                    
-                                    <option value="ARQUIVADO">Arquivado</option>
+                                    <option value="INDENIZADO">Indenizado</option>                                    
+                                    <option value="FECHADO">Fechado</option>
+                                    <option value="REPARO">Reparo</option>
+                                    <option value="RETORNO_REPARO">Retorno reparo</option>
+                                    <option value="CANCELADO">Cancelado</option>                                    
                                 </select>
                             </div>
                         </div>
@@ -106,7 +109,7 @@ const formData = ref({
     dataFilter: {
         init: '',
         end: ''
-    },
+    },    
     statusFilter: '',
     typeFilter: '',
     page: 0,
@@ -143,12 +146,14 @@ function defineFilterType(){
         const regex: RegExp = /\d/
         if(regex.test(formData.value.searchFilter.value)) {
             formData.value.searchFilter.type = 'placa'
+            submit();
             return
         }
         formData.value.searchFilter.type = 'cliente'
+        submit();
         return
-        }
-    }
+    }    
+}
 
 function nextPage() {
     loading.value = true

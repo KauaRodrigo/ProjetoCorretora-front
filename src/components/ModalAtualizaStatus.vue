@@ -31,10 +31,15 @@ const reload: any = inject('reload');
 const sinistroStore = useSinistroStore();
 
 const props = defineProps<{ sinistro: any}>()
+const store  = useSinistroStore();
 
 async function atualizaSinistro() {    
-    await sinistroStore.updateStatus(props.sinistro);    
-    console.log(props.sinistro)
+    await sinistroStore.updateStatus(props.sinistro);        
+    await store.getSquareData('VEICULAR');
+    await store.getSquareData('RESIDENCIAL');
+    await store.getSquareData('VIDA');
+    await store.getSquareData('EMPRESARIAL');
+    await store.getSquareData('VIAGEM');
     reload();
     fechar();
 }

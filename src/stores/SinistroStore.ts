@@ -6,7 +6,8 @@ const useSinistroStore = defineStore('sinistro', {
     state: () => ({
         filters: {
             type: ''
-        }
+        },
+        data: <any> {}
     }),
 
     actions: {
@@ -49,17 +50,22 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
-        getSquareData: async (type: string): Promise<{ aberto: number, retorno_reparo: number }> => {
+        async getSquareData(type: string): Promise<{ aberto: number, retorno_reparo: number }> {
             try {
                 const { data } = await api.get('sinistros/resumo', {
                     params: {
                         tipo: type
                     }
-                })            
+                })    
+                this.data[type] = data;                        
                 return data;
             } catch (error) {
                 throw(error)
             }
+        },
+
+        squareData(type: string) {            
+            return this.data[type];
         },
 
         getFilters(payload: any) {
@@ -113,9 +119,11 @@ const useSinistroStore = defineStore('sinistro', {
 
         registrarSinistro: async (payload: any): Promise<boolean> => {
             try {
-                const { data } = await api.post('sinistros/criar', {
-                    ...payload
-                });
+                const { data } = await api.post('sinistros/criar', 
+                    payload
+                , { headers: {
+                    'Content-Type': 'multipart/form-data',
+                }});
                 return data;
             }catch (error) {
                 throw(error);

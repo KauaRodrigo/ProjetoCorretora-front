@@ -7,19 +7,18 @@
         <span>{{ row.type.toLowerCase() }}</span>
         <span>
             <div class="tag">
-                {{ row.status == 'RETORNO_REPARO' ? row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO' || row.status == 'CANCELADO', 'opened': row.status == 'ABERTO' || row.status == 'INDENIZADO'}"></i>
+                {{ row.status == 'RETORNO_REPARO' ? row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO' || row.status == 'CANCELADO', 'opened': row.status == 'ABERTO'}"></i>
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
             <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="editRegister(row.id)"><i class="fa-solid fa-pen-nib"></i></RouterLink>
-            <button @click="atualizaSinistro" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
-            <button v-if="mostraBotaoCancelar(row.status)" @click="deleteSinistro()" class="btn bg-danger"><i class="fa-solid fa-xmark"></i></button>
+            <button @click="atualizaSinistro" :disabled="!validaPermiteAtualizar(row.status)" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button :disabled="!mostraBotaoCancelar(row.status)" @click="deleteSinistro()" class="btn bg-danger"><i class="fa-solid fa-xmark"></i></button>
         </span>       
     </div>
 </template>
 <script setup lang="ts">
 
-import { AccidentStatus } from '@/enums/accidentStatus';
 import type { AccidentItem } from '../../dtos/AccidentItem.dto';
 import { useRouter } from "vue-router";
 
@@ -34,6 +33,19 @@ function deleteSinistro() {
 
 function atualizaSinistro() {
     emits('atualizaSinistro');
+}
+
+function visualizarSinistro(id: string) {
+    router.push({
+        name: 'visualizarSinistro',
+        params: {
+            id
+        }
+    })
+}
+
+function validaPermiteAtualizar(status: string) {
+    return status != 'CANCELADO';
 }
 
 function mostraBotaoCancelar(status: string): boolean {
@@ -78,7 +90,7 @@ function editRegister(id: number) {
 }
 
 .item {
-    z-index: -1;
+    z-index: 0 !important;
     padding: 0.8%;
     display: grid;    
     background-color: #e2e2e2;    
@@ -101,13 +113,11 @@ span {
     text-overflow: ellipsis;       
 }
 
-.actions {
+.actions {    
     gap: 10px;    
-    a, button {            
+    a, button {        
         display: flex;
         align-items: center;        
-        min-width: 40px;
-        max-width: 40px;
         height: 30px;
         border: none;              
         color: white;
@@ -116,6 +126,10 @@ span {
     }    
     .edit{
         background-color: #0094FF;
+    }
+
+    i{
+        font-size: 15px;
     }
 
     .close{

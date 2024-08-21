@@ -44,8 +44,6 @@ const lastRecordsRows = ref()
 const loading = ref(false)
 const sinistro: any = ref({});
 
-const getData: any = inject('getData');
-
 onMounted(async () => {
     loading.value = true;
     lastRecordsRows.value = await store.getLastRecords(formData.value);
@@ -56,8 +54,7 @@ onMounted(async () => {
 provide('reload', reload)
 
 async function reload() {
-    lastRecordsRows.value = await store.getLastRecords(formData.value)       
-    getData;
+    lastRecordsRows.value = await store.getLastRecords(formData.value);    
 }
 
 function nextPage() {

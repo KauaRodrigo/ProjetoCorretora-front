@@ -50,25 +50,17 @@
                             <label for="evento">Observações</label>
                             <textarea :disabled="!isCadastrar" name="evento" v-model="formData.evento" placeHolder=""></textarea>
                         </div>
+                        <div v-if="formData.fotos || isCadastrar" class="fotos">                            
+                            <img v-if="formData.fotos" v-for="(value, index) of formData.fotos" :key="index" :src="'data:image/png;base64,'+value" alt="">                                
+                            <div v-if="!isVisualizar" class="upload-wrapper">
+                                <label for="input-file" class="label-file"><i class="fa-solid fa-plus"></i></label>
+                                <input type="file" @change="(event) => setFile(event)" id="input-file">    
+                            </div>
+                        </div>
                         <div v-if="isCadastrar">
                             <button type="submit" id="registerCustomer">
                                 Registrar Sinistro
                             </button>
-                        </div>
-                        <div v-if="false" class="fotos">
-                            <img src="../assets/uploads/testes.jpeg" alt="" />
-                            <img src="../assets/uploads/testes2.jpeg" alt="" />
-                            <img src="../assets/uploads/testes 3.jpeg" alt="" />
-                            <img src="../assets/uploads/testes.jpeg" alt="" />                        
-                            <img src="../assets/uploads/testes2.jpeg" alt="" />
-                            <img src="../assets/uploads/testes 3.jpeg" alt="" />
-                            <img src="../assets/uploads/testes.jpeg" alt="" />                        
-                            <img src="../assets/uploads/testes2.jpeg" alt="" />
-                            <img src="../assets/uploads/testes 3.jpeg" alt="" />
-                            <div class="upload-wrapper">
-                                <label for="input-file" class="label-file"><i class="fa-solid fa-plus"></i></label>
-                                <input type="file" id="input-file">                            
-                            </div>
                         </div>
                     </div>
                 </Form>            
@@ -86,7 +78,7 @@
 </template>
 
 <script setup lang="ts">    
-import {inject, onMounted, onUpdated, ref} from "vue";
+import {inject, onBeforeUpdate, onMounted, onUnmounted, ref} from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
@@ -97,6 +89,7 @@ const sinistroStore = useSinistroStore();
 
 const openAlert: any = inject('openAlert');
 const isCadastrar = ref(false)
+const isVisualizar = ref(false)
 const newComment = ref({
     content: ''
 })
@@ -114,6 +107,8 @@ const formData = ref({
     evento: ''
 });
 
+const payload = new FormData();
+
 async function addComment() {
     await sinistroStore.addComment(+route.params.id, newComment.value.content);
     comments.value = await sinistroStore.getComments(+route.params.id);
@@ -123,20 +118,34 @@ async function addComment() {
 async function submit() {
     document.getElementById('registerCustomer')?.setAttribute('disabled', 'true');
     if(isCadastrar.value) {
-        await sinistroStore.registrarSinistro(formData.value).then(() => {
+        let aCampos = Object.entries(formData.value)
+        for(let oCampo of aCampos) {            
+            payload.append(oCampo[0], `${oCampo[1]}`)
+        }
+        console.log(payload)
+        await sinistroStore.registrarSinistro(payload).then(() => {
             openAlert('accidentSearch');            
         })
     }
     await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
+function setFile(event: any) {
+    payload.append('files', event.target.files[0])
+}
+
 onMounted(async () => {
-    if(route.name == 'accidentEdit') {                
-        formData.value = await sinistroStore.getAccidentSingle(+route.params.id);     
-        comments.value = await sinistroStore.getComments(+route.params.id);                
-    } else if (route.name == 'accidentRegister') {
-        isCadastrar.value = true
-    }    
+    if(route.name == 'accidentRegister') {                
+        isCadastrar.value = true        
+        return
+    }
+
+    if(route.name == 'visualizarSinistro') {        
+        isVisualizar.value = true                
+    }
+
+    formData.value = await sinistroStore.getAccidentSingle(+route.params.id);     
+    comments.value = await sinistroStore.getComments(+route.params.id);
 })
 
 </script>
@@ -159,12 +168,12 @@ onMounted(async () => {
     }
 
     .fotos {
-        display: flex;
+        display: flex;        
         margin: 2% 0;        
         padding: 2%;
         gap: 2rem 2.9rem;
         background-color: $primary; 
-        justify-content: center;        
+        justify-content: left;        
         border-radius: 10px;
         max-width: 100%;   
         flex-wrap: wrap;        
@@ -317,6 +326,7 @@ onMounted(async () => {
 
     .upload-wrapper {        
         width: 17%;
+        height: 214.42px;
         display: flex;
     }
 
