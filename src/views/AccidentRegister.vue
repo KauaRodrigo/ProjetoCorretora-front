@@ -50,7 +50,7 @@
                             <label for="evento">Observações</label>
                             <textarea :disabled="!isCadastrar" name="evento" v-model="formData.evento" placeHolder=""></textarea>
                         </div>
-                        <div v-if="formData.fotos || isCadastrar" class="fotos">                            
+                        <div v-if="false" class="fotos">                            
                             <img v-if="formData.fotos" v-for="(value, index) of formData.fotos" :key="index" :src="'data:image/png;base64,'+value" alt="">                                
                             <div v-if="!isVisualizar" class="upload-wrapper">
                                 <label for="input-file" class="label-file"><i class="fa-solid fa-plus"></i></label>
