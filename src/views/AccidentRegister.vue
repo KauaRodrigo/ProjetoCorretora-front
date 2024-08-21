@@ -70,7 +70,7 @@
                     <div id="addComment">
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
                         <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </Page>      
@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">    
-import {inject, onBeforeUpdate, onMounted, onUnmounted, ref} from "vue";
+import {inject, onMounted, onUpdated, ref, type Ref} from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
@@ -117,17 +117,18 @@ async function addComment() {
 
 async function submit() {
     document.getElementById('registerCustomer')?.setAttribute('disabled', 'true');
-    if(isCadastrar.value) {
-        let aCampos = Object.entries(formData.value)
-        for(let oCampo of aCampos) {            
-            payload.append(oCampo[0], `${oCampo[1]}`)
+    if(formData.value.nome && formData.value.tipo && formData.value.codigo){
+        if(isCadastrar.value) {
+            await sinistroStore.registrarSinistro(formData.value).then(() => {
+                openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
+            })
         }
-        console.log(payload)
-        await sinistroStore.registrarSinistro(payload).then(() => {
-            openAlert('accidentSearch');            
-        })
+        await sinistroStore.updateRegister(+route.params.id, formData.value)
     }
-    await sinistroStore.updateRegister(+route.params.id, formData.value)
+    else{
+        openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
+        document.getElementById('registerCustomer')?.removeAttribute('disabled');
+     }
 }
 
 function setFile(event: any) {
