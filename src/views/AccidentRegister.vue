@@ -153,17 +153,6 @@ function previewImage(oFoto: any) {
                 const base64String = file.target.result.split(',')[1]; // Remover o prefixo data:image/png;base64,
                 
                 formData.value.fotos.push(base64String)
-                // const divFotos = document.getElementById('fotos');
-                // const imgElement = document.createElement('img');
-                // if(divFotos) {
-                //     imgElement.src = file.target.result; // Definir o src diretamente como data URL
-                //     imgElement.style.width = '17%';
-                //     imgElement.style.height = '214.42px';                    
-                //     imgElement.style.boxShadow = 'rgba(0,0,0,0.2) 0px 0px 10px';  
-                //     imgElement.style.borderRadius = '5px';
-                //     divFotos.appendChild(imgElement)
-                // } 
-                
             }
         };
         
