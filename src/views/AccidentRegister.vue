@@ -50,11 +50,11 @@
                             <label for="evento">Observações</label>
                             <textarea :disabled="!isCadastrar" name="evento" v-model="formData.evento" placeHolder=""></textarea>
                         </div>
-                        <div v-if="false" class="fotos">                            
+                        <div v-if="formData.fotos || isCadastrar" id="fotos">                            
                             <img v-if="formData.fotos" v-for="(value, index) of formData.fotos" :key="index" :src="'data:image/png;base64,'+value" alt="">                                
                             <div v-if="!isVisualizar" class="upload-wrapper">
                                 <label for="input-file" class="label-file"><i class="fa-solid fa-plus"></i></label>
-                                <input type="file" @change="(event) => setFile(event)" id="input-file">    
+                                <input type="file" multiple @change="(event) => setFile(event)" id="input-file">    
                             </div>
                         </div>
                         <div v-if="isCadastrar">
@@ -104,7 +104,8 @@ const formData = ref({
     placa: '',        
     codigo: '',        
     seguradora: '',
-    evento: ''
+    evento: '',
+    fotos: []
 });
 
 const payload = new FormData();
@@ -117,22 +118,61 @@ async function addComment() {
 
 async function submit() {
     document.getElementById('registerCustomer')?.setAttribute('disabled', 'true');
-    if(formData.value.nome && formData.value.tipo && formData.value.codigo){
-        if(isCadastrar.value) {
-            await sinistroStore.registrarSinistro(formData.value).then(() => {
-                openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
-            })
-        }
-        await sinistroStore.updateRegister(+route.params.id, formData.value)
-    }
-    else{
+    if(!formData.value.nome || !formData.value.tipo || !formData.value.codigo || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
         openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
         document.getElementById('registerCustomer')?.removeAttribute('disabled');
-     }
+        return;
+    }
+    if(isCadastrar.value) {
+        let aCampos = Object.entries(formData.value)
+        for(let oCampo of aCampos) {          
+            if(oCampo[0] == 'fotos') {
+                break;
+            }  
+            payload.append(oCampo[0], `${oCampo[1]}`)
+        }
+        return await sinistroStore.registrarSinistro(payload).then(() => {
+            openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
+        })
+    }
+    return await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
-function setFile(event: any) {
-    payload.append('files', event.target.files[0])
+function setFile(event: any) {    
+    for(const oFoto of event.target.files) {
+        previewImage(oFoto);        
+        payload.append('files', oFoto)
+    }
+}
+
+function previewImage(oFoto: any) {
+    const reader = new FileReader();
+        
+        reader.onload = function(file: any) {
+            if(file) {
+                const base64String = file.target.result.split(',')[1]; // Remover o prefixo data:image/png;base64,
+                
+                formData.value.fotos.push(base64String)
+                // const divFotos = document.getElementById('fotos');
+                // const imgElement = document.createElement('img');
+                // if(divFotos) {
+                //     imgElement.src = file.target.result; // Definir o src diretamente como data URL
+                //     imgElement.style.width = '17%';
+                //     imgElement.style.height = '214.42px';                    
+                //     imgElement.style.boxShadow = 'rgba(0,0,0,0.2) 0px 0px 10px';  
+                //     imgElement.style.borderRadius = '5px';
+                //     divFotos.appendChild(imgElement)
+                // } 
+                
+            }
+        };
+        
+        reader.onerror = function(e) {
+            console.error('Erro ao ler o arquivo:', e);
+        };
+
+        // Leia o arquivo como uma URL de dados base64
+        reader.readAsDataURL(oFoto);
 }
 
 onMounted(async () => {
@@ -168,7 +208,7 @@ onMounted(async () => {
         padding-bottom: 4rem;
     }
 
-    .fotos {
+    #fotos {
         display: flex;        
         margin: 2% 0;        
         padding: 2%;
@@ -180,9 +220,10 @@ onMounted(async () => {
         flex-wrap: wrap;        
         img {                        
             display: block;        
-            width: 17%;                       
+            width: 17%;        
+            height: 214.42px;               
             box-shadow: rgba(0,0,0,0.2) 0px 0px 10px;  
-            border-radius: 5px;
+            border-radius: 5px;            
         }
     }
 
