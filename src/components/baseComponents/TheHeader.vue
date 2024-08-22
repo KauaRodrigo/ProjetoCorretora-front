@@ -9,11 +9,11 @@
                     <li class="nav-item dropdown"> 
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sinistros</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <RouterLink class="dropdown-item" :to="{ name: 'accidentRegister' }">Registrar</RouterLink>
+                            <RouterLink v-if="hasAccess(['ATENDIMENTO'])" class="dropdown-item" :to="{ name: 'accidentRegister' }">Registrar</RouterLink>
                             <RouterLink class="dropdown-item" :to="{ name: 'accidentSearch' }">Buscar</RouterLink>
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li v-if="false" class="nav-item dropdown">
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Clientes</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <RouterLink class="dropdown-item" :to="{ name: 'customerRegister' }">Cadastrar</RouterLink>
@@ -22,7 +22,10 @@
                     </li>
                     
                 </ul>
-                <button @click="emits('openModalLogout')"><i class="bi bi-box-arrow-in-right"></i></button>
+                <div class="d-flex login">                                            
+                    <p>Olá, <b>{{ user.username }}</b></p>                                                                        
+                    <button @click="emits('openModalLogout')"><i class="bi bi-box-arrow-in-right"></i></button>
+                </div>
             </div>
         </nav>
         
@@ -30,29 +33,49 @@
 </template>
 
 <script setup lang="ts">
-    import { RouterLink } from 'vue-router';
-    const emits = defineEmits(['openModalLogout'])
-    
-    const ipAdress = 'localhost'
-    const port = '5173'
-    
-    const mainAdress = 'http://'+ipAdress+':'+port+'/main'
-    const accidentRegister = 'http://'+ipAdress+':'+port+'/registrarSinistro'
-    const accidentSearch = 'http://'+ipAdress+':'+port+'/buscarSinistro'
-    const customerRegister = 'http://'+ipAdress+':'+port+'/cadastrarCliente'
-    const customerSearch = 'http://'+ipAdress+':'+port+'/buscarCliente'
+import { onMounted, ref } from 'vue';
+import { RouterLink } from 'vue-router';
+const emits = defineEmits(['openModalLogout'])
+const user = ref<{ id?: number, username?: string, roles?: string[] }>({});
+
+onMounted(() => {
+    if(localStorage.getItem('user')) {
+        user.value = JSON.parse(localStorage.getItem('user'));
+    }
+})
+
+function hasAccess(roles: string[]) {
+    return user.value.roles?.some(role => {
+        if(roles.includes(role)) {            
+            return true
+        }
+    });
+}
+
 </script>
 <style scoped lang="scss">
-    @import "../src/assets/__variables.scss";
+    @import "../../assets/__variables.scss";    
+    
+    .login {
+        width: auto;
+        align-items: center;
+        gap: 10%;
 
-    header{
-        width: 100%;
+        p {
+            font-family: 'Inter', sans-serif;
+            text-wrap: nowrap;            
+            margin: 0;       
+            width: 100%;     
+            color: white;
+        }
+    }                    
+
+    header{        
         height: 87px;
         background-color: $primary;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;        
+        display: flex;        
         overflow: visible;
-        display: flex;
-
     }
 
     nav li{
@@ -65,17 +88,29 @@
         font-weight: bold;
         font-size: 20px;
         text-decoration: none;
-        //margin: 0 3%;
+        transition: all .5s;
+    }    
+
+    div button {
+        transition: all .5s;
+        color: white;
     }
 
     nav a:hover, div button:hover{
-        color: $secondary;
+        transition: all .5s;
+        color: $secondary !important;
         cursor: pointer;
+    }    
+
+    nav a {
+        color: white !important;
     }
 
-    nav button{
-        //position: absolute;   
-        //right: 8vw;
+    .dropdown-item:active {
+        background-color: #f8f9fa;
+    }
+
+    nav button{        
         font-size: 25px;
         border: none;
         background-color: $primary;
@@ -83,12 +118,14 @@
     }
 
     .dropdown-item{
-        color: $primary;
-    }
+        color: $primary !important;
+        border-radius: 10px 10px 10px 10px;
+    }    
 
-    .dropdown-menu{
-        margin-top: -8px;
-        box-shadow: rgba($color: #64646F, $alpha: 0.1) 0 0 20px 0;
+    .dropdown-menu{                
+        box-shadow: 0 0 20px 0 #64646F;
         border: none;
+        z-index: 1000;     
+        padding: 0;   
     }
 </style>

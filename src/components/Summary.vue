@@ -3,19 +3,19 @@
         <h1>Resumo</h1>
         <ul>
             <li>
-                <SquareSummary open=200 indem=100 type="Veicular"/>
+                <SquareSummary type="Veicular"/>
             </li>
             <li>
-                <SquareSummary open="200" indem="100" type="Residencial"/>
+                <SquareSummary type="Residencial"/>
             </li>
             <li>
-                <SquareSummary open="200" indem="100" type="Vida"/>
+                <SquareSummary type="Vida"/>
             </li>
             <li>
-                <SquareSummary open="200" indem="100" type="Empresarial"/>
+                <SquareSummary type="Empresarial"/>
             </li>
             <li>
-                <SquareSummary open="200" indem="100" type="Viagem"/>
+                <SquareSummary type="Viagem"/>
             </li>
         </ul>
     </div>
@@ -26,11 +26,12 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../src/assets/__variables.scss";
+    @import "../assets/__variables.scss";
     
     .summary{
         overflow: visible;
-
+        margin-top: 1rem;
+        margin-bottom: 5rem;
     }
     .summary h1{
         color: $primary;
@@ -45,6 +46,7 @@
         padding: 0;
         justify-content: space-between;
         width: 100%;
+        margin-top: 20px;
     }
 
     li{

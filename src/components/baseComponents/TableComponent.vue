@@ -1,14 +1,16 @@
 <template>
-    <table class="table-list">
-        <thead>
-            <tr>
-                <th v-for="(header, index) of headers" :key="index">{{ header }}</th>
-            </tr>
-        </thead>
-        <tbody>            
-            <slot></slot>            
-        </tbody>
-    </table>
+    <div>
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th v-for="(header, index) of headers" :key="index">{{ header }}</th>
+                </tr>
+            </thead>
+            <tbody>            
+                <slot></slot>                        
+            </tbody>        
+        </table>        
+    </div>
 </template>
 <script setup lang="ts">
 defineProps<{ headers: string[], template: string }>()
@@ -27,6 +29,7 @@ defineProps<{ headers: string[], template: string }>()
             color: #EEEEEE;             
             display: flex;
             align-items: center;
+            padding: 2% 4%;
         }
     }
     tbody {

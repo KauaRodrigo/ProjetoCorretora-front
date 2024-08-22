@@ -4,24 +4,15 @@ import CustomerRegister from '@/views/CustomerRegister.vue'
 import CustomerSearch from '@/views/CustomerSearch.vue'
 import AccidentRegister from '@/views/AccidentRegister.vue'
 import AccidentSearch from '@/views/AccidentSearch.vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
-
-const isAuth = () => {
-  const token = localStorage.getItem('token')
-  const user = localStorage.getItem('user')
-  if(token && user) {
-    return true
-  }
-  return false
-}
+import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
       name: 'login',
-      component: LoginView
+      component: LoginView,
     },
     {
       path: '/main',
@@ -31,6 +22,16 @@ const router = createRouter({
     {
       path: '/registrarSinistro',
       name: 'accidentRegister',
+      component: AccidentRegister
+    },
+    {
+      path: '/editarSinistro/:id',
+      name: 'accidentEdit',
+      component: AccidentRegister
+    },
+    {
+      path: '/visualizarSinistro/:id',
+      name: 'visualizarSinistro',
       component: AccidentRegister
     },
     {
@@ -51,11 +52,6 @@ const router = createRouter({
     
 
   ]
-})
-
-router.beforeEach((to, from, next) => {
-  if(to.name !== 'login' && !isAuth()) next({ name: 'login' })
-  else next()
 })
 
 export default router

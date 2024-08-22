@@ -1,5 +1,5 @@
-<template>
-    <div id="container">
+<template>    
+    <div id="container">        
         <Form :actions="false" @submit="login" :formData="formData" name="login">
             <img src="/img/logo 2.png" alt="logo">
             <br><label for="email">E-mail</label>
@@ -15,9 +15,9 @@
                     Entrar
                     <Loader v-if="loading" small />
                 </button>
-                <button id="forgot">Esqueci minha senha</button>
+                <button type="button" id="forgot">Esqueci minha senha</button>
             </div>            
-        </Form>
+        </Form>        
     </div>
 </template>
 
@@ -57,43 +57,40 @@ function showPassword(){
 
 </script>
 <style scoped lang="scss">
-    @import "../src/assets/__variables.scss";
+    @import "../assets/__variables.scss";
     #container{
-        height: 100vh;
-        display: flex;
-        align-items: center;
-    }
+        height: 100%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(45deg, #003264, rgb(0,210,176, 0.5) 100%);                
+    }        
 
     form{
         margin: 0 auto;
         background-color: #EEEEEE;
-        border-radius: 25px;
-        width: 35vw;
-        max-width: 550px;
-        padding: 3% 4%;
-        font-weight: bold;
-        box-shadow: rgba(100, 100, 111, 0.1) 0px 0px 20px 0px;    
-    }
+        border-radius: 10px;
+        width: 25vw;              
+        padding: 3% 2%;
+        font-weight: bold;        
+    }           
     
     p {
         margin-top: 2%;
         color: $danger;
     }
 
-    form img{
+    form img {
         width: 80%;
-        display: flex;
-        margin: 0 auto 30px auto;
+        display: grid;
+        margin: 0 auto 2% auto;
     }
     
-    form input{
-        width: 100%;
-        height: 45px;
+    form input {
+        width: 100%;        
         border: none;
-        border-radius: 5px;
-        box-sizing: border-box;
-        padding: 0 2%;
-        font-size: 24px;
+        border-radius: 5px;        
+        padding: 2% 2%;
+        font-size: 16px;
     }
 
     form input::placeholder{
@@ -105,7 +102,7 @@ function showPassword(){
     }
 
     form label{
-        font-size: 21px;
+        font-size: 18px;
     }
 
     #password-input{
@@ -115,7 +112,7 @@ function showPassword(){
     #password-input i{
         position: absolute;
         right: 3%;
-        margin-top: 1.5%;
+        margin-top: 1%;
         font-size: 25px;
     }
 
@@ -125,20 +122,28 @@ function showPassword(){
 
     button{
         border: none;
-        margin-top: 40px;
+        margin-top: 2%;
         font-size: 19px;
     }
 
     #login{
-        background-color: $secondary;
-        box-sizing: border-box;
+        background: rgb(11,199,175);                
         padding: 2% 2.5%;
-        border-radius: 5px;
-        height: 45px;
-        transition: 0.1s;
+        font-size: 1rem;
+        border-radius: 5px;        
+        height: 12%;        
         display: flex;
         align-items: center;
+        font-weight: 600;        
+        color: black;
+        transition: all 1.5s;
         gap: 10px;
+    }    
+
+    #login:hover {
+        transition: all 0.5s;
+        color: white;
+        background-color: $secondary;        
     }
 
     #forgot:hover {
@@ -150,21 +155,83 @@ function showPassword(){
         justify-content: space-between;
     }
 
-    .bi bi-eye{
+    .bi .bi-eye{
         color: black;
-    }
+    }        
 
-    @media screen and (max-width: 780px) {
-        form{
-            width: 90vw;
-            padding: 4%;
+    @media screen and (max-width: 620px) {
+        form {                                    
+            width: 80%;                
+            padding: 6% 5%;                          
+        }       
+
+        form input {            
+            height: auto;
         }
 
+        form label{
+            font-size: 18px;
+        }
+
+        #password-input i{            
+            margin-top: 0;                        
+        }
+
+        #buttons {
+            display: block;
+        }
+
+        #login {
+            transition: all 0.5s;
+            color: white;
+            width: auto;
+            background-color: $secondary;   
+        }
     }
 
-    @media screen and (min-width: 780px) and (max-width: 1050px) {
-        form{
-            width: 50vw;
+    @media screen and (min-width: 620px) and (max-width: 1024px) {
+        form {                                                  
+            width: 45%;                
+            padding: 4% 3%;                          
+            position: absolute;
+            top: 30%;
+        }       
+
+        form input {            
+            height: auto;
+        }        
+
+        #password-input i{            
+            margin-top: 0;                        
+        }
+
+        #login {
+            transition: all 0.5s;
+            color: white;
+            width: auto;
+            background-color: $secondary;   
+        }
+    }
+
+    @media screen and (min-width: 1024px) and (max-width: 1440px) {
+        form {                                    
+            width: 35%;                
+            padding: 4% 3%;                        
+        }       
+
+        form input {            
+            height: auto;
+        }        
+
+        #password-input i{            
+            margin-top: 0;                        
+        }
+
+        #login {
+            transition: all 0.5s;
+            color: white;
+            width: auto;
+            background-color: $secondary;   
         }
     }
 </style>

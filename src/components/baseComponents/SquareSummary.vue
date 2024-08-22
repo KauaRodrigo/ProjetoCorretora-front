@@ -1,20 +1,24 @@
 <template>
     <div class="squareSummary">
-        <div class="square">
+        <div class="square" @click="setFilterRedirect()">
             <i v-if="type=='Veicular'" class="bi bi-car-front"></i>
             <i v-if="type=='Residencial'" class="bi bi-house"></i>
             <i v-if="type=='Vida'" class="bi bi-heart-pulse"></i>
             <i v-if="type=='Empresarial'" class="bi bi-briefcase"></i>
-            <i v-if="type=='Viagem'" class="bi bi-airplane"></i>
-            <div v-if="data" class="key">
-                <h5>Em aberto</h5>
-                <h5>Indenizados</h5>
+            <i v-if="type=='Viagem'" class="bi bi-airplane"></i>            
+            <div v-if="data && !loading" class="key">
+                    <h5>Em aberto</h5>
+                    <h5 v-if="type=='Veicular'">Retorno rep.</h5>
+                    <h5 v-if="type=='Residencial'">Retorno rep.</h5>
+                    <h5 v-if="type=='Empresarial'">Retorno rep.</h5>
             </div>
-            <div v-if="data" class="value">
+            <div v-if="data && !loading" class="value">
                 <h6>{{ data?.aberto }}</h6>
-                <h6>{{ data?.indenizado }}</h6>
-            </div>
-            <Loader v-if="loading" text="Carregando..."/>
+                <h6 v-if="type=='Veicular'">{{ data?.retorno_reparo }}</h6>
+                <h6 v-if="type=='Residencial'">{{ data?.retorno_reparo }}</h6>
+                <h6 v-if="type=='Empresarial'">{{ data?.retorno_reparo }}</h6>                
+            </div>            
+            <Loader v-else text="Carregando..."/>
         </div>
         <h2>{{ type }}</h2>
     </div>
@@ -22,41 +26,55 @@
 
 <script setup lang="ts">
 import useSinistroStore from '@/stores/SinistroStore'
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, provide, ref } from 'vue';
 import Loader from './Loader.vue';
+import { useRouter } from 'vue-router';
 
     const props = defineProps<{
-        open:string,
-        indem:string,
         type:string,
-    }>()
+    }>();
     
-    const store = useSinistroStore();
+    const store  = useSinistroStore();
+    const router = useRouter();
 
-    const loading = ref(false)
-    const data = ref()
+    const loading = ref(false);
+    const data    = computed(() => store.squareData(props.type.toUpperCase()));
 
-    async function getSquareData() {
-        loading.value = true
-        data.value = await store.getSquareData(props.type.toUpperCase());
-        loading.value = false
+    async function getSquareData() {        
+        loading.value = true;
+        await store.getSquareData(props.type.toUpperCase());        
+        loading.value = false;
     }
 
     onMounted(async () => {
-        await getSquareData()
+        loading.value = true;
+        await getSquareData();
+        loading.value = false;
     }) 
+
+    function setFilterRedirect() {
+        store.getFilters({ type: props.type.toUpperCase() });
+        router.push({ name: 'accidentSearch' });
+    }
     
 </script>
 
 <style scoped lang="scss">
-    @import "../src/assets/__variables.scss";
+    @import "../../assets/__variables.scss";
     *{
         font-weight: bold;
     }
     
     .squareSummary{
-        display: inline-block;
+        display: inline-block;        
+        transition: all 0.4s;
     }
+
+    .squareSummary:hover {
+        transition: all 0.4s;
+        transform: scale(1.15);
+    }
+
     .squareSummary h2{
         text-align: center;
         font-weight: 200;
@@ -74,7 +92,8 @@ import Loader from './Loader.vue';
         align-items: center;
         justify-content: space-between;
         padding: 15px;
-        box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 8px;
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 8px;
     }
 
     .square h5{
@@ -85,13 +104,14 @@ import Loader from './Loader.vue';
     .square h6{
         color: $secondary;
         font-size: 25px;
+        text-align: right;
     }
 
     .square i{
         color: rgba(0, 50, 99, 0.1);
         font-size: 120px;
         position: absolute;
-    }
+    }    
 
     @media screen and (max-width: 991px) {
         
@@ -118,7 +138,7 @@ import Loader from './Loader.vue';
             .square{
                 width: 150px;
                 height: 150px;
-                text-align: left;
+                text-align: right;
             }
 
             .square i{

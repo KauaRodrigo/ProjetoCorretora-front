@@ -2,19 +2,23 @@ import api from "@/axios";
 import { defineStore } from "pinia";
 
 const useUserStore = defineStore('users', { 
+    state: () => ({        
+          typeView: 'LIST'        
+      }),
+
     actions: {
         auth: async (payload: { email: string, password: string }) => {
             try {
                 const { data } = await api.post('/auth/login', {
                     ...payload
                 })            
+                api.defaults.headers['Authorization'] = 'Bearer ' + data.access_token                
+                api.defaults.headers['user']          = JSON.stringify(data.user)
+
                 localStorage.setItem('token', data.access_token)
-                api.defaults.headers['Authorization'] = 'Bearer ' + data.access_token
-                api.defaults.headers['user'] = data.user.id
-                localStorage.setItem('user', data.user.id)
+                localStorage.setItem('user',  JSON.stringify(data.user))
                 return true
-            } catch(error) {
-                console.log(error)
+            } catch(error) {                
                 return({
                     message: 'Email ou senha incorretos!',
                     code: 400
@@ -36,6 +40,10 @@ const useUserStore = defineStore('users', {
             localStorage.removeItem('token')
             localStorage.removeItem('user')
             return true
+        },
+        changeViewType(type: string) {
+            this.typeView = type;
+            return this.typeView;
         }
     }
 })

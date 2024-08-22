@@ -1,6 +1,6 @@
 <template>
     <div>
-        <textarea v-bind:placeholder=placeHolder rows="2"></textarea>
+        <textarea :placeholder=placeHolder rows="2"></textarea>
     </div>
 </template>
 
@@ -10,7 +10,7 @@
     }>()
 </script>
 <style scoped lang="scss">
-    @import "./src/assets/__variables.scss";
+    @import "../../assets/__variables.scss";
 
     textarea{
         width: 100%;

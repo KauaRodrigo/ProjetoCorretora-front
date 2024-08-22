@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input v-bind:type=inputType v-bind:placeholder=placeHolder>
+        <input :type=inputType :placeholder=placeHolder>
     </div>
 </template>
 
@@ -11,7 +11,7 @@
     }>()
 </script>
 <style scoped lang="scss">
-    @import "./src/assets/__variables.scss";
+    @import "../../assets/__variables.scss";
 
     input{
         width: 100%;
@@ -19,6 +19,7 @@
         background-color: #f9f9f9;
         border: none;
         border-radius: 5px;
+        box-shadow: 5px 5px 10px 1px lightgray;
         padding: 0 13px;
     }
 

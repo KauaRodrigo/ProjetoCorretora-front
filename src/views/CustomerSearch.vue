@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 <template>
     <TheHeader />
     <Page>
+=======
+<template>    
+>>>>>>> a7a9bc066dfb236fc75683487f9d2a93e3e47152
     <div class="container">
         <h1>Buscar cliente</h1>
         <form>
@@ -53,9 +57,13 @@
     </Page>
 </template>
 
+<<<<<<< HEAD
 <script setup lang="ts">
     import ClientCard from '@/components/baseComponents/ClientCard.vue';
     import TheHeader from '@/components/baseComponents/TheHeader.vue';
+=======
+<script setup lang="ts">    
+>>>>>>> a7a9bc066dfb236fc75683487f9d2a93e3e47152
     import InputBox from '@/components/baseComponents/InputBox.vue';
     import UpdateBox from '@/components/baseComponents/UpdateBox.vue';
     import Page from '@/components/baseComponents/Page.vue';

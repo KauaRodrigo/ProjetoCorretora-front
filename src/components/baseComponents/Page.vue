@@ -9,12 +9,13 @@
             </div>
             <slot>
 
-            </slot>
+            </slot>            
         </div>
     </div>
 </template>
 <script setup lang="ts">
 defineProps<{ title?: string }>()
+
 </script>
 <style scoped lang="scss">   
     .page {
