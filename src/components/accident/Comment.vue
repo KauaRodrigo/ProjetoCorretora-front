@@ -26,23 +26,29 @@ onMounted(() => {
 div {
     width: 50%;
     padding: 2%;
-    background-color: #EEE;
+    background-color: #f0f0f0;
     border-radius: 10px;
     margin-top: 20px;
+    //box-shadow: rgba(0,0,0,0.5) 0px 0px 3px;
+
+
+
 
     h1 {
         font-size: 1.5rem;
+        font-weight: 600;
     }
 
     p {
-        background-color: white;
-        padding: 2%;
+        //background-color: white;
+        padding: 1% 0;
         border-radius: 5px;
     }
 
     i {
         display: block;
         text-align: right;
+        font-weight: lighter;
     }
 }
 </style>

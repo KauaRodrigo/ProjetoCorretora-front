@@ -68,6 +68,7 @@
                     <h1>Atualizações</h1>
                     <Comment v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
                     <div id="addComment">
+                        <h2>Adicionar Atualização</h2>
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
                         <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
                     </div>
@@ -219,7 +220,7 @@ onMounted(async () => {
     #addComment {
         width: 50%;
         padding: 2%;
-        background-color: #EEE;
+        background-color: #f0f0f0;
         border-radius: 10px;
         margin-top: 20px;
 
@@ -402,7 +403,7 @@ onMounted(async () => {
         height: 45px;
         transition: 0.1s;
         border: none;        
-        margin-top: 20px;    
+        margin-top: 5px;    
                
     }
     
