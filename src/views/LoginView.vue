@@ -127,7 +127,7 @@ function showPassword(){
     }
 
     #login{
-        background: rgb(11,199,175);                
+        background: $secondary;                
         padding: 2% 2.5%;
         font-size: 1rem;
         border-radius: 5px;        
@@ -135,14 +135,12 @@ function showPassword(){
         display: flex;
         align-items: center;
         font-weight: 600;        
-        color: black;
         transition: all 1.5s;
         gap: 10px;
     }    
 
     #login:hover {
         transition: all 0.5s;
-        color: white;
         background-color: $secondary;        
     }
 
@@ -183,7 +181,6 @@ function showPassword(){
 
         #login {
             transition: all 0.5s;
-            color: white;
             width: auto;
             background-color: $secondary;   
         }
@@ -207,7 +204,6 @@ function showPassword(){
 
         #login {
             transition: all 0.5s;
-            color: white;
             width: auto;
             background-color: $secondary;   
         }
@@ -229,7 +225,6 @@ function showPassword(){
 
         #login {
             transition: all 0.5s;
-            color: white;
             width: auto;
             background-color: $secondary;   
         }

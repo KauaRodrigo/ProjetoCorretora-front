@@ -112,9 +112,14 @@ const formData = ref({
 const payload = new FormData();
 
 async function addComment() {
-    await sinistroStore.addComment(+route.params.id, newComment.value.content);
-    comments.value = await sinistroStore.getComments(+route.params.id);
-    newComment.value.content = '';
+    if(newComment.value.content == ""){
+        console.log('OI?');
+        openAlert('', 'Comentário vazio', 'Adicione texto ao seu comentário!');
+    }else{
+        await sinistroStore.addComment(+route.params.id, newComment.value.content);
+        comments.value = await sinistroStore.getComments(+route.params.id);
+        newComment.value.content = '';
+    }
 }
 
 async function submit() {
@@ -207,11 +212,13 @@ onMounted(async () => {
         justify-content: left;        
         border-radius: 10px;
         max-width: 100%;   
+        max-height: 400px;
+        overflow-y: scroll;
         flex-wrap: wrap;        
         img {                        
             display: block;        
-            width: 17%;        
-            height: 214.42px;               
+            //width: 17%;        
+            height: 215px;               
             box-shadow: rgba(0,0,0,0.2) 0px 0px 10px;  
             border-radius: 5px;            
         }
@@ -353,21 +360,23 @@ onMounted(async () => {
 	    height: 100px;
         display: none;
         margin: 0;
-        padding: 0;        
+        padding: 0;
     }
 
     .upload-wrapper {        
         width: 17%;
+        min-width: 150px;
         height: 214.42px;
         display: flex;
+        
     }
 
     .upload-wrapper:hover {
         i {
             transition: all .3s;
-            text-shadow: $secondary 2px 2px 1px;
+            //text-shadow: $secondary 0px 0px 5px;
             transition: all .5s;
-            transform: scale(2);
+            transform: scale(1.5);
         }        
     }
 
@@ -403,27 +412,32 @@ onMounted(async () => {
         height: 45px;
         transition: 0.1s;
         border: none;        
-        margin-top: 5px;    
-               
+        margin-top: 5px;
+        font-weight: 600;
+        font-size: 1rem;
     }
     
     #registerCustomer:disabled, #registerCustomer:disabled:hover {
         background-color: #EEE;
         color: black;
         opacity: 0.3;
-        box-shadow: none;
     }
 
     #registerCustomer:hover, #registerComment:hover {
         transition: all 0.2s;
         background-color: $secondaryDark;
         color: white;
-        box-shadow: rgba(0,0,0,0.5) 2px 2px 3px;
     }
 
     #registerComment {
         padding: 2%;            
     }    
 
+    @media screen and (max-width: 620px){
+
+        #addComment{
+            width: 100%;
+        }
+    }
 
 </style>
