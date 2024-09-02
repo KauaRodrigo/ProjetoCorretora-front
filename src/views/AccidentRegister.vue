@@ -50,11 +50,11 @@
                             <label for="evento">Observações</label>
                             <textarea :disabled="!isCadastrar" name="evento" v-model="formData.evento" placeHolder=""></textarea>
                         </div>
-                        <div v-if="false" class="fotos">                            
+                        <div v-if="formData.fotos || isCadastrar" id="fotos">                            
                             <img v-if="formData.fotos" v-for="(value, index) of formData.fotos" :key="index" :src="'data:image/png;base64,'+value" alt="">                                
                             <div v-if="!isVisualizar" class="upload-wrapper">
                                 <label for="input-file" class="label-file"><i class="fa-solid fa-plus"></i></label>
-                                <input type="file" @change="(event) => setFile(event)" id="input-file">    
+                                <input type="file" multiple @change="(event) => setFile(event)" id="input-file">    
                             </div>
                         </div>
                         <div v-if="isCadastrar">
@@ -71,6 +71,13 @@
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
                         <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
                     </div>
+                </div>
+                <div class="col">
+                    <div>
+                        <label>Observações</label>
+                        <TextareaBox placeHolder=""></TextareaBox>
+                    </div>
+                    <button id="registerCustomer">Registrar Sinistro</button>
                 </div>
             </div>
         </Page>      
@@ -104,7 +111,8 @@ const formData = ref({
     placa: '',        
     codigo: '',        
     seguradora: '',
-    evento: ''
+    evento: '',
+    fotos: []
 });
 
 const payload = new FormData();
@@ -117,22 +125,50 @@ async function addComment() {
 
 async function submit() {
     document.getElementById('registerCustomer')?.setAttribute('disabled', 'true');
-    if(formData.value.nome && formData.value.tipo && formData.value.codigo){
-        if(isCadastrar.value) {
-            await sinistroStore.registrarSinistro(formData.value).then(() => {
-                openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
-            })
-        }
-        await sinistroStore.updateRegister(+route.params.id, formData.value)
-    }
-    else{
+    if(!formData.value.nome || !formData.value.tipo || !formData.value.codigo || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
         openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
         document.getElementById('registerCustomer')?.removeAttribute('disabled');
-     }
+        return;
+    }
+    if(isCadastrar.value) {
+        let aCampos = Object.entries(formData.value)
+        for(let oCampo of aCampos) {          
+            if(oCampo[0] == 'fotos') {
+                break;
+            }  
+            payload.append(oCampo[0], `${oCampo[1]}`)
+        }
+        return await sinistroStore.registrarSinistro(payload).then(() => {
+            openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
+        })
+    }
+    return await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
-function setFile(event: any) {
-    payload.append('files', event.target.files[0])
+function setFile(event: any) {    
+    for(const oFoto of event.target.files) {
+        previewImage(oFoto);        
+        payload.append('files', oFoto)
+    }
+}
+
+function previewImage(oFoto: any) {
+    const reader = new FileReader();
+        
+        reader.onload = function(file: any) {
+            if(file) {
+                const base64String = file.target.result.split(',')[1]; // Remover o prefixo data:image/png;base64,
+                
+                formData.value.fotos.push(base64String)
+            }
+        };
+        
+        reader.onerror = function(e) {
+            console.error('Erro ao ler o arquivo:', e);
+        };
+
+        // Leia o arquivo como uma URL de dados base64
+        reader.readAsDataURL(oFoto);
 }
 
 onMounted(async () => {
@@ -168,7 +204,7 @@ onMounted(async () => {
         padding-bottom: 4rem;
     }
 
-    .fotos {
+    #fotos {
         display: flex;        
         margin: 2% 0;        
         padding: 2%;
@@ -180,9 +216,10 @@ onMounted(async () => {
         flex-wrap: wrap;        
         img {                        
             display: block;        
-            width: 17%;                       
+            width: 17%;        
+            height: 214.42px;               
             box-shadow: rgba(0,0,0,0.2) 0px 0px 10px;  
-            border-radius: 5px;
+            border-radius: 5px;            
         }
     }
 
@@ -213,16 +250,6 @@ onMounted(async () => {
         font-weight: bold;
         font-size: 20px;
         margin-bottom: 0;
-    }
-
-    select {
-        width: 50%;
-        display: block;
-    }
-    
-    select:focus{
-        border: 1px solid $secondary;  
-        outline: none;
     }
 
     label{
@@ -371,28 +398,13 @@ onMounted(async () => {
         border-radius: 5px;
         height: 45px;
         transition: 0.1s;
-        border: none;        
-        margin-top: 20px;    
-               
+        border: none;
+        float: right;
+        //display: flex;
+        //align-items: end;
+        //bottom: 0;
+        //position: absolute;
     }
-    
-    #registerCustomer:disabled, #registerCustomer:disabled:hover {
-        background-color: #EEE;
-        color: black;
-        opacity: 0.3;
-        box-shadow: none;
-    }
-
-    #registerCustomer:hover, #registerComment:hover {
-        transition: all 0.2s;
-        background-color: $secondaryDark;
-        color: white;
-        box-shadow: rgba(0,0,0,0.5) 2px 2px 3px;
-    }
-
-    #registerComment {
-        padding: 2%;            
-    }    
 
 
 </style>

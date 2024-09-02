@@ -9,7 +9,7 @@
                 <option value="RETORNO_REPARO">Retorno reparo</option>  
                 <option value="INDENIZADO">Indenizado</option>
                 <option value="FECHADO">Fechado</option>
-                <option value="CANCELADO">Cancelado</option>
+                <option v-if="sinistro.status != 'FECHADO' && sinistro.status != 'INDENIZADO'" value="CANCELADO">Cancelado</option>
             </select>
             <div class="comment_box">
                 <h5>Observações<strong>*</strong></h5>

@@ -5,20 +5,20 @@
             <i v-if="type=='Residencial'" class="bi bi-house"></i>
             <i v-if="type=='Vida'" class="bi bi-heart-pulse"></i>
             <i v-if="type=='Empresarial'" class="bi bi-briefcase"></i>
-            <i v-if="type=='Viagem'" class="bi bi-airplane"></i>
-            <div v-if="data" class="key">
-                <h5>Em aberto</h5>
-                <h5 v-if="type=='Veicular'">Retorno rep.</h5>
-                <h5 v-if="type=='Residencial'">Retorno rep.</h5>
-                <h5 v-if="type=='Empresarial'">Retorno rep.</h5>
+            <i v-if="type=='Viagem'" class="bi bi-airplane"></i>            
+            <div v-if="data && !loading" class="key">
+                    <h5>Em aberto</h5>
+                    <h5 v-if="type=='Veicular'">Retorno rep.</h5>
+                    <h5 v-if="type=='Residencial'">Retorno rep.</h5>
+                    <h5 v-if="type=='Empresarial'">Retorno rep.</h5>
             </div>
-            <div v-if="data" class="value">
+            <div v-if="data && !loading" class="value">
                 <h6>{{ data?.aberto }}</h6>
                 <h6 v-if="type=='Veicular'">{{ data?.retorno_reparo }}</h6>
                 <h6 v-if="type=='Residencial'">{{ data?.retorno_reparo }}</h6>
                 <h6 v-if="type=='Empresarial'">{{ data?.retorno_reparo }}</h6>                
-            </div>
-            <Loader v-if="loading" text="Carregando..."/>
+            </div>            
+            <Loader v-else text="Carregando..."/>
         </div>
         <h2>{{ type }}</h2>
     </div>
@@ -47,7 +47,9 @@ import { useRouter } from 'vue-router';
     }
 
     onMounted(async () => {
+        loading.value = true;
         await getSquareData();
+        loading.value = false;
     }) 
 
     function setFilterRedirect() {
