@@ -11,7 +11,7 @@
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <button class="btn edit" @click="editRegister(row.id)"><i class="fa-solid fa-pen-nib"></i></button>
+            <button class="btn edit" @click="editRegister(row.id)"><i class="fa-solid fa-search"></i></button>
             <button class="btn bg-warning" :disabled="!validaPermiteAtualizar(row.status)" @click="atualizaSinistro()"><i class="fa-solid fa-arrows-rotate"></i></button>
             <button :disabled="!mostraBotaoCancelar(row.status)" class="btn bg-danger" @click="deleteSinistro()"><i class="fa-solid fa-xmark"></i></button>
         </span>
