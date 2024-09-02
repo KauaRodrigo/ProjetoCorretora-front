@@ -72,6 +72,13 @@
                         <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
                     </div>
                 </div>
+                <div class="col">
+                    <div>
+                        <label>Observações</label>
+                        <TextareaBox placeHolder=""></TextareaBox>
+                    </div>
+                    <button id="registerCustomer">Registrar Sinistro</button>
+                </div>
             </div>
         </Page>      
     </div>
@@ -245,16 +252,6 @@ onMounted(async () => {
         margin-bottom: 0;
     }
 
-    select {
-        width: 50%;
-        display: block;
-    }
-    
-    select:focus{
-        border: 1px solid $secondary;  
-        outline: none;
-    }
-
     label{
         font-size: 18px;
         font-weight: bold;
@@ -401,28 +398,13 @@ onMounted(async () => {
         border-radius: 5px;
         height: 45px;
         transition: 0.1s;
-        border: none;        
-        margin-top: 20px;    
-               
+        border: none;
+        float: right;
+        //display: flex;
+        //align-items: end;
+        //bottom: 0;
+        //position: absolute;
     }
-    
-    #registerCustomer:disabled, #registerCustomer:disabled:hover {
-        background-color: #EEE;
-        color: black;
-        opacity: 0.3;
-        box-shadow: none;
-    }
-
-    #registerCustomer:hover, #registerComment:hover {
-        transition: all 0.2s;
-        background-color: $secondaryDark;
-        color: white;
-        box-shadow: rgba(0,0,0,0.5) 2px 2px 3px;
-    }
-
-    #registerComment {
-        padding: 2%;            
-    }    
 
 
 </style>
