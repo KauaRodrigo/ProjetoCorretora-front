@@ -4,8 +4,12 @@
             <div class="container">
                 <h1 v-if="isCadastrar">Registrar sinistro</h1>
                 <Form @submit.prevent="submit" :formData="formData">
-                    <div class="row">
+                    <div class="row">   
                         <div class="col-md">
+                            <div>
+                                <label>Data da ocorrência</label>
+                                <input :disabled="!isCadastrar" type="date" v-model="formData.dataOcorrencia">
+                            </div>
                             <div>
                                 <label>Cliente <strong>*</strong></label>
                                 <input :disabled="!isCadastrar" placeholder="" type="text" v-model="formData.nome"/>
@@ -83,6 +87,7 @@ import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
 import Page from "@/components/baseComponents/Page.vue";
+import { format, differenceInDays } from "date-fns";
 
 const route = useRoute();
 const sinistroStore = useSinistroStore();
@@ -105,6 +110,7 @@ const formData = ref({
     codigo: '',        
     seguradora: '',
     evento: '',
+    dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
     fotos: []
 });
 
@@ -118,6 +124,13 @@ async function addComment() {
 
 async function submit() {
     document.getElementById('registerCustomer')?.setAttribute('disabled', 'true');
+
+    if(validaData(new Date(formData.value.dataOcorrencia), new Date(format(new Date(), 'yyyy-MM-dd'))) > 0) {
+        openAlert('', 'Aviso', 'A data da ocorrência não pode ser maior que a data atual!')        
+        document.getElementById('registerCustomer')?.removeAttribute('disabled');
+        return
+    }
+
     if(!formData.value.nome || !formData.value.tipo || !formData.value.codigo || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
         openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
         document.getElementById('registerCustomer')?.removeAttribute('disabled');
@@ -138,6 +151,11 @@ async function submit() {
     return await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
+function validaData(sDataInicial: any, sDataFinal: any) {
+    const milisegundos = sDataInicial - sDataFinal;
+    return (milisegundos / (1000 * 60 * 60 * 24))
+}
+
 function setFile(event: any) {    
     for(const oFoto of event.target.files) {
         previewImage(oFoto);        
@@ -152,7 +170,9 @@ function previewImage(oFoto: any) {
             if(file) {
                 const base64String = file.target.result.split(',')[1]; // Remover o prefixo data:image/png;base64,
                 
-                formData.value.fotos.push(base64String)
+                if(base64String) {
+                    formData.value.fotos.push(base64String)
+                }
             }
         };
         
@@ -166,7 +186,7 @@ function previewImage(oFoto: any) {
 
 onMounted(async () => {
     if(route.name == 'accidentRegister') {                
-        isCadastrar.value = true        
+        isCadastrar.value = true                        
         return
     }
 
