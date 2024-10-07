@@ -7,6 +7,10 @@
                     <div class="row">   
                         <div class="col-md">
                             <div>
+                                <label for="numeroSinistro">Número do sinistro</label>
+                                <input type="number" name="numeroSinistro" v-model="formData.numeroSinistro">
+                            </div>
+                            <div>
                                 <label>Data da ocorrência</label>
                                 <input :disabled="!isCadastrar" type="date" v-model="formData.dataOcorrencia">
                             </div>
@@ -50,9 +54,15 @@
                                 </div>
                             </div>                            
                         </div>
-                        <div>
-                            <label for="evento">Observações</label>
-                            <textarea :disabled="!isCadastrar" name="evento" v-model="formData.evento" placeHolder=""></textarea>
+                        <div class="eventoInformacoes">
+                            <div id="observacoesContainer">
+                                <label for="observacoes">Observações</label>
+                                <textarea :disabled="!isCadastrar" name="observacoes" v-model="formData.observacoes" placeHolder=""></textarea>
+                            </div>
+                            <div>
+                                <label for="evento">Evento</label>
+                                <input type="text" name="evento" v-model="formData.evento">
+                            </div>
                         </div>
                         <div v-if="formData.fotos || isCadastrar" id="fotos">                            
                             <img v-if="formData.fotos" v-for="(value, index) of formData.fotos" :key="index" :src="'data:image/png;base64,'+value" alt="">                                
@@ -70,7 +80,7 @@
                 </Form>            
                 <div v-if="!isCadastrar" class="comments">
                     <h1>Atualizações</h1>
-                    <Comment v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
+                    <Comment @refreshComments="atualizaComentarios()" v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
                     <div id="addComment">
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
                         <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
@@ -87,7 +97,7 @@ import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
 import Page from "@/components/baseComponents/Page.vue";
-import { format, differenceInDays } from "date-fns";
+import { format } from "date-fns";
 
 const route = useRoute();
 const sinistroStore = useSinistroStore();
@@ -103,6 +113,7 @@ const comments = ref({
 })
 
 const formData = ref({
+    numeroSinistro: null,
     nome: '',
     tipo: '',
     terceiro: false,
@@ -110,6 +121,7 @@ const formData = ref({
     codigo: '',        
     seguradora: '',
     evento: '',
+    observacoes: '',
     dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
     fotos: []
 });
@@ -184,6 +196,10 @@ function previewImage(oFoto: any) {
         reader.readAsDataURL(oFoto);
 }
 
+async function atualizaComentarios() {
+    comments.value = await sinistroStore.getComments(+route.params.id);
+}
+
 onMounted(async () => {
     if(route.name == 'accidentRegister') {                
         isCadastrar.value = true                        
@@ -203,6 +219,16 @@ onMounted(async () => {
     @import "../assets/__variables.scss";
     @import "../assets/inputbox";
     @import "../assets/textarea.scss";
+
+    .eventoInformacoes {
+        display: flex;
+        justify-content: space-between;
+        width: 74%;
+
+        #observacoesContainer {
+            width: 66.5%;
+        }
+    }
 
     input, select, textarea {
         box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
@@ -227,7 +253,7 @@ onMounted(async () => {
         border-radius: 10px;
         max-width: 100%;   
         flex-wrap: wrap;        
-        img {                        
+        img {
             display: block;        
             width: 17%;        
             height: 214.42px;               
@@ -282,12 +308,13 @@ onMounted(async () => {
         margin-top: 15px;
     }
 
-    label[for='evento'] {
+    label[for='observacoes'] {
         display: block;
     }
 
-    textarea[name='evento'] {
+    textarea[name='observacoes'] {
         resize: none;
+        width: 100%;
         padding: 1%;
     }
 
@@ -346,6 +373,17 @@ onMounted(async () => {
     input[name="apolice"] {
         width: 100%;
         display: block;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button, 
+    input[type="number"]::-webkit-outer-spin-button { 
+        -webkit-appearance: none;
+        margin: 0; 
+    }
+
+    /* Para Firefox */
+    input[type="number"] {
+        -moz-appearance: textfield;
     }
 
     .street {
