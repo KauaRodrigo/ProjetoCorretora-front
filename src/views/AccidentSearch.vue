@@ -1,21 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <TheHeader />
-    <Page>
-    <div class="container">
-        <h1>Buscar sinistro</h1>
-        <form>
-            <div class="row">
-                <div class="col-md">
-                    <label>Data</label>
-                    <div class="date">
-                        <div class="date-item">
-                            <InputBox placeHolder="DD/MM/AAAA" inputType="text"></InputBox>
-                        </div>
-                        <h6>Até</h6>
-                        <div class="date-item">
-                            <InputBox placeHolder="DD/MM/AAAA" inputType="text"></InputBox>
-=======
     <div>        
         <Page>
             <div class="container">                
@@ -36,7 +19,6 @@
                                     <input @blur="changeFilters()" type="date" v-model="formData.dataFilter.end">
                                 </div>
                             </div>
->>>>>>> a7a9bc066dfb236fc75683487f9d2a93e3e47152
                         </div>
                     </div>
                     <div class="row justify-content-between">
@@ -88,46 +70,6 @@
                             <option value="status">Status</option>
                         </select>
                     </div>
-<<<<<<< HEAD
-                    <button id="searchAccident">Buscar</button>
-                </div>
-                <div class="col">
-                    
-                </div>
-            </div>
-        </form>
-            <div class="col">
-                <div class="row">
-                    <div class="searchResult">
-                        <h1>Resultado da busca</h1>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="result">
-                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
-                        <NewUpdateBox class="spacing" src="" cod="202401011234" name="Anderson Celulari" status="Fechado" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
-                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
-                        <NewUpdateBox class="spacing" src="" cod="202401011234" name="Anderson Celulari" status="Fechado" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
-                        <NewUpdateBox class="spacing" src="" cod="202401011234" name="Anderson Celulari" status="Fechado" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
-                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
-                        <NewUpdateBox class="spacing" src="" cod="202401011234" name="Anderson Celulari" status="Fechado" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
-                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
-                        <NewUpdateBox class="spacing" src="/img/banner 2.png" cod="202401011234" name="Anderson Celulari" status="Aberto" insurance="Bradesco" type="Veicular" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."></NewUpdateBox>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </Page>
-</template>
-
-<script setup lang="ts">
-    import TheHeader from '@/components/baseComponents/TheHeader.vue'
-    import InputBox from '@/components/baseComponents/InputBox.vue';
-    import UpdateBox from '@/components/baseComponents/UpdateBox.vue';
-    import NewUpdateBox from '@/components/baseComponents/NewUpdateBox.vue';
-    import Page from '@/components/baseComponents/Page.vue';
-    import Form from '@/components/baseComponents/Form.vue';
-=======
                     <div id="order">
                         <label for="order">Ordenar por</label>
                         <select name="order" @change="changeFilters" v-model="formData.order">
@@ -251,7 +193,6 @@ onBeforeUnmount(() => {
     sinistroStore.filters.type = '';
 })
 
->>>>>>> a7a9bc066dfb236fc75683487f9d2a93e3e47152
 </script>
 <style scoped lang="scss">
     @import "../assets/__variables.scss";
@@ -372,32 +313,20 @@ onBeforeUnmount(() => {
     }
 
 
-<<<<<<< HEAD
-    #searchAccident{
-        background-color: $secondary;
-        box-sizing: border-box;
-        padding: 0 2.5%;
-=======
     #registerCustomer{
         background-color: $primary;
         color: white;
         font-weight: 700;        
         padding: 0.5% 1.5%;
->>>>>>> a7a9bc066dfb236fc75683487f9d2a93e3e47152
         border-radius: 5px;
         font-size: 16px;
         transition: 0.1s;
-<<<<<<< HEAD
-        border: none;
-        margin-top: 20px;
-=======
         margin: 2% 0;        
         border: none;        
     }
 
     form {
         margin-bottom: 4%;
->>>>>>> a7a9bc066dfb236fc75683487f9d2a93e3e47152
     }
 
     .searchResult{
@@ -408,29 +337,10 @@ onBeforeUnmount(() => {
         margin-bottom: 5px;
     }
 
-<<<<<<< HEAD
-    .result{
-        //padding: 0;
-        //background-color: red;
-        display: grid;
-        grid-template-columns: auto auto auto auto;
-        box-sizing: border-box;
-        //margin: 0 auto;
-        column-gap: 20px;
-        row-gap: 20px;
-    }
-
-    .spacing{
-        margin: 0 auto;
-        //justify-content: space-between
-        //margin: 10px 0;
-    }
-=======
     .result{        
         padding: 0 10px;
         border: 1.5px solid #EEEEEE;
         border-radius: 10px;
     }    
->>>>>>> a7a9bc066dfb236fc75683487f9d2a93e3e47152
 
 </style>
