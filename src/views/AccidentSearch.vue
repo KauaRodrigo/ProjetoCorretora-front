@@ -175,9 +175,7 @@ function changePerPage() {
 
 function changeFilters() {
     loading.value = true
-    formData.value.page = 0;
-
-    console.log(formData.value.dataFilter.end)
+    formData.value.page = 0;    
 
     if(formData.value.dataFilter.init && formData.value.dataFilter.end == null) {
         return

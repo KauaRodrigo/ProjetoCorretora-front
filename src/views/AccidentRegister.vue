@@ -201,7 +201,20 @@ async function atualizaComentarios() {
 }
 
 onMounted(async () => {
-    if(route.name == 'accidentRegister') {                
+    if(route.name == 'accidentRegister') {
+        formData.value = {
+            numeroSinistro: null,
+            nome: '',
+            tipo: '',
+            terceiro: false,
+            placa: '',        
+            codigo: '',        
+            seguradora: '',
+            evento: '',
+            observacoes: '',
+            dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
+            fotos: []
+        }
         isCadastrar.value = true                        
         return
     }
