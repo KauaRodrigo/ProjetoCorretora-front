@@ -1,6 +1,6 @@
 <template>
     <div class="item" v-if="row">
-        <span>{{ row.code }}</span>
+        <span>{{ row.numeroSinistro }}</span>
         <span>{{ row.cliente }}</span>
         <span>{{ row.company.toLowerCase() }}</span>
         <span :title="row.event">{{ row.event }}</span>

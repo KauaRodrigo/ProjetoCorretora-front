@@ -29,11 +29,11 @@
                             <label>Data</label>
                             <div class="date">
                                 <div class="date-item">
-                                    <input type="date" v-model="formData.dataFilter.init">
+                                    <input @blur="changeFilters()" type="date" v-model="formData.dataFilter.init">
                                 </div>
                                 <h6>Até</h6>
                                 <div class="date-item">
-                                    <input type="date" v-model="formData.dataFilter.end">
+                                    <input @blur="changeFilters()" type="date" v-model="formData.dataFilter.end">
                                 </div>
                             </div>
 >>>>>>> a7a9bc066dfb236fc75683487f9d2a93e3e47152
@@ -233,7 +233,11 @@ function changePerPage() {
 
 function changeFilters() {
     loading.value = true
-    formData.value.page = 0;
+    formData.value.page = 0;    
+
+    if(formData.value.dataFilter.init && formData.value.dataFilter.end == null) {
+        return
+    }
     submit();
 }
 
