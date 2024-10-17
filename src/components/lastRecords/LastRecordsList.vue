@@ -17,10 +17,12 @@
             <div class="page d-flex">
                 <button :disabled="formData.page === 0" @click="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
                 <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
+            
             </div>
         </div>
         <ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" />
         <ModalAtualizaStatus v-if="sinistro" :sinistro="sinistro" />
+        <p style="font-style: italic; color: #bdbdbd; margin-top: 7px; font-size: 15px;">Últimos 7 dias.</p>
     </div>
 </template>
 <script setup lang="ts">

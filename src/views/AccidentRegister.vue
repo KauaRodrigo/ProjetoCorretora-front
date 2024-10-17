@@ -82,6 +82,7 @@
                     <h1>Atualizações</h1>
                     <Comment @refreshComments="atualizaComentarios()" v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
                     <div id="addComment">
+                        <h2>Adicionar Atualização</h2>
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
                         <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
                     </div>
@@ -136,9 +137,14 @@ const formData = ref({
 const payload = new FormData();
 
 async function addComment() {
-    await sinistroStore.addComment(+route.params.id, newComment.value.content);
-    comments.value = await sinistroStore.getComments(+route.params.id);
-    newComment.value.content = '';
+    if(newComment.value.content == ""){
+        console.log('OI?');
+        openAlert('', 'Comentário vazio', 'Adicione texto ao seu comentário!');
+    }else{
+        await sinistroStore.addComment(+route.params.id, newComment.value.content);
+        comments.value = await sinistroStore.getComments(+route.params.id);
+        newComment.value.content = '';
+    }
 }
 
 async function submit() {
@@ -272,11 +278,13 @@ onMounted(async () => {
         justify-content: left;        
         border-radius: 10px;
         max-width: 100%;   
+        max-height: 400px;
+        overflow-y: scroll;
         flex-wrap: wrap;        
         img {
             display: block;        
-            width: 17%;        
-            height: 214.42px;               
+            //width: 17%;        
+            height: 215px;               
             box-shadow: rgba(0,0,0,0.2) 0px 0px 10px;  
             border-radius: 5px;            
         }
@@ -285,7 +293,7 @@ onMounted(async () => {
     #addComment {
         width: 50%;
         padding: 2%;
-        background-color: #EEE;
+        background-color: #f0f0f0;
         border-radius: 10px;
         margin-top: 20px;
 
@@ -420,21 +428,23 @@ onMounted(async () => {
 	    height: 100px;
         display: none;
         margin: 0;
-        padding: 0;        
+        padding: 0;
     }
 
     .upload-wrapper {        
         width: 17%;
+        min-width: 150px;
         height: 214.42px;
         display: flex;
+        
     }
 
     .upload-wrapper:hover {
         i {
             transition: all .3s;
-            text-shadow: $secondary 2px 2px 1px;
+            //text-shadow: $secondary 0px 0px 5px;
             transition: all .5s;
-            transform: scale(2);
+            transform: scale(1.5);
         }        
     }
 
@@ -474,8 +484,34 @@ onMounted(async () => {
         //display: flex;
         //align-items: end;
         //bottom: 0;
-        //position: absolute;
+        //position: absolute;    
+        border: none;        
+        margin-top: 5px;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+    
+    #registerCustomer:disabled, #registerCustomer:disabled:hover {
+        background-color: #EEE;
+        color: black;
+        opacity: 0.3;
     }
 
+    #registerCustomer:hover, #registerComment:hover {
+        transition: all 0.2s;
+        background-color: $secondaryDark;
+        color: white;
+    }
+
+    #registerComment {
+        padding: 2%;            
+    }    
+
+    @media screen and (max-width: 620px){
+
+        #addComment{
+            width: 100%;
+        }
+    }
 
 </style>
