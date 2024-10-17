@@ -4,8 +4,16 @@
             <div class="container">
                 <h1 v-if="isCadastrar">Registrar sinistro</h1>
                 <Form @submit.prevent="submit" :formData="formData">
-                    <div class="row">
+                    <div class="row">   
                         <div class="col-md">
+                            <div>
+                                <label for="numeroSinistro">Número do sinistro</label>
+                                <input type="number" name="numeroSinistro" v-model="formData.numeroSinistro">
+                            </div>
+                            <div>
+                                <label>Data da ocorrência</label>
+                                <input :disabled="!isCadastrar" type="date" v-model="formData.dataOcorrencia">
+                            </div>
                             <div>
                                 <label>Cliente <strong>*</strong></label>
                                 <input :disabled="!isCadastrar" placeholder="" type="text" v-model="formData.nome"/>
@@ -46,9 +54,15 @@
                                 </div>
                             </div>                            
                         </div>
-                        <div>
-                            <label for="evento">Observações</label>
-                            <textarea :disabled="!isCadastrar" name="evento" v-model="formData.evento" placeHolder=""></textarea>
+                        <div class="eventoInformacoes">
+                            <div id="observacoesContainer">
+                                <label for="observacoes">Observações</label>
+                                <textarea :disabled="!isCadastrar" name="observacoes" v-model="formData.observacoes" placeHolder=""></textarea>
+                            </div>
+                            <div>
+                                <label for="evento">Evento</label>
+                                <input type="text" name="evento" v-model="formData.evento">
+                            </div>
                         </div>
                         <div v-if="formData.fotos || isCadastrar" id="fotos">                            
                             <img v-if="formData.fotos" v-for="(value, index) of formData.fotos" :key="index" :src="'data:image/png;base64,'+value" alt="">                                
@@ -66,7 +80,7 @@
                 </Form>            
                 <div v-if="!isCadastrar" class="comments">
                     <h1>Atualizações</h1>
-                    <Comment v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
+                    <Comment @refreshComments="atualizaComentarios()" v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
                     <div id="addComment">
                         <h2>Adicionar Atualização</h2>
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
@@ -84,6 +98,7 @@ import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
 import Page from "@/components/baseComponents/Page.vue";
+import { format } from "date-fns";
 
 const route = useRoute();
 const sinistroStore = useSinistroStore();
@@ -99,6 +114,7 @@ const comments = ref({
 })
 
 const formData = ref({
+    numeroSinistro: null,
     nome: '',
     tipo: '',
     terceiro: false,
@@ -106,6 +122,8 @@ const formData = ref({
     codigo: '',        
     seguradora: '',
     evento: '',
+    observacoes: '',
+    dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
     fotos: []
 });
 
@@ -124,6 +142,13 @@ async function addComment() {
 
 async function submit() {
     document.getElementById('registerCustomer')?.setAttribute('disabled', 'true');
+
+    if(validaData(new Date(formData.value.dataOcorrencia), new Date(format(new Date(), 'yyyy-MM-dd'))) > 0) {
+        openAlert('', 'Aviso', 'A data da ocorrência não pode ser maior que a data atual!')        
+        document.getElementById('registerCustomer')?.removeAttribute('disabled');
+        return
+    }
+
     if(!formData.value.nome || !formData.value.tipo || !formData.value.codigo || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
         openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
         document.getElementById('registerCustomer')?.removeAttribute('disabled');
@@ -144,6 +169,11 @@ async function submit() {
     return await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
+function validaData(sDataInicial: any, sDataFinal: any) {
+    const milisegundos = sDataInicial - sDataFinal;
+    return (milisegundos / (1000 * 60 * 60 * 24))
+}
+
 function setFile(event: any) {    
     for(const oFoto of event.target.files) {
         previewImage(oFoto);        
@@ -158,7 +188,9 @@ function previewImage(oFoto: any) {
             if(file) {
                 const base64String = file.target.result.split(',')[1]; // Remover o prefixo data:image/png;base64,
                 
-                formData.value.fotos.push(base64String)
+                if(base64String) {
+                    formData.value.fotos.push(base64String)
+                }
             }
         };
         
@@ -170,9 +202,26 @@ function previewImage(oFoto: any) {
         reader.readAsDataURL(oFoto);
 }
 
+async function atualizaComentarios() {
+    comments.value = await sinistroStore.getComments(+route.params.id);
+}
+
 onMounted(async () => {
-    if(route.name == 'accidentRegister') {                
-        isCadastrar.value = true        
+    if(route.name == 'accidentRegister') {
+        formData.value = {
+            numeroSinistro: null,
+            nome: '',
+            tipo: '',
+            terceiro: false,
+            placa: '',        
+            codigo: '',        
+            seguradora: '',
+            evento: '',
+            observacoes: '',
+            dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
+            fotos: []
+        }
+        isCadastrar.value = true                        
         return
     }
 
@@ -189,6 +238,16 @@ onMounted(async () => {
     @import "../assets/__variables.scss";
     @import "../assets/inputbox";
     @import "../assets/textarea.scss";
+
+    .eventoInformacoes {
+        display: flex;
+        justify-content: space-between;
+        width: 74%;
+
+        #observacoesContainer {
+            width: 66.5%;
+        }
+    }
 
     input, select, textarea {
         box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
@@ -215,7 +274,7 @@ onMounted(async () => {
         max-height: 400px;
         overflow-y: scroll;
         flex-wrap: wrap;        
-        img {                        
+        img {
             display: block;        
             //width: 17%;        
             height: 215px;               
@@ -270,12 +329,13 @@ onMounted(async () => {
         margin-top: 15px;
     }
 
-    label[for='evento'] {
+    label[for='observacoes'] {
         display: block;
     }
 
-    textarea[name='evento'] {
+    textarea[name='observacoes'] {
         resize: none;
+        width: 100%;
         padding: 1%;
     }
 
@@ -334,6 +394,17 @@ onMounted(async () => {
     input[name="apolice"] {
         width: 100%;
         display: block;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button, 
+    input[type="number"]::-webkit-outer-spin-button { 
+        -webkit-appearance: none;
+        margin: 0; 
+    }
+
+    /* Para Firefox */
+    input[type="number"] {
+        -moz-appearance: textfield;
     }
 
     .street {

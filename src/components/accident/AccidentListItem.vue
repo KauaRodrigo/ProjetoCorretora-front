@@ -1,6 +1,6 @@
 <template>
     <div :class="{ item: type === 'LIST', 'card-item': type === 'CARD' }" v-if="row">
-        <span>{{  row.code }}</span>
+        <span>{{ row.numeroSinistro }}</span>
         <span>{{ row.client }}</span>
         <span>{{ row.company.toLowerCase() }}</span>
         <span :title="row.event">{{ row.event || 'Não informado' }}</span>
