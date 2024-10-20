@@ -8,7 +8,7 @@
                         <div class="col-md">
                             <div>
                                 <label for="numeroSinistro">Número do sinistro</label>
-                                <input type="number" name="numeroSinistro" v-model="formData.numeroSinistro">
+                                <input type="text" name="numeroSinistro" @keyup="(event: any) => {formData.numeroSinistro = UtilsCampos.removeAlfaNumericos(event.target.value)}" v-model="formData.numeroSinistro" maxlength="15">
                             </div>
                             <div>
                                 <label>Data da ocorrência</label>
@@ -30,9 +30,12 @@
                                         <option value="EMPRESARIAL">Empresarial</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <label>Terceiros Envolvidos <strong>*</strong></label>
-                                    <input :disabled="!isCadastrar" type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
+                                <div>                                    
+                                    <label for="terceiro" class="switch">
+                                        <h1>Terceiros Envolvidos</h1>
+                                        <input :disabled="!isCadastrar" type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
+                                        <span class="slider"></span>
+                                    </label>
                                 </div>
                             </div>
                             <div v-if="formData.tipo === 'VEICULAR'" class="vehicle">
@@ -46,7 +49,7 @@
                             <div class="secure-info">
                                 <div>
                                     <label>Número da apólice <strong>*</strong></label>
-                                    <input :disabled="!isCadastrar" name="apolice" placeholder="" type="text" v-model="formData.codigo"/>
+                                    <input :disabled="!isCadastrar" name="apolice" placeholder="" type="text" v-model="formData.codigo" maxlength="15"/>
                                 </div>
                                 <div>
                                     <label>Seguradora</label>
@@ -92,13 +95,14 @@
     </div>
 </template>
 
-<script setup lang="ts">    
-import {inject, onMounted, onUpdated, ref, type Ref} from "vue";
+<script setup lang="ts">
+import { inject, onMounted, ref } from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
 import Page from "@/components/baseComponents/Page.vue";
 import { format } from "date-fns";
+import { UtilsCampos } from "@/utils/UtilsCampos";
 
 const route = useRoute();
 const sinistroStore = useSinistroStore();
@@ -130,8 +134,7 @@ const formData = ref({
 const payload = new FormData();
 
 async function addComment() {
-    if(newComment.value.content == ""){
-        console.log('OI?');
+    if(newComment.value.content == ""){        
         openAlert('', 'Comentário vazio', 'Adicione texto ao seu comentário!');
     }else{
         await sinistroStore.addComment(+route.params.id, newComment.value.content);
@@ -202,6 +205,12 @@ function previewImage(oFoto: any) {
         reader.readAsDataURL(oFoto);
 }
 
+function removeCaracteresAlfa(event: any) {
+    const value = event.target.value.replace(/\D+/g, '');    
+
+    formData.value.numeroSinistro = value;
+}
+
 async function atualizaComentarios() {
     comments.value = await sinistroStore.getComments(+route.params.id);
 }
@@ -253,8 +262,51 @@ onMounted(async () => {
         box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
     }
 
-    input[type='checkbox'] {
-        box-shadow: none;                
+    .switch {        
+        display: inline-block;        
+        height: 34px;
+    }        
+
+    .switch input {
+        display: none !important;
+    }
+
+    .switch input:disabled {
+        cursor: none;
+    }        
+    .switch .slider {        
+        cursor: pointer;
+        display: inline-block;
+        position: absolute;
+        background-color: rgb(234, 234, 234);
+        width: 2.5%;
+        height: 3%;
+        border-radius: 20px;        
+        margin-top: 10px;
+    }
+
+    .switch .slider:before {
+        content: "";
+        position: absolute;            
+        height: 21px;
+        width: 21px;  
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .3s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+            background-color: $secondary;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px $secondary;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(100%);
     }
  
     .container {
@@ -401,8 +453,7 @@ onMounted(async () => {
         -webkit-appearance: none;
         margin: 0; 
     }
-
-    /* Para Firefox */
+    
     input[type="number"] {
         -moz-appearance: textfield;
     }

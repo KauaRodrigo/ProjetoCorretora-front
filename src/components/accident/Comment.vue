@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ comment.usuario }}</h1>
-        <textarea name="content" id="content" v-model="comment.conteudo"></textarea>
+        <textarea :readonly="!alterando" name="content" id="content" v-model="comment.conteudo"></textarea>
         <i>Adicionado em {{ oDataHora.data }} às {{ oDataHora.hora }}</i>
         <div v-if="showActions()" class="actions">
             <button v-if="!alterando" class="btn btn-info" @click="habilitarCampoComentario"><i class="text-white fa-solid fa-pencil"></i></button>
@@ -28,27 +28,17 @@ const emits = defineEmits(['refreshComments'])
 const alterando = ref(false);
 const showModal = ref(false)
 
-onMounted(() => {    
-    const contentInput = document.getElementById('content')
-    contentInput?.setAttribute('readonly', 'true')
-    contentInput.style.pointerEvents = 'none'
+onMounted(() => {        
     const oDataHoraComment = props.comment.dataComentario.split(' ');
     oDataHora.value.data = oDataHoraComment[0];
     oDataHora.value.hora = oDataHoraComment[1]
 })
 
 function habilitarCampoComentario() {
-    alterando.value = true;
-    const contentInput = document.getElementById('content')
-    contentInput?.removeAttribute('readonly')
-    contentInput.style.pointerEvents = 'auto'
-    contentInput?.focus()
+    alterando.value = true;    
 }
 
 function cancelarAlteracao() {
-    const contentInput = document.getElementById('content')
-    contentInput?.setAttribute('readonly', 'true')
-    contentInput.style.pointerEvents = 'none'
     alterando.value = false
 }
 

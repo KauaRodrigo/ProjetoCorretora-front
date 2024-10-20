@@ -9,7 +9,7 @@
             </button>
         </div>
         <div class="list" :class="{'p-4': loading }">
-            <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr" :headers="['Apólice', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+            <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr" :headers="['N° Sinistro', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
                 <AccidentListItem @atualizaSinistro="openModalAtualizaSinistro(value)" @deleteSinistro="openModalConfirmaExclusao(value)" :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
             </Table>
             <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />

@@ -1,11 +1,7 @@
 import api from "@/axios";
 import { defineStore } from "pinia";
 
-const useUserStore = defineStore('users', { 
-    state: () => ({        
-          typeView: 'LIST'        
-      }),
-
+const useUserStore = defineStore('users', {     
     actions: {
         auth: async (payload: { email: string, password: string }) => {
             try {
@@ -40,11 +36,7 @@ const useUserStore = defineStore('users', {
             localStorage.removeItem('token')
             localStorage.removeItem('user')
             return true
-        },
-        changeViewType(type: string) {
-            this.typeView = type;
-            return this.typeView;
-        }
+        }        
     }
 })
 

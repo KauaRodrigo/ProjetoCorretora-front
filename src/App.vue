@@ -8,7 +8,7 @@
 </template> 
 
 <script setup lang="ts">
-import { computed, onBeforeMount, onMounted, provide, ref, type Ref } from 'vue';
+import { computed, onMounted, provide, ref, type Ref } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import ModalLogout from '@/components/ModalLogout.vue';
 import TheHeader from '@/components/baseComponents/TheHeader.vue'

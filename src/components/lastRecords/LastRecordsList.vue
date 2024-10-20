@@ -1,8 +1,9 @@
 <template>
     <div class="lastRecContainer">
         <h1>Últimos registros</h1>
+        <p>Últimos 7 dias.</p>
         <div class="card-list" :class="{'p-4': !lastRecordsRows }">
-            <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr" :headers="['Apólice', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+            <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr" :headers="['N° Sinistro', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
                 <LastRecordsListItem @atualizaSinistro="openModalAtualizaSinistro(value)" @deleteSinistro="openModalConfirmaExclusao(value)" v-for="(value, index) of lastRecordsRows.rows" :key="index" :row="value" />        
             </Table>
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big/>
@@ -22,7 +23,6 @@
         </div>
         <ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" />
         <ModalAtualizaStatus v-if="sinistro" :sinistro="sinistro" />
-        <p style="font-style: italic; color: #bdbdbd; margin-top: 7px; font-size: 15px;">Últimos 7 dias.</p>
     </div>
 </template>
 <script setup lang="ts">
@@ -167,6 +167,12 @@ h1{
     color: $primary;
     font-weight: bold;
     font-size: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-style: italic; 
+    color: $secondary; 
+    font-size: 15px;
 }
 </style>
