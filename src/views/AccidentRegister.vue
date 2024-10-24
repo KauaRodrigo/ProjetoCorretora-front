@@ -49,7 +49,7 @@
                             <div class="secure-info">
                                 <div>
                                     <label>Número da apólice <strong>*</strong></label>
-                                    <input :disabled="!isCadastrar" name="apolice" placeholder="" type="text" v-model="formData.codigo" maxlength="15"/>
+                                    <input :disabled="!isCadastrar" name="apolice" placeholder="" type="text" v-model="formData.numeroApolice" maxlength="15"/>
                                 </div>
                                 <div>
                                     <label>Seguradora</label>
@@ -96,13 +96,14 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, ref } from "vue";
+import { inject, onMounted, ref, type Ref } from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
 import Page from "@/components/baseComponents/Page.vue";
 import { format } from "date-fns";
 import { UtilsCampos } from "@/utils/UtilsCampos";
+import SinistroCreateDto from "@/dtos/SinistroCreateDto";
 
 const route = useRoute();
 const sinistroStore = useSinistroStore();
@@ -117,19 +118,7 @@ const comments = ref({
     rows: []    
 })
 
-const formData = ref({
-    numeroSinistro: null,
-    nome: '',
-    tipo: '',
-    terceiro: false,
-    placa: '',        
-    codigo: '',        
-    seguradora: '',
-    evento: '',
-    observacoes: '',
-    dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
-    fotos: []
-});
+const formData: Ref<SinistroCreateDto> = ref(new SinistroCreateDto());
 
 const payload = new FormData();
 
@@ -152,11 +141,11 @@ async function submit() {
         return
     }
 
-    if(!formData.value.nome || !formData.value.tipo || !formData.value.codigo || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
-        openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
-        document.getElementById('registerCustomer')?.removeAttribute('disabled');
-        return;
-    }
+    // if(!formData.value.nome || !formData.value.tipo || !formData.value.numeroApolice || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
+    //     openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
+    //     document.getElementById('registerCustomer')?.removeAttribute('disabled');
+    //     return;
+    // }
     if(isCadastrar.value) {
         let aCampos = Object.entries(formData.value)
         for(let oCampo of aCampos) {          
@@ -189,7 +178,7 @@ function previewImage(oFoto: any) {
         
         reader.onload = function(file: any) {
             if(file) {
-                const base64String = file.target.result.split(',')[1]; // Remover o prefixo data:image/png;base64,
+                const base64String: any = file.target.result.split(',')[1]; // Remover o prefixo data:image/png;base64,
                 
                 if(base64String) {
                     formData.value.fotos.push(base64String)
@@ -200,8 +189,7 @@ function previewImage(oFoto: any) {
         reader.onerror = function(e) {
             console.error('Erro ao ler o arquivo:', e);
         };
-
-        // Leia o arquivo como uma URL de dados base64
+        
         reader.readAsDataURL(oFoto);
 }
 
@@ -218,12 +206,12 @@ async function atualizaComentarios() {
 onMounted(async () => {
     if(route.name == 'accidentRegister') {
         formData.value = {
-            numeroSinistro: null,
+            numeroSinistro: '',
             nome: '',
             tipo: '',
             terceiro: false,
             placa: '',        
-            codigo: '',        
+            numeroApolice: '',        
             seguradora: '',
             evento: '',
             observacoes: '',
@@ -455,7 +443,7 @@ onMounted(async () => {
     }
     
     input[type="number"] {
-        -moz-appearance: textfield;
+        appearance: textfield;
     }
 
     .street {

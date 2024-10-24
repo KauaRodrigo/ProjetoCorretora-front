@@ -3,7 +3,7 @@ import type { AccidentType } from "@/enums/accidentType"
 
 export type AccidentItem = {
     id: number
-    code: number
+    numeroSinistro: number
     client: string
     company: string
     event: string

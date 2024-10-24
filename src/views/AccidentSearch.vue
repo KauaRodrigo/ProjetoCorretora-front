@@ -63,7 +63,7 @@
                     <div id="orderBy">
                         <label for="orderBy">Ordenar por</label>
                         <select name="orderBy" @change="changeFilters" v-model="formData.orderBy">
-                            <option value="codigo">Código</option>
+                            <option value="numeroApolice">Número da Apólice</option>
                             <option value="cliente">Cliente</option>
                             <option value="seguradora">Seguradora</option>
                             <option value="tipo">Tipo</option>
@@ -114,7 +114,7 @@ const formData = ref({
     typeFilter: '',
     page: 0,
     perPage: 5,
-    orderBy: 'codigo',
+    orderBy: 'numeroApolice',
     order: 'asc',
     searchFilter:{
         type: '',
