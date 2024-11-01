@@ -31,8 +31,12 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label>Terceiros Envolvidos <strong>*</strong></label>
+                                    <label>Terceiros Envolvidos</label>
                                     <input :disabled="!isCadastrar" type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
+                                </div>
+                                <div v-if="formData.terceiro" id="nomeTerceiroContainer">
+                                    <label>Nome do Terceiro <strong>*</strong></label>
+                                    <input type="text" v-model="formData.nomeTerceiro" name="nomeTerceiro" id="nomeTerceiro">
                                 </div>
                             </div>
                             <div v-if="formData.tipo === 'VEICULAR'" class="vehicle">
@@ -46,7 +50,7 @@
                             <div class="secure-info">
                                 <div>
                                     <label>Número da apólice <strong>*</strong></label>
-                                    <input :disabled="!isCadastrar" name="apolice" placeholder="" type="text" v-model="formData.codigo"/>
+                                    <input :disabled="!isCadastrar" name="apolice" placeholder="" type="text" v-model="formData.numeroApolice"/>
                                 </div>
                                 <div>
                                     <label>Seguradora</label>
@@ -92,7 +96,7 @@
 </template>
 
 <script setup lang="ts">    
-import {inject, onMounted, onUpdated, ref, type Ref} from "vue";
+import { inject, onMounted, ref } from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
@@ -118,12 +122,13 @@ const formData = ref({
     tipo: '',
     terceiro: false,
     placa: '',        
-    codigo: '',        
+    numeroApolice: '',        
     seguradora: '',
     evento: '',
     observacoes: '',
     dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
-    fotos: []
+    fotos: [],
+    nomeTerceiro: ''
 });
 
 const payload = new FormData();
@@ -143,7 +148,7 @@ async function submit() {
         return
     }
 
-    if(!formData.value.nome || !formData.value.tipo || !formData.value.codigo || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
+    if(!formData.value.nome || !formData.value.tipo || !formData.value.numeroApolice || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
         openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
         document.getElementById('registerCustomer')?.removeAttribute('disabled');
         return;
@@ -156,10 +161,11 @@ async function submit() {
             }  
             payload.append(oCampo[0], `${oCampo[1]}`)
         }
+        console.log(formData.value)        
         return await sinistroStore.registrarSinistro(payload).then(() => {
             openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
         })
-    }
+    }    
     return await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
@@ -208,12 +214,13 @@ onMounted(async () => {
             tipo: '',
             terceiro: false,
             placa: '',        
-            codigo: '',        
+            numeroApolice: '',        
             seguradora: '',
             evento: '',
             observacoes: '',
             dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
-            fotos: []
+            fotos: [],
+            nomeTerceiro: ''
         }
         isCadastrar.value = true                        
         return
@@ -495,5 +502,8 @@ onMounted(async () => {
         padding: 2%;            
     }    
 
+    #nomeTerceiroContainer {
+        width: 40%;
+    }    
 
 </style>
