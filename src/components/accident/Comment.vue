@@ -105,15 +105,12 @@ div {
         padding: 2%;
         width: 100%;
         resize: none;
-        word-wrap: break-word;
-        padding: 1% 0;
         border-radius: 5px;
     }
 
     i {
         display: block;
-        text-align: right;
-        font-weight: lighter;
+        text-align: right;        
     }
 }
 
