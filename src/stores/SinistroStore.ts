@@ -140,10 +140,7 @@ const useSinistroStore = defineStore('sinistro', {
 
         editarDadosSinistro: async (id:number, payload:any): Promise<any> => {
             try {
-                console.log("SinistroStore");
-                console.log(payload);
-                const { data } = await api.post('sinistros/editar/'+id,
-                    ...payload);
+                const { data } = await api.post(`sinistros/editar/${id}`, payload);
                 return data;
             } catch(error) {
                 throw(error);

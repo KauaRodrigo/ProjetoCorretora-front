@@ -183,14 +183,7 @@ async function submit() {
     }
 
     if(isEditar.value) {
-        console.log("AccidentRegister");
-        console.log(formData.value);
-        console.log(payload);
-        return sinistroStore.editarDadosSinistro(9, payload).then(() => {
-            console.log('---ac---');
-            console.log(formData.value);
-            console.log(payload.values());
-            console.log('---ac---');
+        return sinistroStore.editarDadosSinistro(+route.params.id, formData.value).then(() => {
             openAlert('', 'Sinistro alterado com sucesso!', 'Funcionando!');            
         })
         /*let aCampos = Object.entries(formData.value)
