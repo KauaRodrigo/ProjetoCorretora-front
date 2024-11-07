@@ -37,6 +37,10 @@
                                         <span class="slider"></span>
                                     </label>
                                 </div>
+                                <div v-if="formData.terceiro" id="nomeTerceiroContainer">
+                                    <label>Nome do Terceiro <strong>*</strong></label>
+                                    <input type="text" v-model="formData.nomeTerceiro" name="nomeTerceiro" id="nomeTerceiro">
+                                </div>
                             </div>
                             <div v-if="formData.tipo === 'VEICULAR'" class="vehicle">
                                 <div>
@@ -102,8 +106,8 @@
     </div>
 </template>
 
-<script setup lang="ts">
-import { inject, onMounted, ref, type Ref } from "vue";
+<script setup lang="ts">    
+import { inject, onMounted, ref } from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
 import { useRoute } from "vue-router";
@@ -125,7 +129,20 @@ const comments = ref({
     rows: []    
 })
 
-const formData: Ref<SinistroCreateDto> = ref(new SinistroCreateDto());
+const formData = ref({
+    numeroSinistro: null,
+    nome: '',
+    tipo: '',
+    terceiro: false,
+    placa: '',        
+    numeroApolice: '',        
+    seguradora: '',
+    evento: '',
+    observacoes: '',
+    dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
+    fotos: [],
+    nomeTerceiro: ''
+});
 
 const payload = new FormData();
 
@@ -148,11 +165,11 @@ async function submit() {
         return
     }
 
-    // if(!formData.value.nome || !formData.value.tipo || !formData.value.numeroApolice || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
-    //     openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
-    //     document.getElementById('registerCustomer')?.removeAttribute('disabled');
-    //     return;
-    // }
+    if(!formData.value.nome || !formData.value.tipo || !formData.value.numeroApolice || (formData.value.tipo == 'VEICULAR' && !formData.value.placa)){
+        openAlert('', 'Informações pendentes', 'Você deve preencher todos os campos obrigatórios!');
+        document.getElementById('registerCustomer')?.removeAttribute('disabled');
+        return;
+    }
     if(isCadastrar.value) {
         let aCampos = Object.entries(formData.value)
         for(let oCampo of aCampos) {          
@@ -161,10 +178,11 @@ async function submit() {
             }  
             payload.append(oCampo[0], `${oCampo[1]}`)
         }
+        console.log(formData.value)        
         return await sinistroStore.registrarSinistro(payload).then(() => {
             openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
         })
-    }
+    }    
     return await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
@@ -223,7 +241,8 @@ onMounted(async () => {
             evento: '',
             observacoes: '',
             dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
-            fotos: []
+            fotos: [],
+            nomeTerceiro: ''
         }
         isCadastrar.value = true                        
         return
@@ -552,5 +571,8 @@ onMounted(async () => {
             width: 100%;
         }
     }
+    #nomeTerceiroContainer {
+        width: 40%;
+    }    
 
 </style>
