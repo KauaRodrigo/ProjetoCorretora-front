@@ -3,6 +3,7 @@ import MainPage from '@/views/MainPage.vue'
 import AccidentRegister from '@/views/AccidentRegister.vue'
 import AccidentSearch from '@/views/AccidentSearch.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import PasswordReset from '@/views/PasswordReset.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -11,6 +12,11 @@ const router = createRouter({
       path: '/',
       name: 'login',
       component: LoginView,
+    },
+    {
+      path: '/passwordReset/:token?',
+      name: 'passwordReset',
+      component: PasswordReset
     },
     {
       path: '/main',

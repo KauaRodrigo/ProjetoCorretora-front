@@ -54,7 +54,7 @@ function closeModalLogout() {
 }
 
 function showElement() {    
-    return route.name != 'login' ? true : false;      
+    return route.name != 'login' && route.name != 'passwordReset' ? true : false;      
 }
 
 onMounted(async () => {

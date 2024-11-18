@@ -32,11 +32,39 @@ const useUserStore = defineStore('users', {
                 return false
             } 
         },
+
         logout: () => {
             localStorage.removeItem('token')
             localStorage.removeItem('user')
             return true
-        }        
+        },
+
+        verifyResetToken: async (token: string): Promise<boolean> => {
+            const { data } = await api.get(`/auth/passwordreset/verify`, {
+                params: {
+                    token                
+                }
+            });            
+
+            if(data) {
+                return true;
+            }
+
+            return false;
+
+        },
+
+        updatePassword: async (password: any) => {            
+            return api.post('/auth/passwordreset/update', {
+                password
+            })
+        },
+
+        createResetToken: async (email: string) => {
+            return api.post('/auth/passwordreset', {
+                email
+            })
+        }
     }
 })
 

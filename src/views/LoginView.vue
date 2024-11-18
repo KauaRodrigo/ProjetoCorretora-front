@@ -15,7 +15,7 @@
                     Entrar
                     <Loader v-if="loading" small />
                 </button>
-                <button type="button" id="forgot">Esqueci minha senha</button>
+                <button type="button" id="forgot" @click="openForgotPassword">Esqueci minha senha</button>
             </div>            
         </Form>        
     </div>
@@ -35,12 +35,16 @@ const message = ref('')
 
 async function login() {
     loading.value = true
-    const result = await store.auth(formData.value)
+    const result: any = await store.auth(formData.value)
     if(result.code != 400) {        
         router.push({ name: 'main' })
     }
     message.value = result.message
     loading.value = false
+}
+
+function openForgotPassword() {
+    router.push('/passwordReset')
 }
 
 function showPassword(){
@@ -57,7 +61,7 @@ function showPassword(){
 
 </script>
 <style scoped lang="scss">
-    @import "../assets/__variables.scss";
+    @import "../assets/_variables.scss";
     #container{
         height: 100%;
         display: grid;
