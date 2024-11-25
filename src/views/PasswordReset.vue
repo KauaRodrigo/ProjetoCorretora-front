@@ -2,14 +2,24 @@
     <div id="container">
         <div id="reset-box">
             <div id="emailToReset" v-if="!route.params.token">
-                <h1>Recuperar senha</h1>    
-                <p>Informe seu email para enviar-mos um token de recuperação!</p>
-                <label>E-mail</label>
-                <input type="email" v-model="emailRecuperacao" >
-                <p id="erroEmail" style="display: none;">O campo e-mail é obrigatório</p>
-                <div class="actions">
-                    <button class="btn btn-success" @click="createResetToken">Enviar</button>
-                    <button class="btn btn-danger">Voltar</button>
+                <div v-if="!emailSended">
+                    <h1>Recuperar senha</h1>    
+                    <p>Informe seu email para enviar-mos um token de recuperação!</p>
+                    <label>E-mail</label>
+                    <input type="email" v-model="emailRecuperacao" >
+                    <p id="erroEmail" style="display: none;">O campo e-mail é obrigatório</p>
+                    <div class="actions">
+                        <button class="btn btn-success" @click="createResetToken">Enviar</button>
+                        <button class="btn btn-danger" @click="returnToLogin">Voltar</button>
+                    </div>
+                </div>
+                <div v-else> 
+                    <h1>Email enviado com sucesso!</h1>    
+                    <p>Enviamos um token para redefinição de senha para o seu email. <br>Acesse sua caixa de email e verifique sua caixa de spam!</p>                                        
+                    <div class="actions">
+                        <button class="btn btn-success" @click="reenviar">Reenviar</button>
+                        <button class="btn btn-danger" @click="voltar">Voltar</button>
+                    </div>
                 </div>
             </div>
             <div v-else-if="!tokenIsValid">
@@ -22,14 +32,21 @@
                 </div>
             </div>
             <div v-else id="reset-camps">
-                <h1>Redefina sua senha!</h1>
+                <div v-if="!passwordUpdated">
+                    <h1>Redefina sua senha!</h1>
 
-                <label>Nova senha</label>
-                <input type="password" name="newPassword" v-model="newPassword">
-                <label>Confirmar nova senha</label>
-                <input type="password" name="newPasswordConfirm" v-model="newPasswordConfirm">
-                <p id="erroValidacao">As senhas devem ser iguais</p>
-                <button class="btn btn-success" @click="validarAlteracao()">Confirmar</button>
+                    <label>Nova senha</label>
+                    <input type="password" name="newPassword" v-model="newPassword">
+                    <label>Confirmar nova senha</label>
+                    <input type="password" name="newPasswordConfirm" v-model="newPasswordConfirm">
+                    <p id="erroValidacao">As senhas devem ser iguais</p>
+                    <button class="btn btn-success" @click="validarAlteracao()">Confirmar</button>
+                </div>
+                <div v-else>
+                    <h1>Senha atualizada com sucesso!</h1>
+                    
+                    <button class="btn btn-success" @click="returnToLogin">Voltar ao login</button>
+                </div>
             </div>            
         </div>
     </div>
@@ -47,7 +64,9 @@ const newPassword        = ref('');
 const newPasswordConfirm = ref('');
 const emailRecuperacao   = ref('');
 
-const tokenIsValid: Ref<boolean> = ref(false);
+const passwordUpdated: Ref<boolean> = ref(false);
+const emailSended:     Ref<boolean> = ref(false);
+const tokenIsValid:    Ref<boolean> = ref(false);
 
 function returnToLogin() {
     router.push('/')
@@ -68,7 +87,20 @@ async function createResetToken() {
         p.style.display = 'none'
     }
 
-    return store.createResetToken(emailRecuperacao.value);
+    emailSended.value = await store.createResetToken(emailRecuperacao.value);
+
+    return emailSended;
+}
+
+async function reenviar() {
+    emailSended.value = await store.createResetToken(emailRecuperacao.value);
+
+    return emailSended;
+}
+
+function voltar() {
+    emailSended.value      = false;
+    emailRecuperacao.value = '';
 }
 
 /**
@@ -109,7 +141,7 @@ async function validarAlteracao() {
         p.style.display = 'none';
     }
 
-    await store.updatePassword(newPassword.value);
+    passwordUpdated.value = await store.updatePassword(newPassword.value);
 }
 
 </script>
@@ -146,7 +178,7 @@ async function validarAlteracao() {
         }
     }
 
-    #reset-camps {
+    #reset-camps div {
         display: flex;
         flex-direction: column;        
 
