@@ -54,9 +54,10 @@ const useUserStore = defineStore('users', {
 
         },
 
-        updatePassword: async (password: any) => {            
+        updatePassword: async (password: any, token: string) => {            
             return api.post('/auth/passwordreset/update', {
-                password
+                password,
+                token
             })
         },
 

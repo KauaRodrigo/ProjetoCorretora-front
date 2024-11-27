@@ -58,10 +58,10 @@ function showElement() {
 }
 
 onMounted(async () => {
-    const isAuth = store.getUserAndToken()
-    if(!isAuth) {
-        router.push({ name: 'login' })
-    }
+    const isAuth = store.getUserAndToken();    
+    // if(!isAuth) {
+    //     router.push({ name: 'login' })
+    // }
 })
 </script>
 

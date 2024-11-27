@@ -141,7 +141,7 @@ async function validarAlteracao() {
         p.style.display = 'none';
     }
 
-    passwordUpdated.value = await store.updatePassword(newPassword.value);
+    passwordUpdated.value = await store.updatePassword(newPassword.value, route.params.token);
 }
 
 </script>
