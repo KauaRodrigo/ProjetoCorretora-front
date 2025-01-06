@@ -1,8 +1,8 @@
 <template>
     <Modal>
-        <h1>Tem certeza que deseja excluir esta atualização?</h1>
+        <h1>Tem certeza que deseja EXCLUIR PERMANENTEMENTE o sinistro?</h1>
         <div class="actions"> 
-            <button id="confirmar" @click="excluirComentario()" class="btn btn-success">Confirmar</button>
+            <button id="confirmar" @click="excluirSinistro()" class="btn btn-success">Confirmar</button>
             <button id="cancelar" @click="close()" class="btn btn-danger">Cancelar</button>
         </div>      
     </Modal>
@@ -10,10 +10,10 @@
 <script lang="ts" setup>
 import Modal from './baseComponents/Modal.vue';
 
-const emits = defineEmits(['excluirComentario', 'closeModal'])
+const emits = defineEmits(['excluirSinistro', 'closeModal'])
 
-function excluirComentario() {
-    emits('excluirComentario');   
+function excluirSinistro() {
+    emits('excluirSinistro');   
 }
 
 function close() {

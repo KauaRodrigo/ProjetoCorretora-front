@@ -147,11 +147,14 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
-        /*deletarSinistro: async (payload:any):Promise<boolean> => {
+        excluirSinistro: async(id:number): Promise<any> => {
             try {
-                
+                const { data } = await api.post(`sinistros/excluir/${id}`);
+                return true
+            } catch(error){
+                throw(error);
             }
-        }*/
+        }
     }
 })
 

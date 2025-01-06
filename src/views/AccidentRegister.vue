@@ -66,11 +66,19 @@
                                 <input :disabled="isVisualizar" type="text" name="evento" v-model="formData.evento">
                             </div>
                         </div>
-                        <div v-if="isVisualizar">
-                            <button type="submit" id="btnEditarSinistro" class="btn-tst" @click="isEditar=true; isVisualizar=false;">Editar Sinistro</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <div v-if="isVisualizar">
+                                <button type="submit" id="btnEditarSinistro" class="btn-tst" @click="isEditar=true; isVisualizar=false;">Editar Sinistro</button>
+                            </div>
+                            <div v-if="isEditar || isDeletar">
+                                <button type="submit" id="btnEditarSinistro" class="btn-tst" @click="isEditar=true; isVisualizar=false; isDeletar=false">Confirmar edições</button>
+                            </div>
                         </div>
-                        <div v-if="isEditar">
-                            <button type="submit" id="btnEditarSinistro" class="btn-tst">Confirmar edições</button>
+                        <div v-if="isEditar || isDeletar" class="col-md">
+                            <button type="submit" id="" class="btn-delete" @click="isEditar=false; isVisualizar=false; isDeletar=true; openModal"><i class="bi bi-trash-fill"></i></button>
+                            <ModalConfirmaExclusaoSinistro v-if="showModal" @closeModal="closeModal" @excluirSinistro="excluirSinistro"/>
                         </div>
                     </div>    
                     <div v-if="formData.fotos || isCadastrar" id="fotos">                            
@@ -115,6 +123,10 @@ import Page from "@/components/baseComponents/Page.vue";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 
+import ModalConfirmaExclusaoSinistro from '@/components/ModalConfirmaExclusaoSinistroo.vue';
+
+const emits = defineEmits(['openModalLogout'])
+
 const route = useRoute();
 const sinistroStore = useSinistroStore();
 
@@ -122,6 +134,8 @@ const openAlert: any = inject('openAlert');
 const isCadastrar = ref(false)
 const isVisualizar = ref(false)
 const isEditar = ref(false)
+const isDeletar = ref(false)
+const reallyDeletar = ref(false)
 const newComment = ref({
     content: ''
 })
@@ -144,6 +158,8 @@ const formData = ref({
 });
 
 const payload = new FormData();
+
+const showModal = ref(false);
 
 async function addComment() {
     if(newComment.value.content == ""){
@@ -184,20 +200,22 @@ async function submit() {
 
     if(isEditar.value) {
         return sinistroStore.editarDadosSinistro(+route.params.id, formData.value).then(() => {
-            openAlert('', 'Sinistro alterado com sucesso!', 'Funcionando!');            
+            openAlert('', 'Sinistro alterado com sucesso!', 'Alterado para o modo de visualização.');
+            isEditar.value = false;
+            isVisualizar.value = true;
         })
-        /*let aCampos = Object.entries(formData.value)
-        for(let oCampo of aCampos) {          
-            if(oCampo[0] == 'fotos') {
-                break;
-            }  
-            payload.append(oCampo[0], `${oCampo[1]}`)
-        }
-        /*return await sinistroStore.registrarSinistro(payload).then(() => {
-            openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');
-        })//
     }
-    return await sinistroStore.updateRegister(+route.params.id, formData.value)*/
+
+    if(isDeletar.value){
+        showModal.value = true
+        //return sinistroStore.excluirSinistro(+route.params.id).then(() => {
+        //    openAlert('accidentSearch', 'Sinistro deletado com sucesso!', 'Voltando à lista de vizualização...');
+            //isDeletar.value = false;
+            //isEditar.value = false;
+            //isVisualizar.value = true;
+        //})
+        //console.log("OLÁ!")
+        //emits('openModalLogout')
     }
 }
 
@@ -269,6 +287,21 @@ onMounted(async () => {
     formData.value = await sinistroStore.getAccidentSingle(+route.params.id);     
     comments.value = await sinistroStore.getComments(+route.params.id);
 })
+
+function openModal() {
+    showModal.value = true
+}
+
+function closeModal() {
+    showModal.value = false
+}
+
+function excluirSinistro() {
+    closeModal()
+    //openAlert('AccidentSearch', '', '') preciso redirecionar
+    openAlert('accidentSearch', 'Sinistro deletado com sucesso!', 'Voltando à lista de vizualização...');
+    return sinistroStore.excluirSinistro(+route.params.id)
+}
 
 </script>
 <style scoped lang="scss">

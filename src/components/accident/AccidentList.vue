@@ -15,7 +15,7 @@
             <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
         </div>
-        <ModalConfirmaExclusaoSinistro :sinistro="sinistro" />
+        <!--<ModalConfirmaExclusaoSinistro :sinistro="sinistro" />-->
         <ModalAtualizaStatus :sinistro="sinistro" />
     </div>
 </template>
@@ -27,7 +27,7 @@ import Table from '../baseComponents/TableComponent.vue'
 import AccidentListItem from './AccidentListItem.vue';
 import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
 import useUserStore from '@/stores/UserStore';
-import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
+import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistroo.vue';
 import ModalAtualizaStatus from '../ModalAtualizaStatus.vue';
 
 const store = useUserStore();

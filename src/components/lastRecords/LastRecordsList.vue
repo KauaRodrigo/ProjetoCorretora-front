@@ -20,7 +20,7 @@
             
             </div>
         </div>
-        <ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" />
+        <!--<ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" />-->
         <ModalAtualizaStatus v-if="sinistro" :sinistro="sinistro" />
         <p style="font-style: italic; color: #bdbdbd; margin-top: 7px; font-size: 15px;">Últimos 7 dias.</p>
     </div>
@@ -32,7 +32,7 @@ import useSinistroStore from '@/stores/SinistroStore';
 import { inject, onMounted, provide, ref } from 'vue';
 import Loader from '../baseComponents/Loader.vue';
 import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
-import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
+import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistroo.vue';
 import ModalAtualizaStatus from '../ModalAtualizaStatus.vue';
 
 const store = useSinistroStore()

@@ -40,3 +40,23 @@ body, html, #app {
   border: none;
   margin-top: 5px;
 }
+
+.btn-delete{
+  background: $danger;
+  padding: 2% 2.5%;
+  font-size: 1rem;
+  border-radius: 5px;
+  height: 12%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  //transition: all 1.5s;
+  //gap: 10px;
+  border: none;
+  margin-top: 5px;
+}
+
+.btn-delete i{
+  //margin-left: 2px;
+}
