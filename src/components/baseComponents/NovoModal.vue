@@ -1,7 +1,7 @@
 <template>
     <Modal>
-        <h1>{{ text }}</h1>
-        <div class="actions">
+        <h1>{{ texto }}</h1>
+        <div class="acoes">
             <button id="confirmar" @click="confirmar()" class="btn btn-success">Confirmar</button>
             <button id="cancelar" @click="fecharModal()" class="btn btn-danger">Cancelar</button>
         </div>      
@@ -11,7 +11,7 @@
 import Modal from './Modal.vue';
 
 const props = defineProps<{
-    text: string,
+    texto: string,
 }>();
 
 const emits = defineEmits(['confirmar', 'fecharModal'])
@@ -43,7 +43,7 @@ function fecharModal(){
         border: none;
     }            
 
-    .actions {
+    .acoes {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
