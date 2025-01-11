@@ -11,7 +11,7 @@ import Overlay from './Overlay.vue';
 
 </script>
 <style scoped lang="scss">
-@import '../../assets/_variables.scss';
+@import '../../assets/_variables';
 
 .modal-wrapper {
     position: fixed;
