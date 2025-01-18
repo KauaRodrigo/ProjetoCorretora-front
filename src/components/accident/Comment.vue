@@ -9,13 +9,13 @@
             <button v-if="alterando" @click="alterarComentario" class="btn btn-success"><i class="fa fa-check"></i></button>
             <button v-if="alterando" @click="cancelarAlteracao" class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <ModalExclusaoComentario v-if="showModal" @closeModal="closeModal" @excluirComentario="excluirComentario"/>
+        <Modal v-if="showModal" texto="Tem certeza que deseja excluir esta atualização?" @confirmar="excluirComentario" @cancelar="closeModal" />
     </div>
 </template>
 <script setup lang="ts">
 import api from '@/axios';
 import { onMounted, ref, type Ref } from 'vue';
-import ModalExclusaoComentario from '../ModalExclusaoComentario.vue';
+import Modal from '../Modal.vue';
 
 const oDataHora: Ref<{ data: string, hora: string }> = ref({
     data: '',

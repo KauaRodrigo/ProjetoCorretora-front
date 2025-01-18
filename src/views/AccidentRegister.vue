@@ -78,7 +78,7 @@
                         </div>
                         <div v-if="isEditar || isDeletar" class="col-md">
                             <button type="submit" id="" class="btn-delete" @click="isEditar=false; isVisualizar=false; isDeletar=true; openModal"><i class="bi bi-trash-fill"></i></button>
-                            <ModalConfirmaExclusaoSinistro v-if="showModal" @closeModal="closeModal" @excluirSinistro="excluirSinistro"/>
+                            <Modal v-if="showModal" texto="Você tem certeza que deseja EXCLUIR PERMANENTEMENTE o sinistro atual?" @confirmar="excluirSinistro" @cancelar="closeModal"/>
                         </div>
                     </div>    
                     <div v-if="formData.fotos || isCadastrar" id="fotos">                            
@@ -122,8 +122,7 @@ import { useRoute } from "vue-router";
 import Page from "@/components/baseComponents/Page.vue";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-
-import ModalConfirmaExclusaoSinistro from '@/components/ModalConfirmaExclusaoSinistroo.vue';
+import Modal from "@/components/Modal.vue";
 
 const emits = defineEmits(['openModalLogout'])
 
@@ -208,14 +207,6 @@ async function submit() {
 
     if(isDeletar.value){
         showModal.value = true
-        //return sinistroStore.excluirSinistro(+route.params.id).then(() => {
-        //    openAlert('accidentSearch', 'Sinistro deletado com sucesso!', 'Voltando à lista de vizualização...');
-            //isDeletar.value = false;
-            //isEditar.value = false;
-            //isVisualizar.value = true;
-        //})
-        //console.log("OLÁ!")
-        //emits('openModalLogout')
     }
 }
 
@@ -298,7 +289,6 @@ function closeModal() {
 
 function excluirSinistro() {
     closeModal()
-    //openAlert('AccidentSearch', '', '') preciso redirecionar
     openAlert('accidentSearch', 'Sinistro deletado com sucesso!', 'Voltando à lista de vizualização...');
     return sinistroStore.excluirSinistro(+route.params.id)
 }

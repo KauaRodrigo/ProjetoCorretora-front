@@ -3,9 +3,6 @@
         <Page>
             <div class="container">
                 <Summary />
-                <button class="btn-tst" @click="ativarModal()">Ativar Modal</button>
-                <NovoModal text="Olá mundo!" v-if="showModal" @closeModal="closeModal"
-                @confirmar="confirmar"/>
                 <LastRecordsList />            
             </div>
         </Page>
@@ -38,18 +35,6 @@ function openModalLogout() {
 
 function closeModalLogout() {
     showModalLogout.value = false
-}
-import NovoModal from '@/components/baseComponents/NovoModal.vue';
-const showModal = ref(false);
-function ativarModal(){
-    showModal.value = true
-}
-function closeModal() {
-    showModal.value = false
-}
-function confirmar(){
-    closeModal()
-    console.log("KAUÃ FODINHA")
 }
 
 </script>
