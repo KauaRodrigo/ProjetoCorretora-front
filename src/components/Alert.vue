@@ -30,6 +30,9 @@ onMounted(() => {
     }, 5000)
 })
 
+/**
+ * Fecha o alerta
+ */
 function destoyAlert() {
     setTimeout(() => {
         show.value = false;

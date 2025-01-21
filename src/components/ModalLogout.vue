@@ -20,6 +20,9 @@ const emits = defineEmits(['logout', 'closeModal'])
 
 const loading = ref(false)
 
+/**
+ * Realiza o logout do sistema
+ */
 function logout() {
     loading.value = true
     emits('logout')

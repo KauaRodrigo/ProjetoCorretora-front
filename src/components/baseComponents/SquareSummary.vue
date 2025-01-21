@@ -1,22 +1,14 @@
 <template>
     <div class="squareSummary">
         <div class="square" @click="setFilterRedirect()">
-            <i v-if="type=='Veicular'" class="bi bi-car-front"></i>
-            <i v-if="type=='Residencial'" class="bi bi-house"></i>
-            <i v-if="type=='Vida'" class="bi bi-heart-pulse"></i>
-            <i v-if="type=='Empresarial'" class="bi bi-briefcase"></i>
-            <i v-if="type=='Viagem'" class="bi bi-airplane"></i>            
+            <i class="bi" :class="{'bi-car-front': type === 'Veicular', 'bi-house': type === 'Residencial', 'bi-heart-pulse': type === 'Vida', 'bi-briefcase': type == 'Empresarial', 'bi-airplane': type == 'Viagem' }"></i>            
             <div v-if="data && !loading" class="key">
-                    <h5>Em aberto</h5>
-                    <h5 v-if="type=='Veicular'">Retorno rep.</h5>
-                    <h5 v-if="type=='Residencial'">Retorno rep.</h5>
-                    <h5 v-if="type=='Empresarial'">Retorno rep.</h5>
+                <h5>Em aberto</h5>
+                <h5 title="Retorno Reparo" v-if="type == 'Veicular' || type == 'Residencial' || type == 'Empresarial'">Retorno rep.</h5>                    
             </div>
             <div v-if="data && !loading" class="value">
                 <h6>{{ data?.aberto }}</h6>
-                <h6 v-if="type=='Veicular'">{{ data?.retorno_reparo }}</h6>
-                <h6 v-if="type=='Residencial'">{{ data?.retorno_reparo }}</h6>
-                <h6 v-if="type=='Empresarial'">{{ data?.retorno_reparo }}</h6>                
+                <h6 v-if="type == 'Veicular' || type == 'Residencial' || type == 'Empresarial'">{{ data?.retorno_reparo }}</h6>                
             </div>            
             <Loader v-else text="Carregando..."/>
         </div>
@@ -26,32 +18,38 @@
 
 <script setup lang="ts">
 import useSinistroStore from '@/stores/SinistroStore'
-import { computed, onMounted, provide, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Loader from './Loader.vue';
 import { useRouter } from 'vue-router';
 
-    const props = defineProps<{
-        type:string,
-    }>();
-    
-    const store  = useSinistroStore();
-    const router = useRouter();
-
+    const props   = defineProps<{ type:string }>();    
+    const store   = useSinistroStore();
+    const router  = useRouter();
     const loading = ref(false);
     const data    = computed(() => store.squareData(props.type.toUpperCase()));
 
+    onMounted(async () => {
+        loading.value = true;
+        await getSquareData();
+        loading.value = false;
+    })
+
+    /**
+     * Busca os dados referente ao tipo de sinistro específico
+     * 
+     * @return {void}
+     */
     async function getSquareData() {        
         loading.value = true;
         await store.getSquareData(props.type.toUpperCase());        
         loading.value = false;
     }
 
-    onMounted(async () => {
-        loading.value = true;
-        await getSquareData();
-        loading.value = false;
-    }) 
-
+    /**
+     * Redireciona para a tela de busca de sinistros e preenche o filtro de tipo de sinistro
+     * 
+     * @return {void}
+     */
     function setFilterRedirect() {
         store.getFilters({ type: props.type.toUpperCase() });
         router.push({ name: 'accidentSearch' });
@@ -99,6 +97,7 @@ import { useRouter } from 'vue-router';
     .square h5{
         font-size: 16px;
         line-height: 26px;
+        z-index: 100;
     }
 
     .square h6{
@@ -111,6 +110,7 @@ import { useRouter } from 'vue-router';
         color: rgba(0, 50, 99, 0.1);
         font-size: 120px;
         position: absolute;
+        z-index: 0;
     }    
 
     @media screen and (max-width: 991px) {

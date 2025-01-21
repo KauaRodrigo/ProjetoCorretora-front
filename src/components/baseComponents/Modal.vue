@@ -25,6 +25,7 @@ import Overlay from './Overlay.vue';
 }
 
 .modal-box {
+    position: relative;
     width: 90%;
     max-width: 500px;
     border-radius: 10px;

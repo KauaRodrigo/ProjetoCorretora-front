@@ -29,6 +29,15 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
+        cancelarSinistro: async (payload: any) => {
+            try {
+                return api.post(`sinistros/cancelar/${payload.id}`)
+            }
+            catch(error) {
+                throw(error);
+            }
+        },
+
         updateStatus: async (payload: { id: number, status: AccidentStatus, descricao: string }): Promise<boolean> => {            
             try {
                 return api.post(`sinistros/atualizar/${payload.id}`, {
@@ -116,13 +125,17 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
-        registrarSinistro: async (payload: any): Promise<boolean> => {            
+        registrarSinistro: async (payload: any): Promise<boolean> => {
             try {
-                const { data } = await api.post('sinistros/criar', 
-                    payload
-                , { headers: {
-                    'Content-Type': 'multipart/form-data',
-                }});
+                const { data } = await api.post(
+                    'sinistros/criar', 
+                    payload, 
+                    { 
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    }
+                );
                 return data;
             }catch (error) {
                 throw(error);

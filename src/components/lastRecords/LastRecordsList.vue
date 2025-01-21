@@ -3,8 +3,8 @@
         <h1>Últimos registros</h1>
         <p>Últimos 7 dias.</p>
         <div class="card-list" :class="{'p-4': !lastRecordsRows }">
-            <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr" :headers="['N° Sinistro', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
-                <LastRecordsListItem @atualizaSinistro="openModalAtualizaSinistro(value)" @deleteSinistro="openModalConfirmaExclusao(value)" v-for="(value, index) of lastRecordsRows.rows" :key="index" :row="value" />        
+            <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr" :headers="['N° do Sinistro', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+                <LastRecordsListItem @atualizaSinistro="openModalAtualizaStatusSinistro(value)" @deleteSinistro="openModalConfirmaExclusaoCancelamento(value, true)" @cancelarSinistro="openModalConfirmaExclusaoCancelamento(value, false)" v-for="(value, index) of lastRecordsRows.rows" :key="index" :row="value" />        
             </Table>
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big/>
             <AccidentEmpty v-if="!lastRecordsRows?.rows?.length && !loading" />
@@ -21,7 +21,7 @@
             
             </div>
         </div>
-        <ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" />
+        <ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" :excluindo="excluindo"/>
         <ModalAtualizaStatus v-if="sinistro" :sinistro="sinistro" />
     </div>
 </template>
@@ -29,14 +29,13 @@
 import LastRecordsListItem from './LastRecordsListItem.vue'
 import Table from '../baseComponents/TableComponent.vue'
 import useSinistroStore from '@/stores/SinistroStore';
-import { inject, onMounted, provide, ref } from 'vue';
+import { onMounted, provide, ref } from 'vue';
 import Loader from '../baseComponents/Loader.vue';
 import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
 import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
 import ModalAtualizaStatus from '../ModalAtualizaStatus.vue';
 
 const store = useSinistroStore()
-
 const formData = ref({
     page: 0,
     perPage: 5
@@ -45,6 +44,7 @@ const maxPage = ref();
 const lastRecordsRows = ref()
 const loading = ref(false)
 const sinistro: any = ref({});
+const excluindo = ref(false);
 
 onMounted(async () => {
     loading.value = true;
@@ -55,25 +55,40 @@ onMounted(async () => {
 
 provide('reload', reload)
 
+/**
+ * Recarrega os registros da listagem com base nos filtros aplicados
+ */
 async function reload() {
     lastRecordsRows.value = await store.getLastRecords(formData.value);    
 }
 
+/**
+ * Vai para a próxima página da listagem
+ */
 function nextPage() {
     ++formData.value.page; 
     submit();
 }
 
+/**
+ * Voltra para a próxima anterior da listagem
+ */
 function prevPage() {
     --formData.value.page; 
     submit();
 }
 
+/**
+ * Altera a quantidade de registros apresentado na listagem
+ */
 function changePerPage() {
     formData.value.page = 0;
     submit()
 }
 
+/**
+ * Realiza a busca dos registros com os filtros aplicados
+ */
 async function submit() {
     loading.value = true
     lastRecordsRows.value = await store.getLastRecords(formData.value)        
@@ -81,7 +96,15 @@ async function submit() {
     maxPage.value = Math.ceil(lastRecordsRows.value.count / formData.value.perPage)
 }
 
-function openModalConfirmaExclusao(row: any) {      
+/**
+ * 
+ * Abre o modal para exclusão ou cancelamento do sinistro
+ * 
+ * @param {any} row 
+ * @param {boolean} excluir 
+ */
+function openModalConfirmaExclusaoCancelamento(row: any, excluir: boolean) {      
+    excluindo.value = excluir;
     sinistro.value.id = row.id;
     sinistro.value.status = row.status;
     const modal = document.getElementById('modalExclusaoSinistro');
@@ -91,7 +114,14 @@ function openModalConfirmaExclusao(row: any) {
     }
 }
 
-function openModalAtualizaSinistro(row: any) {    
+/**
+ * 
+ * Abre o modal para atualização do status sinistro
+ * 
+ * @param {any} row 
+ * @param {boolean} excluir 
+ */
+function openModalAtualizaStatusSinistro(row: any) {    
     sinistro.value.id = row.id;
     sinistro.value.status = row.status;
     sinistro.value.type = row.type

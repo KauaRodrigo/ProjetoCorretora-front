@@ -44,6 +44,12 @@ onMounted(() => {
     }
 })
 
+/**
+ * 
+ * Verifica se o usuário possui acesso à ação
+ * 
+ * @param {string[]} roles 
+ */
 function hasAccess(roles: string[]) {
     return user.value.roles?.some(role => {
         if(roles.includes(role)) {            

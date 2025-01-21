@@ -31,7 +31,7 @@
     .summary{
         overflow: visible;
         margin-top: 1rem;
-        margin-bottom: 5rem;
+        margin-bottom: 2.5rem;
     }
     .summary h1{
         color: $primary;

@@ -19,7 +19,7 @@ defineProps<{ title?: string }>()
 </script>
 <style scoped lang="scss">   
     .page {
-        //padding: 2%;
+        padding: 1% 0;
     } 
     .content {
         padding: 0 2%;

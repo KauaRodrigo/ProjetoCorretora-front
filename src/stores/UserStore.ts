@@ -62,9 +62,11 @@ const useUserStore = defineStore('users', {
         },
 
         createResetToken: async (email: string) => {
-            return api.post('/auth/passwordreset', {
+            const { data } = await api.post('/auth/passwordreset', {
                 email
             })
+
+            return data;
         }
     }
 })

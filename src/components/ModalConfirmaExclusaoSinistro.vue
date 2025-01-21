@@ -1,7 +1,7 @@
 <template>
     <div id="modalExclusaoSinistro">
         <Modal>
-            <h1>Tem certeza que deseja cancelar o sinistro?</h1>            
+            <h1>Tem certeza que deseja {{ excluindo == true ? 'excluir' : 'cancelar' }} o sinistro?</h1>            
             <div class="actions"> 
                 <button id="confirmar" @click="deleteRegister()" class="btn btn-success">Confirmar</button>
                 <button id="cancelar" @click="close()" class="btn btn-danger">Cancelar</button>
@@ -17,14 +17,26 @@ import { inject } from 'vue';
 const reload: any = inject('reload');
 const sinistroStore = useSinistroStore();
 
-const props = defineProps<{ sinistro: any}>()
+const props = defineProps<{ sinistro: any, excluindo: boolean}>()
 
+/**
+ * Faz a requisição para excluir o sinistro
+ */
 async function deleteRegister() {
-    await sinistroStore.deleteAccident(props.sinistro);    
+    if(props.excluindo == false) {
+        await sinistroStore.cancelarSinistro(props.sinistro);    
+        reload();
+        close();
+        return;
+    }
+    await sinistroStore.deleteAccident(props.sinistro);
     reload();
     close();
 }
 
+/**
+ * Fecha o modal de exclusão de sinistro
+ */
 function close() {
     const modal = document.getElementById('modalExclusaoSinistro');
     

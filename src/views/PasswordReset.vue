@@ -87,7 +87,15 @@ async function createResetToken() {
         p.style.display = 'none'
     }
 
-    emailSended.value = await store.createResetToken(emailRecuperacao.value);
+    const oRetorno = await store.createResetToken(emailRecuperacao.value);    
+
+    emailSended.value = true;
+
+    if(oRetorno.status == 404 && p) {
+        emailSended.value = false;
+        p.style.display = 'block';
+        p.textContent = oRetorno.message
+    }
 
     return emailSended;
 }

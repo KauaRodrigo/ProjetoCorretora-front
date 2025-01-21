@@ -12,10 +12,16 @@ import Modal from './baseComponents/Modal.vue';
 
 const emits = defineEmits(['excluirComentario', 'closeModal'])
 
+/**
+ * Faz a requisição para excluir um comentário
+ */
 function excluirComentario() {
     emits('excluirComentario');   
 }
 
+/**
+ * Fecha o modal de exclusão de comentário
+ */
 function close() {
     emits('closeModal')   
 }
