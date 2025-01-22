@@ -343,4 +343,16 @@ onBeforeUnmount(() => {
         border-radius: 10px;
     }    
 
+    @media screen and (max-width: 767px){
+        .col-4, .col-5, .col-6, #ordenacao{
+            width: 100%;
+        }
+
+        .selects{
+            width: 100%;
+            gap: 1rem;
+            justify-content: initial;
+        }
+    }
+
 </style>
