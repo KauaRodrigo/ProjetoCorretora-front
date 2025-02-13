@@ -6,7 +6,7 @@
                     <div class="linha d-flex">   
                         <div style="width: 50%; margin-right: 25px;">
                             <label for="numeroSinistro">Número do sinistro</label>
-                            <input :disabled="isVisualizar" type="text" name="numeroSinistro" @keyup="(event: any) => {formData.numeroSinistro = UtilsCampos.removeAlfaNumericos(event.target.value)}" v-model="formData.numeroSinistro" maxlength="15">
+                            <input :disabled="isVisualizar" type="text" name="numeroSinistro" @keyup="(event) => {formData.numeroSinistro = UtilsCampos.removeAlfaNumericos(event.target.value)}" v-model="formData.numeroSinistro" maxlength="15">
                         </div>
                         <div style="width: 48%">
                             <label>Número da apólice <strong>*</strong></label>
@@ -18,9 +18,12 @@
                             <label>Data da ocorrência</label>
                             <input :disabled="isVisualizar" type="date" v-model="formData.dataOcorrencia">
                         </div>
-                        <div style="width: 25%">
+                        <div style="width: 25%;  position: relative;">
                             <label>Seguradora</label>
-                            <input :disabled="isVisualizar" placeholder="" type="text" v-model="formData.seguradora"/>
+                            <input @keyup="buscaSeguradoras()" :disabled="isVisualizar" placeholder="" type="text" v-model="formData.seguradora"/>
+                            <div v-if="aSeguradoras && aSeguradoras.length > 0 && !oSeguradoraSelecionada" class="resultadosSeguradora">
+                                <span @click="selecionarSeguradora(oSeguradora)" v-for="(oSeguradora, iIndex) of aSeguradoras" :cliente="oSeguradora.id">{{ oSeguradora.nome }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="linha d-flex">
@@ -48,9 +51,12 @@
                         </div>
                     </div>
                     <div class="linha d-flex">
-                        <div style="width: 50%; margin-right: 25px;">
+                        <div style="width: 50%; margin-right: 25px; position: relative;">
                             <label>Cliente <strong>*</strong></label>
-                            <input :disabled="isVisualizar" placeholder="" type="text" v-model="formData.nome"/>
+                            <input :disabled="isVisualizar" @keyup="buscaClientes()" placeholder="" type="text" v-model="formData.nome"/>
+                            <div v-if="aClientes && aClientes.length > 0 && !clienteSelecionado" class="resultadosClientes">
+                                <span @click="selecionarCliente(oCliente)" v-for="(oCliente, iIndex) of aClientes" :cliente="oCliente.id">{{ oCliente.name }}</span>
+                            </div>
                         </div>
                         <div v-if="formData.tipo == 'VEICULAR'" style="width: 25%">
                             <label>Placa <strong>*</strong></label>
@@ -95,7 +101,7 @@
     </div>
 </template>
 
-<script setup lang="ts">    
+<script setup>    
 import { inject, onMounted, ref } from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
 import Comment from "../components/accident/Comment.vue" 
@@ -108,7 +114,7 @@ import ModalVisualizarImagem from "@/components/ModalVisualizarImagem.vue";
 const route = useRoute();
 const sinistroStore = useSinistroStore();
 
-const openAlert: any = inject('openAlert');
+const openAlert = inject('openAlert');
 const isCadastrar = ref(false)
 const isVisualizar = ref(false)
 const newComment = ref({
@@ -117,9 +123,14 @@ const newComment = ref({
 const comments = ref({
     rows: []    
 })
-const indiceImagem      = ref();
-const visualizarImagem  = ref(false);
-const imagemSelecionada = ref('');
+const indiceImagem           = ref();
+const visualizarImagem       = ref(false);
+const imagemSelecionada      = ref('');
+const aClientes              = ref();
+const clienteSelecionado     = ref(false);
+
+const aSeguradoras           = ref();
+const oSeguradoraSelecionada = ref(false);
 
 const formData = ref({
     numeroSinistro: '',
@@ -137,6 +148,42 @@ const formData = ref({
 });
 
 const payload = new FormData();
+
+async function buscaClientes() {
+    clienteSelecionado.value = false;
+
+    if(formData.value.nome.length >= 3) {
+        aClientes.value = await sinistroStore.getClientesPorNome(formData.value.nome);
+        console.log(aClientes.value);
+        return;   
+    }
+
+    aClientes.value = [];    
+}
+
+function selecionarCliente(oCliente) {
+    formData.value.nome = oCliente.name;
+    formData.value.seguradora = oCliente.seguradora.nome
+
+    clienteSelecionado.value = true;
+}
+
+async function buscaSeguradoras() {
+    oSeguradoraSelecionada.value = false;
+
+    if(formData.value.seguradora.length >= 3) {
+        aSeguradoras.value = await sinistroStore.getSeguradorasPorNome(formData.value.seguradora);        
+        return;  
+    }
+
+    aSeguradoras.value = [];
+}
+
+function selecionarSeguradora(oSeguradora) {    
+    formData.value.seguradora = oSeguradora.nome
+
+    oSeguradoraSelecionada.value = true;
+}
 
 function excluirImagem() {
     formData.value.fotos.splice(indiceImagem.value, 1);
@@ -180,22 +227,22 @@ async function submit() {
     return await sinistroStore.updateRegister(+route.params.id, formData.value)
 }
 
-function validaData(sDataInicial: any, sDataFinal: any) {
+function validaData(sDataInicial, sDataFinal) {
     const milisegundos = sDataInicial - sDataFinal;
     return (milisegundos / (1000 * 60 * 60 * 24))
 }
 
-function setFile(event: any) {    
+function setFile(event) {    
     for(const oFoto of event.target.files) {
         previewImage(oFoto);        
         payload.append('files', oFoto)
     }
 }
 
-function previewImage(oFoto: any) {
+function previewImage(oFoto) {
     const reader = new FileReader();
         
-        reader.onload = function(file: any) {
+        reader.onload = function(file) {
             if(file) {
                 const base64String = file.target.result.split(',')[1]; // Remover o prefixo data:image/png;base64,
                 
@@ -212,7 +259,7 @@ function previewImage(oFoto: any) {
         reader.readAsDataURL(oFoto);
 }
 
-function removeCaracteresAlfa(event: any) {
+function removeCaracteresAlfa(event) {
     const value = event.target.value.replace(/\D+/g, '');    
 
     formData.value.numeroSinistro = value;
@@ -222,7 +269,7 @@ async function atualizaComentarios() {
     comments.value = await sinistroStore.getComments(+route.params.id);
 }
 
-function selecionarImagem(base64: string, indice: number) {
+function selecionarImagem(base64, indice) {
     indiceImagem.value = indice;
     visualizarImagem.value = true;
     imagemSelecionada.value = base64;
@@ -273,10 +320,6 @@ onMounted(async () => {
         width: 50%;
     }    
 
-    input, select, textarea {
-        box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
-    }
-
     .switch {        
         display: inline-block;        
         height: 34px;
@@ -313,7 +356,7 @@ onMounted(async () => {
     }
 
     input:checked + .slider {
-            background-color: $secondary;
+        background-color: $secondary;
     }
 
     input:focus + .slider {
@@ -377,14 +420,7 @@ onMounted(async () => {
         font-weight: bold;
         font-size: 20px;
         margin-bottom: 0;
-    }
-
-    label{
-        font-size: 18px;
-        font-weight: bold;
-        color: $primary;
-        margin-top: 15px;
-    }
+    }    
 
     label[for='observacoes'] {
         display: block;
@@ -505,6 +541,63 @@ onMounted(async () => {
     #nomeTerceiroContainer {
         width: 48%;
         margin-left: 25px;
-    }    
+    }            
+
+    .resultadosSeguradora {
+        position: absolute;
+        top: 100%;
+        max-height: 150px;
+        overflow: auto;        
+        margin-top: 5px;        
+        width: 100%;
+        background-color: rgb(240, 240, 240);
+        border-radius: 10px;
+        padding: 1%;    
+        span {
+            padding: 0 2%;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;            
+            height: 40px;    
+            border-radius: 5px;        
+            color: black;
+            text-transform: capitalize;
+            cursor: pointer;
+            &:hover {
+                background-color: white;
+                transition: background-color 0.5s;
+            }
+        }      
+    }
+
+    .resultadosClientes {
+        position: absolute;
+        top: 100%;
+        max-height: 150px;
+        overflow: auto;        
+        margin-top: 5px;        
+        width: 100%;
+        background-color: rgb(240, 240, 240);
+        border-radius: 10px;
+        padding: 1%;        
+
+        span {
+            padding: 0 2%;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;            
+            height: 40px;    
+            border-radius: 5px;        
+            color: black;
+            text-transform: capitalize;
+            cursor: pointer;
+            &:hover {
+                background-color: white;
+                transition: background-color 0.5s;
+            }
+        }        
+    }
 
 </style>

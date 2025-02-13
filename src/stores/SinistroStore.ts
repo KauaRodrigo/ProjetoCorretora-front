@@ -140,6 +140,34 @@ const useSinistroStore = defineStore('sinistro', {
             }catch (error) {
                 throw(error);
             }
+        },
+
+        getClientesPorNome: async (sNome: string): Promise<any[]> => {
+            try {
+                const { data } = await api.post(
+                    'clientes',
+                    { sNome: sNome }
+                )
+
+                return data;
+            }
+            catch(oErro) {
+                throw(oErro);
+            }            
+        },
+
+        getSeguradorasPorNome: async (sNome: string): Promise<any[]> => {
+            try {
+                const { data } = await api.post(
+                    'seguradoras',
+                    { sNome: sNome }
+                )
+
+                return data;
+            }
+            catch(oErro) {
+                throw(oErro);
+            }            
         }
     }
 })
