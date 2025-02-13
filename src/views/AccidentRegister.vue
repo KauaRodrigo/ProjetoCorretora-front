@@ -8,20 +8,20 @@
                         <div class="col-md">
                             <div>
                                 <label for="numeroSinistro">Número do sinistro</label>
-                                <input type="number" name="numeroSinistro" v-model="formData.numeroSinistro">
+                                <input :disabled="isVisualizar" type="number" name="numeroSinistro" v-model="formData.numeroSinistro">
                             </div>
                             <div>
                                 <label>Data da ocorrência</label>
-                                <input :disabled="!isCadastrar" type="date" v-model="formData.dataOcorrencia">
+                                <input :disabled="isVisualizar" type="date" v-model="formData.dataOcorrencia">
                             </div>
                             <div>
-                                <label>Cliente <strong>*</strong></label>
-                                <input :disabled="!isCadastrar" placeholder="" type="text" v-model="formData.nome"/>
+                                <label>Cliente<strong>*</strong></label>
+                                <input :disabled="isVisualizar" placeholder="" type="text" v-model="formData.nome"/>
                             </div>
                             <div class="adtional-info">
                                 <div>
-                                    <label>Tipo <strong>*</strong></label>
-                                    <select :disabled="!isCadastrar" name="tipo" v-model="formData.tipo">
+                                    <label>Tipo<strong>*</strong></label>
+                                    <select :disabled="isVisualizar" name="tipo" v-model="formData.tipo">
                                         <option value="">Selecione</option>
                                         <option value="VEICULAR">Veicular</option>
                                         <option value="VIAGEM">Viagem</option>
@@ -31,68 +31,83 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label>Terceiros Envolvidos <strong>*</strong></label>
-                                    <input :disabled="!isCadastrar" type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
+                                    <label>Terceiros Envolvidos<strong>*</strong></label>
+                                    <input :disabled="isVisualizar" type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
                                 </div>
                             </div>
                             <div v-if="formData.tipo === 'VEICULAR'" class="vehicle">
                                 <div>
-                                    <label>Placa <strong>*</strong></label>
-                                    <input :disabled="!isCadastrar" placeholder="" type="text" v-model="formData.placa"/>
+                                    <label>Placa<strong>*</strong></label>
+                                    <input :disabled="isVisualizar" placeholder="" type="text" v-model="formData.placa"/>
                                 </div>
                             </div>                        
                         </div>
-                        <div class="col">
-                            <div class="secure-info">
-                                <div>
-                                    <label>Número da apólice <strong>*</strong></label>
-                                    <input :disabled="!isCadastrar" name="apolice" placeholder="" type="text" v-model="formData.codigo"/>
-                                </div>
-                                <div>
-                                    <label>Seguradora</label>
-                                    <input :disabled="!isCadastrar" placeholder="" type="text" v-model="formData.seguradora"/>
-                                </div>
-                            </div>                            
-                        </div>
-                        <div class="eventoInformacoes">
-                            <div id="observacoesContainer">
-                                <label for="observacoes">Observações</label>
-                                <textarea :disabled="!isCadastrar" name="observacoes" v-model="formData.observacoes" placeHolder=""></textarea>
+                        <div class="col secure-info">
+                            <div>
+                                <label>Número da apólice<strong>*</strong></label><br>
+                                <input :disabled="isVisualizar" name="apolice" placeholder="" type="text" v-model="formData.codigo"/>
                             </div>
                             <div>
-                                <label for="evento">Evento</label>
-                                <input type="text" name="evento" v-model="formData.evento">
-                            </div>
-                        </div>
-                        <div v-if="formData.fotos || isCadastrar" id="fotos">                            
-                            <img v-if="formData.fotos" v-for="(value, index) of formData.fotos" :key="index" :src="'data:image/png;base64,'+value" alt="">                                
-                            <div v-if="!isVisualizar" class="upload-wrapper">
-                                <label for="input-file" class="label-file"><i class="fa-solid fa-plus"></i></label>
-                                <input type="file" multiple @change="(event) => setFile(event)" id="input-file">    
-                            </div>
-                        </div>
-                        <div v-if="isCadastrar">
-                            <button type="submit" id="registerCustomer">
-                                Registrar Sinistro
-                            </button>
+                                <label>Seguradora</label><br>
+                                <input :disabled="isVisualizar" placeholder="" type="text" v-model="formData.seguradora"/>
+                            </div>                       
                         </div>
                     </div>
-                </Form>            
+                    <div class="row">
+                        <div class="col-md">
+                            <div>
+                                <label for="observacoes">Observações</label>
+                                <textarea :disabled="isVisualizar" name="observacoes" v-model="formData.observacoes" placeHolder=""></textarea>
+                            </div>
+                        </div>
+                        <div class="col secure-info">
+                            <div>
+                                <label for="evento">Evento</label><br>
+                                <input :disabled="isVisualizar" type="text" name="evento" v-model="formData.evento">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <div v-if="isVisualizar">
+                                <button type="submit" id="btnEditarSinistro" class="btn-tst" @click="isEditar=true; isVisualizar=false;">Editar Sinistro</button>
+                            </div>
+                            <div v-if="isEditar || isDeletar">
+                                <button type="submit" id="btnEditarSinistro" class="btn-tst" @click="isEditar=true; isVisualizar=false; isDeletar=false">Confirmar edições</button>
+                            </div>
+                        </div>
+                        <div v-if="isEditar || isDeletar" class="col-md">
+                            <button type="submit" id="" class="btn-delete" @click="isEditar=false; isVisualizar=false; isDeletar=true; openModal"><i class="bi bi-trash-fill"></i></button>
+                            <Modal v-if="showModal" texto="Você tem certeza que deseja EXCLUIR PERMANENTEMENTE o sinistro atual?" @confirmar="excluirSinistro" @cancelar="closeModal"/>
+                        </div>
+                    </div>    
+                    <div v-if="formData.fotos || isCadastrar" id="fotos">                            
+                        <img v-if="formData.fotos" v-for="(value, index) of formData.fotos" :key="index" :src="'data:image/png;base64,'+value" alt="">                                
+                        <div v-if="!isVisualizar" class="upload-wrapper">
+                            <label for="input-file" class="label-file"><i class="fa-solid fa-plus"></i></label>
+                            <input type="file" multiple @change="(event) => setFile(event)" id="input-file">    
+                        </div>
+                    </div>
+                    <div v-if="isCadastrar">
+                        <button type="submit" id="registerCustomer" class="btn-tst">Registrar Sinistro</button>
+                    </div>
+                </Form>
                 <div v-if="!isCadastrar" class="comments">
                     <h1>Atualizações</h1>
                     <Comment @refreshComments="atualizaComentarios()" v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
                     <div id="addComment">
-                        <h2>Adicionar Atualização</h2>
+                        <h2>Adicionar atualização</h2>
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
-                        <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
+                        <!--<button class="btn" id="registerComment" @click="addComment()">Adicionar</button>-->
+                        <button class="btn-tst" @click="addComment()">Adicionar</button>
                     </div>
                 </div>
                 <div class="col">
-                    <div>
+                    <!--<div>
                         <label>Observações</label>
                         <TextareaBox placeHolder=""></TextareaBox>
                     </div>
-                    <button id="registerCustomer">Registrar Sinistro</button>
+                    <button id="registerCustomer">Registrar Sinistro</button>-->
                 </div>
             </div>
         </Page>      
@@ -106,6 +121,10 @@ import Comment from "../components/accident/Comment.vue"
 import { useRoute } from "vue-router";
 import Page from "@/components/baseComponents/Page.vue";
 import { format } from "date-fns";
+import { id } from "date-fns/locale";
+import Modal from "@/components/Modal.vue";
+
+const emits = defineEmits(['openModalLogout'])
 
 const route = useRoute();
 const sinistroStore = useSinistroStore();
@@ -113,6 +132,9 @@ const sinistroStore = useSinistroStore();
 const openAlert: any = inject('openAlert');
 const isCadastrar = ref(false)
 const isVisualizar = ref(false)
+const isEditar = ref(false)
+const isDeletar = ref(false)
+const reallyDeletar = ref(false)
 const newComment = ref({
     content: ''
 })
@@ -136,9 +158,10 @@ const formData = ref({
 
 const payload = new FormData();
 
+const showModal = ref(false);
+
 async function addComment() {
     if(newComment.value.content == ""){
-        console.log('OI?');
         openAlert('', 'Comentário vazio', 'Adicione texto ao seu comentário!');
     }else{
         await sinistroStore.addComment(+route.params.id, newComment.value.content);
@@ -173,7 +196,18 @@ async function submit() {
             openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
         })
     }
-    return await sinistroStore.updateRegister(+route.params.id, formData.value)
+
+    if(isEditar.value) {
+        return sinistroStore.editarDadosSinistro(+route.params.id, formData.value).then(() => {
+            openAlert('', 'Sinistro alterado com sucesso!', 'Alterado para o modo de visualização.');
+            isEditar.value = false;
+            isVisualizar.value = true;
+        })
+    }
+
+    if(isDeletar.value){
+        showModal.value = true
+    }
 }
 
 function validaData(sDataInicial: any, sDataFinal: any) {
@@ -236,9 +270,28 @@ onMounted(async () => {
         isVisualizar.value = true                
     }
 
+    if(route.name == 'accidentEdit') {        
+        isEditar.value = true                
+    }
+    
+
     formData.value = await sinistroStore.getAccidentSingle(+route.params.id);     
     comments.value = await sinistroStore.getComments(+route.params.id);
 })
+
+function openModal() {
+    showModal.value = true
+}
+
+function closeModal() {
+    showModal.value = false
+}
+
+function excluirSinistro() {
+    closeModal()
+    openAlert('accidentSearch', 'Sinistro deletado com sucesso!', 'Voltando à lista de vizualização...');
+    return sinistroStore.excluirSinistro(+route.params.id)
+}
 
 </script>
 <style scoped lang="scss">
@@ -246,7 +299,7 @@ onMounted(async () => {
     @import "../assets/inputbox";
     @import "../assets/textarea.scss";
 
-    .eventoInformacoes {
+    /*.eventoInformacoes {
         display: flex;
         justify-content: space-between;
         width: 74%;
@@ -254,7 +307,7 @@ onMounted(async () => {
         #observacoesContainer {
             width: 66.5%;
         }
-    }
+    }*/
 
     input, select, textarea {
         box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
@@ -292,6 +345,7 @@ onMounted(async () => {
 
     #addComment {
         width: 50%;
+        height: auto;
         padding: 2%;
         background-color: #f0f0f0;
         border-radius: 10px;
@@ -326,9 +380,9 @@ onMounted(async () => {
         margin-top: 15px;
     }
 
-    label[for='observacoes'] {
+    /*label[for='observacoes'] {
         display: block;
-    }
+    }*/
 
     textarea[name='observacoes'] {
         resize: none;
@@ -362,7 +416,7 @@ onMounted(async () => {
     }
 
     .secure-info {
-        width: 50%;
+        //width: 50%;
         gap: 2rem;
 
         input {
@@ -380,18 +434,18 @@ onMounted(async () => {
         margin: 20px 0;
     }
 
-    input[name="cep"] {
+    /*input[name="cep"] {
         width: 50%;
-    }
+    }*/
 
-    input[name="numero"] {
+    /*input[name="numero"] {
         width: 25%;
-    }
+    }*/
 
-    input[name="apolice"] {
+    /*input[name="apolice"] {
         width: 100%;
         display: block;
-    }
+    }*/
 
     input[type="number"]::-webkit-inner-spin-button, 
     input[type="number"]::-webkit-outer-spin-button { 
@@ -473,7 +527,7 @@ onMounted(async () => {
         font-size: 14px;
     }
 
-    #registerCustomer, #registerComment {
+    /*#registerCustomer, #registerComment {
         background-color: $secondary;        
         padding: 0 1%;
         border-radius: 5px;
@@ -489,7 +543,7 @@ onMounted(async () => {
         margin-top: 5px;
         font-weight: 600;
         font-size: 1rem;
-    }
+    }*/
     
     #registerCustomer:disabled, #registerCustomer:disabled:hover {
         background-color: #EEE;
