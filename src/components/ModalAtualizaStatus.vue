@@ -14,6 +14,7 @@
             <div class="comment_box">
                 <h5>Observações<strong>*</strong></h5>
                 <textarea name="comment" id="comment" placeholder="Digite a atualização" v-model="sinistro.descricao"></textarea>
+                <p id="mensagem_erro"></p>
             </div>
             <div class="actions"> 
                 <button id="confirmar" @click="atualizaSinistro()" class="btn btn-success">Confirmar</button>
@@ -33,7 +34,14 @@ const sinistroStore = useSinistroStore();
 const props = defineProps<{ sinistro: any}>()
 const store  = useSinistroStore();
 
+/**
+ * Realiza a requisição para atualizar o status do sinistro
+ */
 async function atualizaSinistro() {    
+    if(!props.sinistro.descricao) {
+        return document.getElementById('mensagem_erro').innerText = 'O campo observações é obrigatório!';
+    }
+
     await sinistroStore.updateStatus(props.sinistro);        
     await store.getSquareData('VEICULAR');
     await store.getSquareData('RESIDENCIAL');
@@ -41,13 +49,17 @@ async function atualizaSinistro() {
     await store.getSquareData('EMPRESARIAL');
     await store.getSquareData('VIAGEM');
     reload();
-    fechar();
+    fechar();    
 }
 
+/**
+ * Fecha modal de atualização de status do sinsitro e reseta o valor da mensagem de erro
+ */
 function fechar() {
     const modal = document.getElementById('modalAtualizaStatus');
     
     if(modal) {
+        document.getElementById('mensagem_erro').innerText = '';
         modal.style.display = 'none';
     }
 }
@@ -104,6 +116,11 @@ function fechar() {
 
     strong {
         color: $secondary;
+    }
+
+    #mensagem_erro {
+        color: red;
+        font-style: italic;
     }
 
 }

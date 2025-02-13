@@ -1,13 +1,17 @@
 <template>
     <div>
-        <input :type=inputType :placeholder=placeHolder>
+        <label>
+            {{ titulo }}
+            <input :type=tipoCampo :placeholder=placeHolder>
+        </label>
     </div>
 </template>
 
 <script setup lang="ts">
     defineProps<{
-        placeHolder:string,
-        inputType:string
+        placeHolder: string,
+        tipoCampo:   string,
+        titulo:      string
     }>()
 </script>
 <style scoped lang="scss">

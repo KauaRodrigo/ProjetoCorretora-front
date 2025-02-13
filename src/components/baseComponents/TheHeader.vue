@@ -9,18 +9,24 @@
                     <li class="nav-item dropdown"> 
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sinistros</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <RouterLink v-if="hasAccess(['ATENDIMENTO'])" class="dropdown-item" :to="{ name: 'accidentRegister' }">Registrar</RouterLink>
+                            <RouterLink v-if="hasAccess(['ATENDIMENTO'])" class="dropdown-item" :to="{ name: 'accidentRegister' }">Cadastrar</RouterLink>
                             <RouterLink class="dropdown-item" :to="{ name: 'accidentSearch' }">Buscar</RouterLink>
                         </div>
                     </li>
-                    <li v-if="false" class="nav-item dropdown">
+                    <li class="nav-item dropdown">
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Clientes</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <RouterLink class="dropdown-item" :to="{ name: 'customerRegister' }">Cadastrar</RouterLink>
-                            <RouterLink class="dropdown-item" :to="{ name: 'customerSearch' }">Buscar</RouterLink>
+                            <RouterLink class="dropdown-item" :to="{ name: 'adicionarCliente' }">Cadastrar</RouterLink>
+                            <RouterLink class="dropdown-item" :to="{ name: 'buscarClientes' }">Buscar</RouterLink>
                         </div>
-                    </li>
-                    
+                    </li>     
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seguradoras</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <RouterLink class="dropdown-item" :to="{ name: 'adicionarSeguradora' }">Cadastrar</RouterLink>
+                            <RouterLink class="dropdown-item" :to="{ name: 'buscarSeguradoras' }">Buscar</RouterLink>
+                        </div>
+                    </li>                                       
                 </ul>
                 <div class="d-flex login">                                            
                     <p>Olá, <b>{{ user.username }}</b></p>
@@ -44,6 +50,12 @@ onMounted(() => {
     }
 })
 
+/**
+ * 
+ * Verifica se o usuário possui acesso à ação
+ * 
+ * @param {string[]} roles 
+ */
 function hasAccess(roles: string[]) {
     return user.value.roles?.some(role => {
         if(roles.includes(role)) {            

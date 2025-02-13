@@ -6,7 +6,6 @@ input, select{
   background-color: #f9f9f9;
   border: none;
   border-radius: 5px;
-  //box-shadow: rgba(0, 0, 0, 0.24) 3px 3px 10px;
   padding: 0 13px;
 }
 
@@ -17,4 +16,15 @@ input:focus-visible{
 input:focus{
   border: 1px solid $secondary;
   padding: 0 12px;
+}
+
+label{
+  font-size: 18px;
+  font-weight: bold;
+  color: $primary;
+  margin-top: 15px;
+}
+
+input, select, textarea {
+  box-shadow: rgba(0,0,0,0.2) 2px 2px 3px;
 }

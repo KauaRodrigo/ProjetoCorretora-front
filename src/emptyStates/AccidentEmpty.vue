@@ -22,7 +22,6 @@
 
     h3 {
         font-weight: 700;
-        //font-size: 22px;
         font-family: Arial, serif;
         color: $tertiary;
         z-index: 1;

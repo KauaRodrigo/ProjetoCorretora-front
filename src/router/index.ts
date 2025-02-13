@@ -3,6 +3,8 @@ import MainPage from '@/views/MainPage.vue'
 import AccidentRegister from '@/views/AccidentRegister.vue'
 import AccidentSearch from '@/views/AccidentSearch.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import PasswordReset from '@/views/PasswordReset.vue'
+import CadastrarClientes from '@/views/clientes/CadastrarClientes.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,27 +15,32 @@ const router = createRouter({
       component: LoginView,
     },
     {
-      path: '/main',
+      path: '/recuperarsenha/:token?',
+      name: 'passwordReset',
+      component: PasswordReset
+    },
+    {
+      path: '/inicio',
       name: 'main',
       component: MainPage
     },
     {
-      path: '/registrarSinistro',
+      path: '/sinistros/registrar',
       name: 'accidentRegister',
       component: AccidentRegister
     },
     {
-      path: '/editarSinistro/:id',
+      path: '/sinsitros/editar/:id',
       name: 'accidentEdit',
       component: AccidentRegister
     },
     {
-      path: '/visualizarSinistro/:id',
+      path: '/sinistros/visualizar/:id',
       name: 'visualizarSinistro',
       component: AccidentRegister
     },
     {
-      path: '/buscarSinistro',
+      path: '/sinistros',
       name: 'accidentSearch',
       component: AccidentSearch
     },
@@ -41,9 +48,27 @@ const router = createRouter({
       path: '/excluirSinistro/:id',
       name: 'deleteAccident',
       component: AccidentRegister
-    }
-    
-
+    },    
+    {
+      path: '/clientes',
+      name: 'buscarClientes',
+      component: AccidentSearch
+    },
+    {
+      path: '/clientes/adicionar',
+      name: 'adicionarCliente',
+      component: CadastrarClientes
+    },
+    {
+      path: '/seguradoras',
+      name: 'buscarSeguradoras',
+      component: AccidentSearch
+    },
+    {
+      path: '/seguradoras/adicionar',
+      name: 'adicionarSeguradora',
+      component: AccidentSearch
+    },
   ]
 })
 

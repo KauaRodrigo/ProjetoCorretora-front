@@ -1,11 +1,7 @@
 import api from "@/axios";
 import { defineStore } from "pinia";
 
-const useUserStore = defineStore('users', { 
-    state: () => ({        
-          typeView: 'LIST'        
-      }),
-
+const useUserStore = defineStore('users', {     
     actions: {
         auth: async (payload: { email: string, password: string }) => {
             try {
@@ -36,14 +32,41 @@ const useUserStore = defineStore('users', {
                 return false
             } 
         },
+
         logout: () => {
             localStorage.removeItem('token')
             localStorage.removeItem('user')
             return true
         },
-        changeViewType(type: string) {
-            this.typeView = type;
-            return this.typeView;
+
+        verifyResetToken: async (token: string): Promise<boolean> => {
+            const { data } = await api.get(`/auth/passwordreset/verify`, {
+                params: {
+                    token                
+                }
+            });            
+
+            if(data) {
+                return true;
+            }
+
+            return false;
+
+        },
+
+        updatePassword: async (password: any, token: string) => {            
+            return api.post('/auth/passwordreset/update', {
+                password,
+                token
+            })
+        },
+
+        createResetToken: async (email: string) => {
+            const { data } = await api.post('/auth/passwordreset', {
+                email
+            })
+
+            return data;
         }
     }
 })

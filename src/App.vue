@@ -9,7 +9,7 @@
 </template> 
 
 <script setup lang="ts">
-import { computed, onBeforeMount, onMounted, provide, ref, type Ref } from 'vue';
+import { computed, onMounted, provide, ref, type Ref } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import TheHeader from '@/components/baseComponents/TheHeader.vue'
 import useUserStore from './stores/UserStore';
@@ -55,14 +55,14 @@ function closeModalLogout() {
 }
 
 function showElement() {    
-    return route.name != 'login' ? true : false;      
+    return route.name != 'login' && route.name != 'passwordReset' ? true : false;      
 }
 
 onMounted(async () => {
-    const isAuth = store.getUserAndToken()
-    if(!isAuth) {
-        router.push({ name: 'login' })
-    }
+    const isAuth = store.getUserAndToken();    
+    // if(!isAuth) {
+    //     router.push({ name: 'login' })
+    // }
 })
 </script>
 

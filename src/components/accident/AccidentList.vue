@@ -1,21 +1,14 @@
 <template>  
-    <div>
-        <div v-if="false" class="d-flex actions">
-            <button @click="changeViewType('LIST')">
-                <i class="bi bi-list"></i>
-            </button>    
-            <button @click="changeViewType('CARD')">
-                <i class="bi bi-card-heading"></i>
-            </button>
-        </div>
+    <div>        
         <div class="list" :class="{'p-4': loading }">
-            <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.8fr 0.5fr 0.5fr 0.7fr" :headers="['Apólice', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
-                <AccidentListItem @atualizaSinistro="openModalAtualizaSinistro(value)" @deleteSinistro="openModalConfirmaExclusao(value)" :type="viewType" v-for="(value, index) of rows" :key="index" :row="value"/>
+            <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr" :headers="['N° do    Sinistro', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+                <AccidentListItem @atualizaSinistro="openModalAtualizaStatusSinistro(value)" @cancelarSinistro="openModalConfirmaExclusaoCancelamento(value, false)" @deleteSinistro="openModalConfirmaExclusaoCancelamento(value, true)" v-for="(value, index) of rows" :key="index" :row="value"/>
             </Table>
             <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
         </div>
         <!--<ModalConfirmaExclusaoSinistro :sinistro="sinistro" />-->
+        <!-- <ModalConfirmaExclusaoSinistro :sinistro="sinistro" :excluindo="excluindo" /> -->
         <ModalAtualizaStatus :sinistro="sinistro" />
     </div>
 </template>
@@ -25,27 +18,28 @@ import { ref, type Ref } from 'vue';
 import Loader from '../baseComponents/Loader.vue';
 import Table from '../baseComponents/TableComponent.vue'
 import AccidentListItem from './AccidentListItem.vue';
-import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
+import AccidentEmpty from "../../emptyStates/AccidentEmpty.vue";
 import useUserStore from '@/stores/UserStore';
-import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistroo.vue';
+import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
 import ModalAtualizaStatus from '../ModalAtualizaStatus.vue';
 
-const store = useUserStore();
-
-const viewType: Ref<string> = ref(store.typeView);
 const sinistro: Ref<{ id: number, status: string, type: ''}> = ref({
     id: 0,
     status: '',
     type: ''
 })
+const excluindo: Ref<boolean> = ref(false);
 
 defineProps<{ rows?: any, loading?: boolean }>()
 
-function changeViewType(type: string) {
-    viewType.value = store.changeViewType(type);    
-}
-
-function openModalConfirmaExclusao(row: any) {    
+/**
+ * Abre o modal para exclusão ou cancelamento do sinistro
+ * 
+ * @param {any} row 
+ * @param {boolean} excluir
+ */
+function openModalConfirmaExclusaoCancelamento(row: any, excluir: boolean) {    
+    excluindo.value = excluir;
     sinistro.value.id = row.id;
     sinistro.value.status = row.status;
     sinistro.value.type = row.type;
@@ -56,7 +50,13 @@ function openModalConfirmaExclusao(row: any) {
     }
 }
 
-function openModalAtualizaSinistro(row: any) {    
+/**
+ * 
+ * Abre o modal para atualização do status do sinistro
+ * 
+ * @param {any} row 
+ */
+function openModalAtualizaStatusSinistro(row: any) {    
     sinistro.value.id = row.id;
     sinistro.value.status = row.status;
     const modal = document.getElementById('modalAtualizaStatus');    
