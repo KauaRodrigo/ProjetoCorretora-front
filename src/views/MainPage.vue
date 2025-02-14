@@ -5,7 +5,7 @@
                 <Summary />
                 <LastRecordsList />            
             </div>
-        </Page>               
+        </Page>
     </div>
 </template>
 

@@ -80,19 +80,34 @@
                             <input type="file" multiple @change="(event) => setFile(event)" id="input-file">    
                         </div>
                     </div>
-                    <div v-if="isCadastrar">
-                        <button type="submit" id="registerCustomer">
-                            Registrar Sinistro
-                        </button>
-                    </div>                    
+                    <div class="row">
+                        <div class="col-md">
+                            <div v-if="isVisualizar">
+                                <button type="submit" id="btnEditarSinistro" class="btn-tst" @click="isEditar=true; isVisualizar=false;">Editar Sinistro</button>
+                            </div>
+                            <div v-if="isEditar || isDeletar">
+                                <button type="submit" id="btnEditarSinistro" class="btn-tst" @click="isEditar=true; isVisualizar=false; isDeletar=false">Confirmar edições</button>
+                            </div>
+                        </div>
+                        <div v-if="isEditar || isDeletar" class="col-md">
+                            <button type="submit" id="" class="btn-delete" @click="isEditar=false; isVisualizar=false; isDeletar=true; openModal"><i class="bi bi-trash-fill"></i></button>
+                            <Modal v-if="showModal" texto="Você tem certeza que deseja EXCLUIR PERMANENTEMENTE o sinistro atual?" @confirmar="excluirSinistro" @cancelar="closeModal"/>
+                        </div>
+                        <div v-if="isCadastrar">
+                            <button type="submit" id="registerCustomer">
+                                Registrar Sinistro
+                            </button>
+                        </div>
+                    </div>                      
                 </Form>            
                 <div v-if="isVisualizar" class="comments">
                     <h1>Atualizações</h1>
                     <Comment @refreshComments="atualizaComentarios()" v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
                     <div id="addComment">
-                        <h2>Adicionar Atualização</h2>
+                        <h2>Adicionar atualização</h2>
                         <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
-                        <button class="btn" id="registerComment" @click="addComment()">Adicionar</button>
+                        <!--<button class="btn" id="registerComment" @click="addComment()">Adicionar</button>-->
+                        <button class="btn-tst" @click="addComment()">Adicionar</button>
                     </div>
                 </div>                
             </div>
@@ -110,6 +125,9 @@ import Page from "@/components/baseComponents/Page.vue";
 import { format } from "date-fns";
 import { UtilsCampos } from "@/utils/UtilsCampos";
 import ModalVisualizarImagem from "@/components/ModalVisualizarImagem.vue";
+import Modal from "@/components/Modal.vue";
+
+const emits = defineEmits(['openModalLogout'])
 
 const route = useRoute();
 const sinistroStore = useSinistroStore();
@@ -117,6 +135,9 @@ const sinistroStore = useSinistroStore();
 const openAlert = inject('openAlert');
 const isCadastrar = ref(false)
 const isVisualizar = ref(false)
+const isEditar = ref(false)
+const isDeletar = ref(false)
+const reallyDeletar = ref(false)
 const newComment = ref({
     content: ''
 })
@@ -148,6 +169,8 @@ const formData = ref({
 });
 
 const payload = new FormData();
+
+const showModal = ref(false);
 
 async function buscaClientes() {
     clienteSelecionado.value = false;
@@ -223,8 +246,19 @@ async function submit() {
         return await sinistroStore.registrarSinistro(payload).then(() => {
             openAlert('accidentSearch', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
         })
-    }    
-    return await sinistroStore.updateRegister(+route.params.id, formData.value)
+    }
+
+    if(isEditar.value) {
+        return sinistroStore.editarDadosSinistro(+route.params.id, formData.value).then(() => {
+            openAlert('', 'Sinistro alterado com sucesso!', 'Alterado para o modo de visualização.');
+            isEditar.value = false;
+            isVisualizar.value = true;
+        })
+    }
+
+    if(isDeletar.value){
+        showModal.value = true
+    }
 }
 
 function validaData(sDataInicial, sDataFinal) {
@@ -299,9 +333,28 @@ onMounted(async () => {
         isVisualizar.value = true                
     }    
 
+    if(route.name == 'accidentEdit') {        
+        isEditar.value = true                
+    }
+    
+
     formData.value = await sinistroStore.getAccidentSingle(+route.params.id);     
     comments.value = await sinistroStore.getComments(+route.params.id);
 })
+
+function openModal() {
+    showModal.value = true
+}
+
+function closeModal() {
+    showModal.value = false
+}
+
+function excluirSinistro() {
+    closeModal()
+    openAlert('accidentSearch', 'Sinistro deletado com sucesso!', 'Voltando à lista de vizualização...');
+    return sinistroStore.excluirSinistro(+route.params.id)
+}
 
 </script>
 <style scoped lang="scss">
@@ -309,12 +362,17 @@ onMounted(async () => {
     @import "../assets/inputbox";
     @import "../assets/textarea.scss";
 
+    /*.eventoInformacoes {
     .linha div {
         display: flex;
         flex-direction: column;
     }
     
 
+        #observacoesContainer {
+            width: 66.5%;
+        }
+    }*/
     #observacoesContainer {
         margin-right: 25px;
         width: 50%;
@@ -395,6 +453,7 @@ onMounted(async () => {
 
     #addComment {
         width: 50%;
+        height: auto;
         padding: 2%;
         background-color: #f0f0f0;
         border-radius: 10px;
@@ -422,9 +481,9 @@ onMounted(async () => {
         margin-bottom: 0;
     }    
 
-    label[for='observacoes'] {
+    /*label[for='observacoes'] {
         display: block;
-    }
+    }*/
 
     textarea[name='observacoes'] {
         resize: none;
@@ -434,14 +493,60 @@ onMounted(async () => {
 
     strong{
         color: $secondary;
-    }            
+    }
+
+    .adress-inputs{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .adtional-info {
+        display: flex;
+        width: 100%;
+        gap: 2rem;
+
+        select {
+            width: 100%;
+        }
+
+        input[name="terceiro"] {
+            display: block;
+            width: 1rem;
+        }
+    }
+
+    .secure-info {
+        //width: 50%;
+        gap: 2rem;
+
+        input {
+            width: 30ch;
+        }
+
+        select {
+            width: 100%;
+        }
+    }
 
     .address-div {
         display: flex;
         gap: 1rem;
         margin: 20px 0;
     }
-        
+
+    /*input[name="cep"] {
+        width: 50%;
+    }*/
+
+    /*input[name="numero"] {
+        width: 25%;
+    }*/
+
+    /*input[name="apolice"] {
+        width: 100%;
+        display: block;
+    }*/
 
     input[type="number"]::-webkit-inner-spin-button, 
     input[type="number"]::-webkit-outer-spin-button { 

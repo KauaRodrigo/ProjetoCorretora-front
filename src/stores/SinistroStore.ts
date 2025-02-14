@@ -142,6 +142,33 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
+/*        atualizarDadosSinistro: async (id:number): Promise<boolean> => {            
+            try {
+                const { data } = await api.post('sinistros/editar/'+id);
+                return true;
+            }catch (error) {
+                throw(error);
+            }
+        },*/
+
+        editarDadosSinistro: async (id:number, payload:any): Promise<any> => {
+            try {
+                const { data } = await api.post(`sinistros/editar/${id}`, payload);
+                return data;
+            } catch(error) {
+                throw(error);
+            }
+        },
+
+        excluirSinistro: async(id:number): Promise<any> => {
+            try {
+                const { data } = await api.post(`sinistros/excluir/${id}`);
+                return true
+            } catch(error){
+                throw(error);
+            }
+        },
+        
         getClientesPorNome: async (sNome: string): Promise<any[]> => {
             try {
                 const { data } = await api.post(

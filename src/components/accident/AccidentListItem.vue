@@ -11,9 +11,10 @@
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <button class="btn btn-info" @click="visualizarSinistro(row.id)"><i class="fa-solid fa-search"></i></button>
-            <button class="btn btn-primary" @click="editRegister(row.id)"><i class="fa-solid fa-pencil"></i></button>            
-            <button class="btn bg-warning" :disabled="!validaPermiteAtualizar(row.status)" @click="atualizaSinistro()"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="viewRegister(row.id)"><i class="fa-solid fa-search"></i></RouterLink>
+            <button @click="atualizaSinistro" :disabled="!validaPermiteAtualizar(row.status)" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button :disabled="!mostraBotaoCancelar(row.status)" @click="deleteSinistro()" class="btn bg-danger"><i class="fa-solid fa-xmark"></i></button>
+            <button class="btn btn-info" @click="visualizarSinistro(row.id)"><i class="fa-solid fa-search"></i></button>            
             <!-- <button @click="deleteSinistro()" class="btn bg-danger"><i class="fa-solid fa-trash"></i></button> -->
         </span>       
     </div>
@@ -111,6 +112,15 @@ function editRegister(id: number) {
     router.push({
         name: 'accidentEdit',
         params: {
+            id
+        }
+    })
+}
+
+function viewRegister(id:number){
+    router.push({
+        name:'visualizarSinistro',
+        params:{
             id
         }
     })

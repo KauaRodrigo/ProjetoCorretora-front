@@ -1,4 +1,4 @@
-@import "_variables";
+@import "__variables";
 
 textarea {
   width: 45%;
@@ -6,7 +6,8 @@ textarea {
   background-color: #f9f9f9;
   border: none;
   border-radius: 5px;
-  padding: 0 2%;
+  //padding: 0 2%;
+  //padding: 0 13px;
 }
 
 textarea:focus-visible{

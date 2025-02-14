@@ -25,8 +25,8 @@
 </template>
 <script lang="ts" setup>
 import useSinistroStore from '@/stores/SinistroStore';
-import { inject, onMounted } from 'vue';
-import Modal from './baseComponents/Modal.vue';
+import { inject } from 'vue';
+//import Modal from './baseComponents/Modal.vue';
 
 const reload: any = inject('reload');
 const sinistroStore = useSinistroStore();

@@ -29,7 +29,7 @@
                     </li>                                       
                 </ul>
                 <div class="d-flex login">                                            
-                    <p>Olá, <b>{{ user.username }}</b></p>                                                                        
+                    <p>Olá, <b>{{ user.username }}</b></p>
                     <button @click="emits('openModalLogout')"><i class="bi bi-box-arrow-in-right"></i></button>
                 </div>
             </div>

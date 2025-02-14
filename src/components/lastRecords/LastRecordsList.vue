@@ -21,7 +21,8 @@
             
             </div>
         </div>
-        <ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" :excluindo="excluindo"/>
+        <!--<ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" />-->
+        <!-- <ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" :excluindo="excluindo"/> -->
         <ModalAtualizaStatus v-if="sinistro" :sinistro="sinistro" />
     </div>
 </template>
@@ -32,7 +33,7 @@ import useSinistroStore from '@/stores/SinistroStore';
 import { onMounted, provide, ref } from 'vue';
 import Loader from '../baseComponents/Loader.vue';
 import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
-import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
+import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistroo.vue';
 import ModalAtualizaStatus from '../ModalAtualizaStatus.vue';
 
 const store = useSinistroStore()

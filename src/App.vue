@@ -2,7 +2,8 @@
     <div class="app" id="app" v-if="route">
         <TheHeader v-if="isLogin" @openModalLogout="openModalLogout"></TheHeader>         
         <RouterView />
-        <ModalLogout @logout="logout" @closeModal="closeModalLogout" v-if="showModalLogout && showElement()" />  
+        <Modal v-if="showModalLogout && showElement()" texto="Tem certeza que deseja sair?" @confirmar="logout" @cancelar="closeModalLogout" />
+          
         <Alert v-if="showAlert" :title="title" :content="content" :route="backRoute"/>
     </div>
 </template> 
@@ -10,10 +11,10 @@
 <script setup lang="ts">
 import { computed, onMounted, provide, ref, type Ref } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router'
-import ModalLogout from '@/components/ModalLogout.vue';
 import TheHeader from '@/components/baseComponents/TheHeader.vue'
 import useUserStore from './stores/UserStore';
 import Alert from './components/Alert.vue';
+import Modal from './components/Modal.vue';
 
 const store = useUserStore()
 const router = useRouter()
