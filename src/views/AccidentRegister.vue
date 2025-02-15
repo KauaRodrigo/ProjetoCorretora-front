@@ -23,6 +23,7 @@
                             <input @keyup="buscaSeguradoras()" :disabled="isVisualizar" placeholder="" type="text" v-model="formData.seguradora"/>
                             <div v-if="aSeguradoras && aSeguradoras.length > 0 && !oSeguradoraSelecionada" class="resultadosSeguradora">
                                 <span @click="selecionarSeguradora(oSeguradora)" v-for="(oSeguradora, iIndex) of aSeguradoras" :cliente="oSeguradora.id">{{ oSeguradora.nome }}</span>
+                                <span style="margin-bottom: 0;" @click="() => router.push({name: 'adicionarSeguradora'})"><i style="color: #003263;" class="fa fa-plus"></i>&nbsp;Adicionar seguradora</span>
                             </div>
                         </div>
                     </div>
@@ -54,8 +55,9 @@
                         <div style="width: 50%; margin-right: 25px; position: relative;">
                             <label>Cliente <strong>*</strong></label>
                             <input :disabled="isVisualizar" @keyup="buscaClientes()" placeholder="" type="text" v-model="formData.nome"/>
-                            <div v-if="aClientes && aClientes.length > 0 && !clienteSelecionado" class="resultadosClientes">
+                            <div v-if="aClientes && !clienteSelecionado" class="resultadosClientes">
                                 <span @click="selecionarCliente(oCliente)" v-for="(oCliente, iIndex) of aClientes" :cliente="oCliente.id">{{ oCliente.name }}</span>
+                                <span @click="() => router.push({name: 'adicionarCliente'})"><i style="color: #003263" class="fa fa-plus"></i>Adicionar Cliente</span>
                             </div>
                         </div>
                         <div v-if="formData.tipo == 'VEICULAR'" style="width: 25%">
@@ -126,6 +128,7 @@ import { format } from "date-fns";
 import { UtilsCampos } from "@/utils/UtilsCampos";
 import ModalVisualizarImagem from "@/components/ModalVisualizarImagem.vue";
 import Modal from "@/components/Modal.vue";
+import router from "../router";
 
 const emits = defineEmits(['openModalLogout'])
 
@@ -660,7 +663,7 @@ function excluirSinistro() {
         padding: 1%;    
         span {
             padding: 0 2%;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             display: flex;
             align-items: center;
             font-weight: bold;            
@@ -689,7 +692,7 @@ function excluirSinistro() {
 
         span {
             padding: 0 2%;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             display: flex;
             align-items: center;
             font-weight: bold;            

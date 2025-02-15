@@ -5,6 +5,7 @@ import AccidentSearch from '@/views/AccidentSearch.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import PasswordReset from '@/views/PasswordReset.vue'
 import CadastrarClientes from '@/views/clientes/CadastrarClientes.vue'
+import CadastrarSeguradora from '../views/seguradoras/CadastrarSeguradora.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -67,7 +68,7 @@ const router = createRouter({
     {
       path: '/seguradoras/adicionar',
       name: 'adicionarSeguradora',
-      component: AccidentSearch
+      component: CadastrarSeguradora
     },
   ]
 })

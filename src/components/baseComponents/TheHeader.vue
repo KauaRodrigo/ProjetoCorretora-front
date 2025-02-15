@@ -9,7 +9,7 @@
                     <li class="nav-item dropdown"> 
                         <a class="nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sinistros</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <RouterLink v-if="hasAccess(['ATENDIMENTO'])" class="dropdown-item" :to="{ name: 'accidentRegister' }">Cadastrar</RouterLink>
+                            <RouterLink class="dropdown-item" :to="{ name: 'accidentRegister' }">Cadastrar</RouterLink>
                             <RouterLink class="dropdown-item" :to="{ name: 'accidentSearch' }">Buscar</RouterLink>
                         </div>
                     </li>

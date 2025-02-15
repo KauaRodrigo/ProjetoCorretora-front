@@ -44,7 +44,7 @@ async function login() {
 }
 
 function openForgotPassword() {
-    router.push('/passwordReset')
+    router.push({name: 'passwordReset'})
 }
 
 function showPassword(){

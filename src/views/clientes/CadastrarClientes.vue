@@ -1,5 +1,5 @@
 <template>
-    <Page   >
+    <Page>
         <div class="container">
             <form @submit.prevent="submit" :formData="formData">
                 <div class="d-flex">
@@ -23,17 +23,17 @@
                     <div class="d-flex p-2 w-50 flex-column">
                         <div>
                             <label>CPF</label>
-                            <input v-model="formData.cpf" type="text">
+                            <input @blur="(event) => UtilsCampos.tratarCampoCPF(event)" v-model="formData.cpf" type="text">
                         </div>
                         <div>
                             <label>Telefone/Celular</label>
-                            <input v-model="formData.telefone" type="text">
+                            <input @blur="(event) => UtilsCampos.tratarCampoTelefone(event)" v-model="formData.telefone" type="text">
                         </div>
                     </div>
                 </div>
                 <div class="actions" id="actions">
                     <button type="submit" class="btn btn-success">Confirmar</button>
-                    <button class="btn btn-danger">Cancelar</button>
+                    <button type="button" @click="() => router.back()" class="btn btn-danger">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -43,7 +43,11 @@
 import Page from '@/components/baseComponents/Page.vue';
 import useClienteStore from '@/stores/ClienteStore';
 import useSinistroStore from '@/stores/SinistroStore';
+import useSeguradoraStore from '@/stores/SeguradoraStore';
 import { onMounted, ref } from 'vue';
+import UtilsFuncoes from '../../utils/UtilsFuncoes';
+import { UtilsCampos } from '../../utils/UtilsCampos';
+import router from '../../router';
 
 const aSeguradoras = ref();
 const oSeguradoraSelecionada = ref();
@@ -55,19 +59,15 @@ const formData = ref({
 });
 
 const sinistroStore = useSinistroStore();
+const seguradoraStore = useSeguradoraStore();
 const clienteStore = useClienteStore();
 
-onMounted(() => {    
-    $(window).on('resize', setActionsPosition());
+onMounted(async () => {    
+    UtilsFuncoes.setResizeAcoes();
+    $(window).on('resize', () => UtilsFuncoes.setResizeAcoes());
+    seguradoraStore.cadastrarSeguradora();
+    console.log(seguradoraStore.getSeguradoras)
 })
-
-function setActionsPosition() {    
-    let oActions = $('#actions');
-    let oPage    = $('.page');
-    
-    oPage.css('height', $('#app').height() - 87);
-    oActions.css('margin-top', oPage.height() - 400);
-}
 
 async function submit() {
     return clienteStore.cadastrarClientes(formData.value);
@@ -102,7 +102,7 @@ input {
 }
 
 .actions {          
-    height: 40px;
+    height: 40px;    
     text-align: right;
     button:nth-child(1) {
         margin-right: 15px;
