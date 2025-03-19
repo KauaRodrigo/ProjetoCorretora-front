@@ -28,6 +28,7 @@ const showModalLogout = ref(false)
 
 async function logout() {
     const logedOut = store.logout()
+    showModalLogout.value = false;
     if(logedOut) {
         await router.push({ name: 'login' })
     }

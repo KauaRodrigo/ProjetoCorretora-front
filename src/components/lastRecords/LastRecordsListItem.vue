@@ -6,15 +6,19 @@
         <span :title="row.event"         >{{ row.event                 || 'Não informado' }}</span>
         <span :title="row.type"          >{{ row.type.toLowerCase()    || 'Não informado' }}</span>
         <span>
-            <div class="tag">
-                {{ row.status == 'RETORNO_REPARO' ?  row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO' || row.status == 'CANCELADO', 'opened': row.status == 'ABERTO'}"></i>
+            <div class="tag" :class="{
+            'closed': row.status == 'FECHADO' || row.status == 'CANCELADO',
+            'opened': row.status == 'ABERTO'
+        }">
+                {{ row.status == 'RETORNO_REPARO' ?  row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <button class="btn btn-info" @click="visualizarSinistro(row.id)"><i class="fa-solid fa-search"></i></button>
-            <button class="btn btn-primary" @click="editRegister(row.id)"><i class="fa-solid fa-pencil"></i></button>            
-            <button class="btn bg-warning" :disabled="!validaPermiteAtualizar(row.status)" @click="atualizaSinistro()"><i class="fa-solid fa-arrows-rotate"></i></button>            
-            <!-- <button class="btn bg-danger" @click="deleteSinistro()"><i class="fa-solid fa-trash"></i></button> -->
+            <RouterLink title="Visualizar sinistro" :to="{ name: 'visualizarSinistro', params: { id: row.id }}" class="btn edit" @click="viewRegister(row.id)"><i class="fa-solid fa-search"></i></RouterLink>
+            <RouterLink title="Alterar sinistro" :to="{ name: 'editarSinistro', params: { id: row.id}}" class="btn btn-info"><i class="fa fa-pencil"></i></RouterLink>            
+            <button title="Atualizar status do sinistro" @click="atualizaSinistro" :disabled="!validaPermiteAtualizar(row.status)" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button title="Cancelar sinistro" :disabled="!mostraBotaoCancelar(row.status)" @click="cancelarSinistro()" class="btn bg-danger"><i class="fa-solid fa-xmark"></i></button>
+            <button title="Excluir sinistro" @click="deleteSinistro()" class="btn btn-danger-dark"><i class="fa-solid fa-trash"></i></button>
         </span>
     </div>
 </template>
@@ -118,28 +122,36 @@ function visualizarSinistro(id: number) {
 <style scoped lang="scss">
 @import '../../assets/_variables';
 .item {
+    z-index: 0 !important;
     padding: 0.8%;
     display: grid;    
     background-color: #e2e2e2;    
-    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr;
+    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 1fr;
+    text-decoration: none;
+    color: black;    
 }
+
 .item:nth-child(2n) {
     background-color: #EEEEEE;
 }
+
 .item:last-child {
     border-radius: 0 0 10px 10px;
 }
+
 span {
     font-size: 16px;
     padding: 2% 4%;
-    text-transform: capitalize;
+    text-transform: capitalize;     
     text-wrap: nowrap;    
     overflow: hidden;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;       
+    text-transform: capitalize;
 }
+
 .actions {
     gap: 10px;    
-    button {            
+    button, a {            
         display: flex;
         align-items: center;
         //width: 35%;
@@ -148,13 +160,16 @@ span {
         color: white;
         justify-content: center;  
         border-radius: 5px;    
-    }    
+    }
+    .edit{
+        background-color: #0094FF;
+    }
 
     i{
         font-size: 15px;
     }
 
-    .close{
+    .close {
         background-color: #e5c122c3;
     }
 }
@@ -164,15 +179,18 @@ span {
     display: flex;
     gap: 10px;
     align-items: center;
-    i {
-        font-size: 10px;
-        color: #e5c122c3;
+    width: max-content;
+    padding: 2% 5%;
+    border-radius: 5px;
+    background-color: #e5c122;
+    color: white;
+    
+    &.closed {
+        background-color: #C00000;    
     }
-    .closed {
-        color: #C00000;
-    }
-    .opened {
-        color: green;
+
+    &.opened {
+        background-color: green;
     }
 }
 

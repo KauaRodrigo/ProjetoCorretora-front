@@ -1,5 +1,13 @@
 @import "bootstrap/scss/bootstrap";
-@import "./_variables.scss";
+@import "/src/assets/_variables.scss";
+
+.btn-danger-dark {
+  background-color: $danger-dark;
+}
+
+.btn-danger-dark:hover {
+  background-color: darken($danger-dark, 10%);
+}
 
 * {
   margin: 0;

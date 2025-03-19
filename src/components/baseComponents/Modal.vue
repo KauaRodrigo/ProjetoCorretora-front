@@ -1,13 +1,14 @@
 <template>
     <Overlay />
-    <div class="modal-wrapper">
-        <div class="modal-box">        
+    <div v-bind="$attrs" class="modal-wrapper">
+        <div class="modal-box" :style="customStyle">        
             <slot></slot>
         </div>
     </div>
 </template>
 <script setup lang="ts">
 import Overlay from './Overlay.vue';
+defineProps<{customStyle: string}>();
 
 </script>
 <style scoped lang="scss">

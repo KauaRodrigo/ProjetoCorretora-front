@@ -19,7 +19,8 @@ const props = defineProps<{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center;    
+    backdrop-filter: blur(0.5px);    
 }
 .loader {
     border: 4px solid transparent;
@@ -27,7 +28,7 @@ const props = defineProps<{
     border-radius: 80%;
     width: 40px;
     height: 40px;
-    animation: spin 1s linear infinite; 
+    animation: spin 1s linear infinite;    
 }
 
 .big {

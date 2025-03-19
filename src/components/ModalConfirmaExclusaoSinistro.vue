@@ -1,7 +1,7 @@
 <template>
     <div id="modalExclusaoSinistro">
         <Modal>
-            <h1>Tem certeza que deseja {{ excluindo == true ? 'excluir' : 'cancelar' }} o sinistro?</h1>            
+            <h1>Tem certeza que deseja {{ excluindo == true ? 'excluir' : 'cancelar' }} o sinistro {{ sinistro.numeroSinistro }}?</h1>            
             <div class="actions"> 
                 <button id="confirmar" @click="deleteRegister()" class="btn btn-success">Confirmar</button>
                 <button id="cancelar" @click="close()" class="btn btn-danger">Cancelar</button>

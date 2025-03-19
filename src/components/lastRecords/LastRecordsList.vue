@@ -3,11 +3,11 @@
         <h1>Últimos registros</h1>
         <p>Últimos 7 dias.</p>
         <div class="card-list" :class="{'p-4': !lastRecordsRows }">
-            <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr" :headers="['N° do Sinistro', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+            <Table v-if="lastRecordsRows?.rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 1fr" :headers="['N° do Sinistro', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
                 <LastRecordsListItem @atualizaSinistro="openModalAtualizaStatusSinistro(value)" @deleteSinistro="openModalConfirmaExclusaoCancelamento(value, true)" @cancelarSinistro="openModalConfirmaExclusaoCancelamento(value, false)" v-for="(value, index) of lastRecordsRows.rows" :key="index" :row="value" />        
             </Table>
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big/>
-            <AccidentEmpty v-if="!lastRecordsRows?.rows?.length && !loading" />
+            <AccidentEmpty v-if="!lastRecordsRows?.rows?.length && !loading" />            
         </div>
         <div v-if="lastRecordsRows?.count >= formData.perPage" class="d-flex pagination justify-content-between">            
             <select class="perPage" name="perPage" id="perPage" @change="changePerPage()" v-model="formData.perPage">
@@ -17,13 +17,11 @@
             </select>
             <div class="page d-flex">
                 <button :disabled="formData.page === 0" @click="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
-                <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
-            
+                <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>            
             </div>
         </div>
-        <!--<ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" />-->
-        <!-- <ModalConfirmaExclusaoSinistro v-if="sinistro" :sinistro="sinistro" :excluindo="excluindo"/> -->
-        <ModalAtualizaStatus v-if="sinistro" :sinistro="sinistro" />
+        <ModalConfirmaExclusaoSinistro :sinistro="sinistro" :excluindo="excluindo" />
+        <ModalAtualizaStatus :sinistro="sinistro" />
     </div>
 </template>
 <script setup lang="ts">
@@ -32,9 +30,10 @@ import Table from '../baseComponents/TableComponent.vue'
 import useSinistroStore from '@/stores/SinistroStore';
 import { onMounted, provide, ref } from 'vue';
 import Loader from '../baseComponents/Loader.vue';
-import AccidentEmpty from "@/emptyStates/AccidentEmpty.vue";
-import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistroo.vue';
+import AccidentEmpty from "@/emptyStates/SinistrosVazio.vue";
+import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
 import ModalAtualizaStatus from '../ModalAtualizaStatus.vue';
+import api from '@/axios';
 
 const store = useSinistroStore()
 const formData = ref({
@@ -107,6 +106,7 @@ async function submit() {
 function openModalConfirmaExclusaoCancelamento(row: any, excluir: boolean) {      
     excluindo.value = excluir;
     sinistro.value.id = row.id;
+    sinistro.value.numeroSinistro = row.numeroSinistro;
     sinistro.value.status = row.status;
     const modal = document.getElementById('modalExclusaoSinistro');
 

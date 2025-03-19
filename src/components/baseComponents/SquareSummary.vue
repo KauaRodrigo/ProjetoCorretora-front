@@ -51,8 +51,8 @@ import { useRouter } from 'vue-router';
      * @return {void}
      */
     function setFilterRedirect() {
-        store.getFilters({ type: props.type.toUpperCase() });
-        router.push({ name: 'accidentSearch' });
+        store.getFilters({ tipo: props.type.toUpperCase() });
+        router.push({ name: 'buscarSinistros' });
     }
     
 </script>

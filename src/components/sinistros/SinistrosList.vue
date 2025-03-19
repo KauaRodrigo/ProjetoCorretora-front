@@ -1,30 +1,30 @@
 <template>  
     <div>        
         <div class="list" :class="{'p-4': loading }">
-            <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr" :headers="['N° do    Sinistro', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
-                <AccidentListItem @atualizaSinistro="openModalAtualizaStatusSinistro(value)" @cancelarSinistro="openModalConfirmaExclusaoCancelamento(value, false)" @deleteSinistro="openModalConfirmaExclusaoCancelamento(value, true)" v-for="(value, index) of rows" :key="index" :row="value"/>
+            <Table v-if="rows?.length > 0 && !loading" template="0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 1fr" :headers="['N° do    Sinistro', 'Cliente', 'Seguradora', 'Evento', 'Tipo', 'Status', '']">
+                <SinistrosListItem @atualizaSinistro="openModalAtualizaStatusSinistro(value)" @cancelarSinistro="openModalConfirmaExclusaoCancelamento(value, false)" @deleteSinistro="openModalConfirmaExclusaoCancelamento(value, true)" v-for="(value, index) of rows" :key="index" :row="value"/>
             </Table>
-            <AccidentEmpty v-else-if="rows?.length == 0 && !loading" />
+            <SinistrosVazio v-else-if="rows?.length == 0 && !loading" />
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big />
-        </div>
-        <!--<ModalConfirmaExclusaoSinistro :sinistro="sinistro" />-->
-        <!-- <ModalConfirmaExclusaoSinistro :sinistro="sinistro" :excluindo="excluindo" /> -->
-        <ModalAtualizaStatus :sinistro="sinistro" />
+        </div>        
     </div>
+    <ModalConfirmaExclusaoSinistro :sinistro="sinistro" :excluindo="excluindo" />
+    <ModalAtualizaStatus :sinistro="sinistro" />
 </template>
 <script lang="ts" setup>
 
 import { ref, type Ref } from 'vue';
 import Loader from '../baseComponents/Loader.vue';
 import Table from '../baseComponents/TableComponent.vue'
-import AccidentListItem from './AccidentListItem.vue';
-import AccidentEmpty from "../../emptyStates/AccidentEmpty.vue";
+import SinistrosListItem from './SinistrosListItem.vue';
+import SinistrosVazio from "../../emptyStates/SinistrosVazio.vue";
 import useUserStore from '@/stores/UserStore';
 import ModalConfirmaExclusaoSinistro from '../ModalConfirmaExclusaoSinistro.vue';
 import ModalAtualizaStatus from '../ModalAtualizaStatus.vue';
 
 const sinistro: Ref<{ id: number, status: string, type: ''}> = ref({
     id: 0,
+    numeroSinistro: 0,
     status: '',
     type: ''
 })
@@ -38,8 +38,9 @@ defineProps<{ rows?: any, loading?: boolean }>()
  * @param {any} row 
  * @param {boolean} excluir
  */
-function openModalConfirmaExclusaoCancelamento(row: any, excluir: boolean) {    
+function openModalConfirmaExclusaoCancelamento(row: any, excluir: boolean) {        
     excluindo.value = excluir;
+    sinistro.value.numeroSinistro = row.numeroSinistro;
     sinistro.value.id = row.id;
     sinistro.value.status = row.status;
     sinistro.value.type = row.type;

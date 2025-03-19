@@ -4,8 +4,8 @@ import { defineStore } from "pinia";
 
 const useSinistroStore = defineStore('sinistro', {
     state: () => ({
-        filters: {
-            type: ''
+        filtros: {
+            tipo: ''
         },
         data: <any> {}
     }),
@@ -77,7 +77,7 @@ const useSinistroStore = defineStore('sinistro', {
         },
 
         getFilters(payload: any) {
-            this.filters = payload; 
+            this.filtros = payload; 
         },
 
         updateRegister: async (id: number, payload: any): Promise<any> => {
@@ -101,10 +101,10 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
 
-        getAccidentsByFilters: async (filters?: any): Promise<{ rows: any, count: number }> => {
+        buscaSinistros: async (oFiltros?: any): Promise<{ rows: any, count: number }> => {
             try {
                 const { data } = await api.post('sinistros', {
-                    ...filters
+                    ...oFiltros
                 })                            
                 return data;
             } catch (error) {
@@ -169,6 +169,17 @@ const useSinistroStore = defineStore('sinistro', {
             }
         },
         
+        getClientes: async (): Promise<any[]> => {
+            try {
+                const { data } = await api.get('clientes');
+
+                return data;
+            }
+            catch(error) {
+                throw(error)
+            }
+        },
+
         getClientesPorNome: async (sNome: string): Promise<any[]> => {
             try {
                 const { data } = await api.post(
@@ -195,6 +206,46 @@ const useSinistroStore = defineStore('sinistro', {
             catch(oErro) {
                 throw(oErro);
             }            
+        },
+
+        getSeguradoras: async(): Promise<any[]> => {
+            try {
+                const { data } = await api.post('seguradoras', {
+                    orderBy: 'nome',
+                    order: 'ASC',
+                    page: 0,
+                    perPage: 999999
+                });
+
+                return data;
+            }
+            catch (oErro) {
+                throw(oErro);
+            }
+        },
+
+        exportarConsulta: async (oFiltros): Promise<any> => {
+            try {
+                const { data } = await api.post('sinistros/exportar', {
+                    ...oFiltros,
+                    headers: {
+                        "Content-Type": "text/csv"
+                    },                    
+                });
+                
+                
+                const url = window.URL.createObjectURL(new Blob([data]));                
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'dados.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                return data;
+            } catch (error) {
+                throw(error);
+            }
         }
     }
 })

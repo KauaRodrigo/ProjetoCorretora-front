@@ -2,7 +2,7 @@
     <Page>
         <div class="container">
             <form @submit.prevent="submit" :formData="formData">
-                <div class="d-flex">
+                <div v-if="formData" class="d-flex">
                     <div class="d-flex p-2 w-50 flex-column">
                         <div>
                             <label>Nome Cliente</label>
@@ -14,20 +14,17 @@
                         </div>
                         <div style="width: 50%;  position: relative;">
                             <label>Seguradora</label>
-                            <input class="w-100" @keyup="buscaSeguradoras()" placeholder="" type="text" v-model="formData.seguradora"/>
-                            <div v-if="aSeguradoras && aSeguradoras.length > 0 && !oSeguradoraSelecionada" class="resultadosSeguradora">
-                                <span @click="selecionarSeguradora(oSeguradora)" v-for="(oSeguradora, iIndex) of aSeguradoras" :cliente="oSeguradora.id">{{ oSeguradora.nome }}</span>
-                            </div>
+                            <input disabled class="w-100" placeholder="" type="text" v-model="formData.seguradora"/>
                         </div>
                     </div>
                     <div class="d-flex p-2 w-50 flex-column">
                         <div>
                             <label>CPF</label>
-                            <input v-model="formData.cpf" type="text">
+                            <input @blur="trataCampoCpf()" v-model="formData.cpf" type="text">
                         </div>
                         <div>
                             <label>Telefone/Celular</label>
-                            <input v-model="formData.telefone" type="text">
+                            <input @blur="trataCampoTelefone()" v-model="formData.telefone" type="text">
                         </div>
                     </div>
                 </div>
@@ -39,29 +36,32 @@
         </div>
     </Page>
 </template>
-<script setup>
+<script setup lang="ts">
 import Page from '@/components/baseComponents/Page.vue';
 import useClienteStore from '@/stores/ClienteStore';
-import useSinistroStore from '@/stores/SinistroStore';
-import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { UtilsCampos } from '@/utils/UtilsCampos';
+import { onBeforeMount, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute();
 const router = useRouter();
-const aSeguradoras = ref();
-const oSeguradoraSelecionada = ref();
 const formData = ref({
     name: '',
     telefone: '',
     dataNascimento: '',
-    cpf: ''
+    cpf: '',
+    seguradora: ''
 });
 
-const sinistroStore = useSinistroStore();
 const clienteStore = useClienteStore();
+
+onBeforeMount(() => {
+    formData.value = getCliente(route.params.id);
+})
 
 onMounted(() => {    
     setActionsPosition();
-    $(window).on('resize', () => setActionsPosition());
+    $(window).on('resize', () => setActionsPosition());    
 })
 
 function setActionsPosition() {    
@@ -76,25 +76,29 @@ function back() {
     router.back();
 }
 
-async function submit() {
-    return clienteStore.cadastrarClientes(formData.value);
+async function getCliente(iId: number) {
+    formData.value = await clienteStore.buscarClienteById(iId);
+    formData.value.cpf = UtilsCampos.mascaraCpf(formData.value.cpf);
+    formData.value.telefone = UtilsCampos.mascaraTelefone(formData.value.telefone);
 }
 
-async function buscaSeguradoras() {
-    oSeguradoraSelecionada.value = false;
-
-    if(formData.value.seguradora.length >= 3) {
-        aSeguradoras.value = await sinistroStore.getSeguradorasPorNome(formData.value.seguradora);        
-        return;  
+async function submit() {
+    let payload = {
+        ...formData.value
     }
 
-    aSeguradoras.value = [];
+    payload.cpf      = UtilsCampos.removeAlfaNumericos(payload.cpf);
+    payload.telefone = UtilsCampos.removeAlfaNumericos(payload.telefone);
+
+    return clienteStore.atualizarCliente(route.params.id, payload);
 }
 
-function selecionarSeguradora(oSeguradora) {    
-    formData.value.seguradora = oSeguradora.nome
+function trataCampoCpf() {
+    formData.value.cpf = UtilsCampos.mascaraCpf(formData.value.sCpf);
+}
 
-    oSeguradoraSelecionada.value = true;
+function trataCampoTelefone() {
+    formData.value.telefone = UtilsCampos.mascaraTelefone(formData.value.telefone)
 }
 
 </script>
@@ -114,33 +118,5 @@ input {
     button:nth-child(1) {
         margin-right: 15px;
     }
-}
-
-.resultadosSeguradora {
-    position: absolute;
-    top: 100%;
-    max-height: 150px;
-    overflow: auto;        
-    margin-top: 5px;        
-    width: 100%;
-    background-color: rgb(240, 240, 240);
-    border-radius: 10px;
-    padding: 1%;    
-    span {
-        padding: 0 2%;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        font-weight: bold;            
-        height: 40px;    
-        border-radius: 5px;        
-        color: black;
-        text-transform: capitalize;
-        cursor: pointer;
-        &:hover {
-            background-color: white;
-            transition: background-color 0.5s;
-        }
-    }      
 }
 </style>

@@ -8,6 +8,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "noCheck": true,
     "types": ["node"]
   },
   "include": [

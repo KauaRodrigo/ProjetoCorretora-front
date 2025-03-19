@@ -6,18 +6,21 @@
         <span :title="row.event">{{ row.event || 'Não informado' }}</span>
         <span :title="row.type">{{ row.type.toLowerCase() || 'Não informado'}}</span>
         <span :title="row.status">
-            <div class="tag">
-                {{ row.status == 'RETORNO_REPARO' ? row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}<i class="bi bi-circle-fill" :class="{'closed': row.status == 'FECHADO' || row.status == 'CANCELADO', 'opened': row.status == 'ABERTO'}"></i>
+            <div class="tag" :class="{
+            'closed': row.status == 'FECHADO' || row.status == 'CANCELADO',
+            'opened': row.status == 'ABERTO'
+        }">
+                {{ row.status == 'RETORNO_REPARO' ? row.status.replace('_', ' ').toLowerCase() : row.status.toLowerCase() }}
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <RouterLink :to="{ name: 'accidentEdit', params: { id: row.id }}" class="btn edit" @click="viewRegister(row.id)"><i class="fa-solid fa-search"></i></RouterLink>
-            <button @click="atualizaSinistro" :disabled="!validaPermiteAtualizar(row.status)" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
-            <button :disabled="!mostraBotaoCancelar(row.status)" @click="deleteSinistro()" class="btn bg-danger"><i class="fa-solid fa-xmark"></i></button>
-            <button class="btn btn-info" @click="visualizarSinistro(row.id)"><i class="fa-solid fa-search"></i></button>            
-            <!-- <button @click="deleteSinistro()" class="btn bg-danger"><i class="fa-solid fa-trash"></i></button> -->
+            <RouterLink title="Visualizar sinistro" :to="{ name: 'visualizarSinistro', params: { id: row.id }}" class="btn edit" @click="viewRegister(row.id)"><i class="fa-solid fa-search"></i></RouterLink>
+            <RouterLink title="Alterar sinistro" :to="{ name: 'editarSinistro', params: { id: row.id}}" class="btn btn-info"><i class="fa fa-pencil"></i></RouterLink>            
+            <button title="Atualizar status do sinistro" @click="atualizaSinistro" :disabled="!validaPermiteAtualizar(row.status)" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button title="Cancelar sinistro" :disabled="!mostraBotaoCancelar(row.status)" @click="cancelarSinistro()" class="btn bg-danger"><i class="fa-solid fa-xmark"></i></button>
+            <button title="Excluir sinistro" @click="deleteSinistro()" class="btn btn-danger-dark"><i class="fa-solid fa-trash"></i></button>
         </span>       
-    </div>
+    </div>        
 </template>
 <script setup lang="ts">
 
@@ -127,6 +130,7 @@ function viewRegister(id:number){
 }
 </script>
 <style scoped lang="scss">
+@import '/src/assets/_variables.scss';
 
 .card-item {
     padding: 0.8%;
@@ -150,7 +154,7 @@ function viewRegister(id:number){
     padding: 0.8%;
     display: grid;    
     background-color: #e2e2e2;    
-    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 0.7fr;
+    grid-template-columns: 0.5fr 0.8fr 0.6fr 0.7fr 0.5fr 0.7fr 1fr;
     text-decoration: none;
     color: black;    
 }
@@ -175,7 +179,7 @@ span {
 
 .actions {
     gap: 10px;    
-    button {            
+    button, a {            
         display: flex;
         align-items: center;
         //width: 35%;
@@ -193,7 +197,7 @@ span {
         font-size: 15px;
     }
 
-    .close{
+    .close {
         background-color: #e5c122c3;
     }
 }
@@ -203,18 +207,18 @@ span {
     display: flex;
     gap: 10px;
     align-items: center;
-
-    i {
-        font-size: 10px;
-        color: #e5c122c3;
-    }
-
-    .closed {
-        color: #C00000;
-    }
+    width: max-content;
+    padding: 2% 5%;
+    border-radius: 5px;
+    background-color: #e5c122;
+    color: white;
     
-    .opened {
-        color: green;
+    &.closed {
+        background-color: #C00000;    
+    }
+
+    &.opened {
+        background-color: green;
     }
 }
 </style>

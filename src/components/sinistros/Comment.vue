@@ -8,15 +8,15 @@
             <button v-if="!alterando" class="btn btn-danger" @click="openModalExclusaoComentario"><i class="fa fa-trash"></i></button>
             <button v-if="alterando" @click="alterarComentario" class="btn btn-success"><i class="fa fa-check"></i></button>
             <button v-if="alterando" @click="cancelarAlteracao" class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <Modal v-if="showModal" texto="Tem certeza que deseja excluir esta atualização?" @confirmar="excluirComentario" @cancelar="closeModal" />
-        <!-- <ModalExclusaoComentario v-if="showModal" @closeModal="closeModalExclusaoComentario" @excluirComentario="excluirComentario"/> -->
+        </div>        
+        <ModalExclusaoComentario v-if="showModal" @closeModal="closeModalExclusaoComentario" @excluirComentario="excluirComentario"/>
     </div>
 </template>
 <script setup lang="ts">
 import api from '@/axios';
 import { onMounted, ref, type Ref } from 'vue';
-import Modal from '../Modal.vue';
+import ModalExclusaoComentario from '../ModalExclusaoComentario.vue';
+
 
 const oDataHora: Ref<{ data: string, hora: string }> = ref({
     data: '',
@@ -27,6 +27,7 @@ const props = defineProps<{ comment: any }>()
 const emits = defineEmits(['refreshComments'])
 const alterando = ref(false);
 const showModal = ref(false)
+let lastValue: string;
 
 onMounted(() => {        
     const oDataHoraComment = props.comment.dataComentario.split(' ');
@@ -38,6 +39,8 @@ onMounted(() => {
  * Habilita o textarea para alterar um comentario
  */
 function habilitarCampoComentario() {
+    lastValue = props.comment.conteudo;
+    document.getElementById('content').focus();
     alterando.value = true;    
 }
 
@@ -45,6 +48,7 @@ function habilitarCampoComentario() {
  * Cancela a alteração do comentário e desabilita novamente o textarea
  */
 function cancelarAlteracao() {
+    props.comment.conteudo = lastValue;
     alterando.value = false
 }
 
@@ -54,10 +58,7 @@ function cancelarAlteracao() {
 function alterarComentario() {
     api.post(`/sinistros/atualizarComentario/${props.comment.idComentario}`, {
         conteudo: props.comment.conteudo
-    })
-    const contentInput = document.getElementById('content')
-    contentInput?.setAttribute('readonly', 'true')
-    contentInput.style.pointerEvents = 'none'
+    })        
     alterando.value = false;
 }
 

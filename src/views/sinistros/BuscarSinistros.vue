@@ -6,17 +6,17 @@
                     <div class="row justify-content-between">
                         <div class="col-5">
                             <label>Nome ou placa</label>
-                            <input type="text" v-model="formData.searchFilter.value" @blur="defineFilterType()">
+                            <input type="text" v-model="formData.searchFilter.valor" @blur="definirFiltroPesquisa()">
                         </div>
                         <div class="col-4">
                             <label>Data</label>
                             <div class="date">
                                 <div class="date-item">
-                                    <input @blur="changeFilters()" type="date" v-model="formData.dataFilter.init">
+                                    <input @blur="changeFilters()" type="date" v-model="formData.data.inicial">
                                 </div>
                                 <h6>Até</h6>
                                 <div class="date-item">
-                                    <input @blur="changeFilters()" type="date" v-model="formData.dataFilter.end">
+                                    <input @blur="changeFilters()" type="date" v-model="formData.data.final">
                                 </div>
                             </div>
                         </div>
@@ -25,17 +25,17 @@
                         <div class="vehicle col-6">
                             <div class="vehicle-item col-4">
                                 <label>Número da apólice</label>
-                                <input @blur="changeFilters()" type="text" v-model="formData.policyNumberFilter">
+                                <input @blur="changeFilters()" type="text" v-model="formData.apolice">
                             </div>
                             <div class="vehicle-item">
                                 <label>Seguradora</label>
-                                <input @blur="changeFilters()" type="text" v-model="formData.companyFilter"/>
+                                <input @blur="changeFilters()" type="text" v-model="formData.seguradora"/>
                             </div>
                         </div>
                         <div class="col-3 selects">
                             <div>
                                 <label>Tipo seguro</label>
-                                <select name="status" @blur="changeFilters()" v-model="formData.typeFilter">
+                                <select name="status" @change="changeFilters()" v-model="formData.tipo">
                                     <option value="">Não Filtrar</option>
                                     <option value="VEICULAR">Veicular</option>
                                     <option value="VIDA">Vida</option>
@@ -46,7 +46,7 @@
                             </div>
                             <div>
                                 <label>Status</label>
-                                <select name="status" @blur="changeFilters()" v-model="formData.statusFilter">
+                                <select name="status" @change="changeFilters()" v-model="formData.status">
                                     <option value="">Não Filtrar</option>
                                     <option value="ABERTO">Aberto</option>
                                     <option value="INDENIZADO">Indenizado</option>                                    
@@ -60,6 +60,12 @@
                     </div>                    
                 </form>          
                 <div id="ordenacao">
+                    <div id="exportar">
+                        <button class="btn btn-outline-info" @click="exportarConsulta">
+                            Exportar
+                            <i class="fa-solid fa-file-download"></i>
+                        </button>
+                    </div>
                     <div id="orderBy">
                         <label for="orderBy">Ordenar por</label>
                         <select name="orderBy" @change="changeFilters" v-model="formData.orderBy">
@@ -71,14 +77,14 @@
                         </select>
                     </div>
                     <div id="order">
-                        <label for="order">Ordenar por</label>
+                        <label for="order">Ordem</label>
                         <select name="order" @change="changeFilters" v-model="formData.order">
                             <option value="asc">Crescente</option>
                             <option value="desc">Descrescente</option>                        
                         </select>
                     </div>
                 </div>                      
-                <AccidentList :rows="accidentList?.rows" :loading="loading"/>
+                <SinistrosList :rows="sinistros?.rows" :loading="loading"/>
                 <div class="d-flex pagination justify-content-between">
                     <select class="perPage" name="perPage" id="perPage" @change="changePerPage()" v-model="formData.perPage">
                         <option value="5">5</option>
@@ -97,59 +103,60 @@
 
 <script setup lang="ts">
 import Page from '@/components/baseComponents/Page.vue';
-import AccidentList from '@/components/accident/AccidentList.vue';
+import SinistrosList from '@/components/sinistros/SinistrosList.vue';
 import { onBeforeUnmount, onMounted, provide, ref } from 'vue';
 import useSinistroStore from '@/stores/SinistroStore';
 
 const sinistroStore = useSinistroStore()  
 
 const formData = ref({
-    policyNumberFilter: '',
-    companyFilter: '',        
-    dataFilter: {
-        init: '',
-        end: ''
+    apolice: '',
+    seguradora: '',        
+    data: {
+        inicial: '',
+        final: ''
     },    
-    statusFilter: '',
-    typeFilter: '',
+    status: '',
+    tipo: '',
     page: 0,
     perPage: 5,
     orderBy: 'numeroApolice',
     order: 'asc',
     searchFilter:{
-        type: '',
-        value:''
+        coluna: '',
+        valor:''
     }
 })    
 
 const loading = ref(true)
 const maxPage = ref(0)
-const accidentList: any = ref({})
+const sinistros: any = ref({})
 
 onMounted(async () => {        
-    if(sinistroStore.filters) {        
-        formData.value.typeFilter = sinistroStore.filters.type 
+    if(sinistroStore.filtros) {        
+        formData.value.tipo = sinistroStore.filtros.tipo 
     }
-    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value);
-    maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage);
+    sinistros.value = await sinistroStore.buscaSinistros(formData.value);
+    maxPage.value = Math.ceil(sinistros.value.count / formData.value.perPage);
     loading.value = false;
 })
 
 provide('reload', reload)
 
 async function reload() {
-    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)       
+    sinistros.value = await sinistroStore.buscaSinistros(formData.value)       
 }
 
-function defineFilterType(){
-    if(formData.value.searchFilter.value.length > 1){
+function definirFiltroPesquisa(){
+    if(formData.value.searchFilter.valor.length > 1){
         const regex: RegExp = /\d/
-        if(regex.test(formData.value.searchFilter.value)) {
-            formData.value.searchFilter.type = 'placa'
+
+        if(regex.test(formData.value.searchFilter.valor)) {
+            formData.value.searchFilter.coluna = 'placa'
             submit();
             return
         }
-        formData.value.searchFilter.type = 'cliente'
+        formData.value.searchFilter.coluna = 'cliente'
         submit();
         return
     }    
@@ -177,25 +184,29 @@ function changeFilters() {
     loading.value = true
     formData.value.page = 0;    
 
-    if(formData.value.dataFilter.init && formData.value.dataFilter.end == null) {
+    if(formData.value.data.inicial && formData.value.data.final == null) {
         return
     }
     submit();
 }
 
 async function submit() {    
-    accidentList.value = await sinistroStore.getAccidentsByFilters(formData.value)        
+    sinistros.value = await sinistroStore.buscaSinistros(formData.value)        
     loading.value = false
-    maxPage.value = Math.ceil(accidentList.value.count / formData.value.perPage)
+    maxPage.value = Math.ceil(sinistros.value.count / formData.value.perPage)
+}
+
+async function exportarConsulta() {
+    await sinistroStore.exportarConsulta(formData.value)
 }
 
 onBeforeUnmount(() => {
-    sinistroStore.filters.type = '';
+    sinistroStore.filtros.tipo = '';
 })
 
 </script>
 <style scoped lang="scss">
-    @import "../assets/__variables.scss";
+    @import "/src/assets/__variables.scss";
     .selects {
         display: flex;
         gap: 1rem;
@@ -207,16 +218,29 @@ onBeforeUnmount(() => {
         display: flex;
         justify-content: right;
         gap: 1rem;
-        margin-left: auto; 
-        width: 40%;
+        margin-left: auto;         
 
         #orderBy {
-            width: 50%;
+            width: 25%;
         }          
 
         #order {
-            width: 25%;
-        }          
+            width: 20%;
+        }       
+        
+        #exportar {            
+            display: flex;
+            align-items: end;
+            margin-right: auto;                                    
+
+            i {
+                margin-left: 5px;
+            }
+
+            button {                                
+                height: max-content;
+            }
+        }
     }
 
     .pagination {

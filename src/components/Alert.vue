@@ -1,5 +1,5 @@
 <template>
-    <div v-if="show" class="alert">
+    <div class="alert">
         <div class="alertContent">
             <h1>{{ title }}</h1>
             <h4>{{ content }}</h4>
@@ -18,25 +18,20 @@ const props = defineProps<{
     route: string
 }>();
 
-const show = ref(false);
-
-onMounted(() => {
-    show.value = true
+onMounted(() => {    
     setTimeout(() => {
         const alert = (document.getElementsByClassName('alert'))[0];
         alert.classList.add('fadeOut')
         destoyAlert();
         router.push({ name: props.route })
-    }, 5000)
+    }, 5000)    
 })
 
 /**
  * Fecha o alerta
  */
 function destoyAlert() {
-    setTimeout(() => {
-        show.value = false;
-    }, 1000)
+    $('#alert').hide();
 }
 
 </script>
@@ -46,12 +41,13 @@ function destoyAlert() {
     .alert {
         background-color: $primary;
         opacity: 0.5;
-        max-width: 30%;
+        max-width: 550px;
+        min-width: 400px;
         position: fixed;
         bottom: 5px;
         right: 5px;
         margin: 0;
-        min-height: 12%;         
+        min-height: 12%;
         padding: 0;
     }
 
@@ -80,6 +76,8 @@ function destoyAlert() {
     .loaderBar {
         height: 10px;
         width: 100%;
+        position: absolute;
+        bottom: 0;
         background: black;
         animation: close 5s linear;
     }

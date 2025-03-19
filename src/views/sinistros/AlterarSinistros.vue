@@ -22,7 +22,7 @@
                             <label>Seguradora</label>                            
                             <select name="seguradora" id="seguradoras" v-model="formData.seguradoraId">
                                 <option selected value="">Selecione</option>
-                                <option v-for="(oSeguradora, iIndex) of aSeguradoras" :value="oSeguradora.id">{{ oSeguradora.nome }}</option>
+                                <option v-for="(oSeguradora, iIndex) of aSeguradoras?.rows" :value="oSeguradora.id">{{ oSeguradora.nome }}</option>
                             </select>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                             <label>Cliente <strong>*</strong></label>
                             <select name="cliente" id="cliente" v-model="formData.clienteId">
                                 <option value="undefined">Selecione</option>
-                                <option v-for="(oCliente, iIndex) of aClientes" :value="oCliente.id">{{ oCliente.name }}</option>
+                                <option v-for="(oCliente, iIndex) of aClientes?.rows" :value="oCliente.id">{{ oCliente.name }}</option>
                             </select>                            
                         </div>
                         <div v-if="formData.tipo == 'VEICULAR'" style="width: 25%">
@@ -73,37 +73,12 @@
                             <input id="evento" :disabled="isVisualizar" type="text" name="evento" v-model="formData.evento">
                         </div>
                     </div>                    
-                    <div class="row">
-                        <div class="col-md">
-                            <div v-if="isVisualizar">
-                                <button type="submit" id="btnEditarSinistro" class="btn-tst" @click="isEditar=true; isVisualizar=false;">Editar Sinistro</button>
-                            </div>
-                            <div v-if="isEditar || isDeletar">
-                                <button type="submit" id="btnEditarSinistro" class="btn-tst" @click="isEditar=true; isVisualizar=false; isDeletar=false">Confirmar edições</button>
-                            </div>
-                        </div>
-                        <div v-if="isEditar || isDeletar" class="col-md">
-                            <button type="submit" id="" class="btn-delete" @click="isEditar=false; isVisualizar=false; isDeletar=true; openModal"><i class="bi bi-trash-fill"></i></button>
-                            <Modal v-if="showModal" texto="Você tem certeza que deseja EXCLUIR PERMANENTEMENTE o sinistro atual?" @confirmar="excluirSinistro" @cancelar="closeModal"/>
-                        </div>
-                        <div v-if="isCadastrar">
-                            <button type="submit" id="confirmar">
-                                Registrar Sinistro
-                            </button>
-                        </div>
-                    </div>                      
-                </Form>            
-                <div v-if="isVisualizar" class="comments">
-                    <h1>Atualizações</h1>
-                    <Comment @refreshComments="atualizaComentarios()" v-for="(comment, index) of comments.rows" :key="index" :comment="comment"/>
-                    <div id="addComment">
-                        <h2>Adicionar atualização</h2>
-                        <textarea placeholder="Descreva a atualização..." name="comment" v-model="newComment.content" id="comment"></textarea>
-                        <!--<button class="btn" id="registerComment" @click="addComment()">Adicionar</button>-->
-                        <button class="btn-tst" @click="addComment()">Adicionar</button>
+                    <div class="actions">                                                    
+                        <button type="submit" id="confirmar" class="btn">Confirmar edições</button>                                                    
+                        <button type="button" class="btn btn-info" @click="back()">Cancelar</button>
                     </div>
-                </div>                
-            </div>            
+                </Form>
+            </div>
         </Page>      
     </div>
 </template>
@@ -111,31 +86,24 @@
 <script setup>    
 import { inject, onMounted, ref } from "vue";
 import useSinistroStore from "@/stores/SinistroStore";
-import Comment from "../components/sinistros/Comment.vue" 
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Page from "@/components/baseComponents/Page.vue";
 import { format } from "date-fns";
 import { UtilsCampos } from "@/utils/UtilsCampos";
 import { Sinistros } from "@/classe/sinistros";
 import Modal from "@/components/Modal.vue";
+import Comment from "@/components/sinistros/Comment.vue";
+import useSeguradoraStore from "@/stores/SeguradoraStore";
 
 const emits = defineEmits(['openModalLogout'])
 
 const route = useRoute();
+const router = useRouter();
+
 const sinistroStore = useSinistroStore();
+const seguradoraStore = useSeguradoraStore();   
 
 const openAlert = inject('openAlert');
-
-const isCadastrar = ref(false)
-const isVisualizar = ref(false)
-const isEditar = ref(false)
-const isDeletar = ref(false)
-const newComment = ref({
-    content: ''
-})
-const comments = ref({
-    rows: []    
-})
 
 const aClientes              = ref();
 const aSeguradoras           = ref();
@@ -174,63 +142,21 @@ async function submit() {
         return;
     }
     
-    if(isCadastrar.value) {        
-        return await sinistroStore.registrarSinistro(formData.value).then(() => {
-            openAlert('buscarSinistros', 'Sinistro Cadastrado', 'Seu sinistro foi registrado com sucesso, você será redirecionado em 5 segundos!');            
-        })
-    }
-
-    if(isEditar.value) {
-        return sinistroStore.editarDadosSinistro(+route.params.id, formData.value).then(() => {
-            openAlert('', 'Sinistro alterado com sucesso!', 'Alterado para o modo de visualização.');
-            isEditar.value = false;
-            isVisualizar.value = true;
-        })
-    }
-
-    if(isDeletar.value){
-        showModal.value = true
-    }
+    return sinistroStore.editarDadosSinistro(+route.params.id, formData.value).then(() => {
+        openAlert('', 'Sinistro alterado com sucesso!', 'Alterado para o modo de visualização.');        
+    })    
 }
 
-async function atualizaComentarios() {
-    comments.value = await sinistroStore.getComments(+route.params.id);
-}
 
 onMounted(async () => {
     Sinistros.getInstance().processaDadosOnLoad();    
+    
+    formData.value = await sinistroStore.getAccidentSingle(+route.params.id);        
 
-    if(route.name == 'cadastrarSinistro') {
-        aSeguradoras.value = await sinistroStore.getSeguradoras();
-        aClientes.value = await sinistroStore.getClientes();
-        formData.value = {
-            numeroSinistro: '',
-            nome: '',
-            tipo: '',
-            terceiro: false,
-            placa: '',        
-            numeroApolice: '',        
-            seguradora: '',
-            evento: '',
-            observacoes: '',
-            dataOcorrencia: format(new Date(), 'yyyy-MM-dd'),
-            fotos: [],
-            nomeTerceiro: ''
-        }
-        isCadastrar.value = true                        
-        return
-    }
-
-    if(route.name == 'visualizarSinistro') {        
-        isVisualizar.value = true                
-    }    
-
-    if(route.name == 'accidentEdit') {        
-        isEditar.value = true                
-    }
-            
-    formData.value = await sinistroStore.getAccidentSingle(+route.params.id);     
-    comments.value = await sinistroStore.getComments(+route.params.id);
+    aSeguradoras.value = await sinistroStore.getSeguradoras();
+    seguradoraStore.buscarClientesAtivosSeguradora(formData.value.seguradoraId).then((oClientes) => {
+        aClientes.value = oClientes;
+    });
 })
 
 function openModal() {
@@ -247,11 +173,15 @@ function excluirSinistro() {
     return sinistroStore.excluirSinistro(+route.params.id)
 }
 
+function back() {
+    router.back();
+}
+
 </script>
 <style scoped lang="scss">
-    @import "../assets/__variables.scss";
-    @import "../assets/inputbox";
-    @import "../assets/textarea.scss";
+    @import "/src/assets/__variables.scss";
+    @import "/src/assets/inputbox";
+    @import "/src/assets/textarea.scss";
 
     #observacoesContainer {
         margin-right: 25px;
@@ -391,103 +321,41 @@ function excluirSinistro() {
     
     input[type="number"] {
         appearance: textfield;
-    }
-
-    #confirmar, #registerComment {
-        background-color: $secondary;        
-        padding: 0 1%;
-        border-radius: 5px;
-        height: 45px;
-        transition: 0.1s;
-        border: none;        
-        border: none;        
-        margin-top: 9rem;
-        font-weight: 600;
-        font-size: 1rem;
-    }
-    
-    #confirmar:disabled, #confirmar:disabled:hover {
-        background-color: #EEE;
-        color: black;
-        opacity: 0.3;
-    }
-
-    #confirmar:hover, #registerComment:hover {
-        transition: all 0.2s;
-        background-color: $secondaryDark;
-        color: white;
-    }
-
-    #registerComment {
-        padding: 2%;            
     }    
 
-    @media screen and (max-width: 620px){
-
-        #addComment{
-            width: 100%;
-        }
-    }
     #nomeTerceiroContainer {
         width: 48%;
         margin-left: 25px;
-    }            
-
-    .resultadosSeguradora {
-        position: absolute;
-        top: 100%;
-        max-height: 150px;
-        overflow: auto;        
-        margin-top: 5px;        
-        width: 100%;
-        background-color: rgb(240, 240, 240);
-        border-radius: 10px;
-        padding: 1%;    
-        span {
-            padding: 0 2%;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            font-weight: bold;            
-            height: 40px;    
-            border-radius: 5px;        
-            color: black;
-            text-transform: capitalize;
-            cursor: pointer;
-            &:hover {
-                background-color: white;
-                transition: background-color 0.5s;
-            }
-        }      
     }
 
-    .resultadosClientes {
-        position: absolute;
-        top: 100%;
-        max-height: 150px;
-        overflow: auto;        
-        margin-top: 5px;        
-        width: 100%;
-        background-color: rgb(240, 240, 240);
-        border-radius: 10px;
-        padding: 1%;        
+    .actions {
+        margin-top: 9rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1em;        
 
-        span {
-            padding: 0 2%;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            font-weight: bold;            
-            height: 40px;    
-            border-radius: 5px;        
+        #confirmar {
+            background-color: $secondary;                            
+        }
+        
+        #confirmar:disabled, #confirmar:disabled:hover {
+            background-color: #EEE;
             color: black;
-            text-transform: capitalize;
-            cursor: pointer;
-            &:hover {
-                background-color: white;
-                transition: background-color 0.5s;
-            }
-        }        
+            opacity: 0.3;
+        }
+
+        button {
+            border-radius: 5px;        
+            transition: 0.1s;        
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            transition: all 0.2s;            
+            color: white;
+        }
     }
 
 </style>
