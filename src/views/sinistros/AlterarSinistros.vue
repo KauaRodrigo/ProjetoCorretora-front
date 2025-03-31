@@ -6,30 +6,30 @@
                     <div class="linha d-flex">   
                         <div style="width: 50%; margin-right: 25px;">
                             <label for="numeroSinistro">Número do sinistro</label>
-                            <input id="numeroSinistro" :disabled="isVisualizar" type="text" name="numeroSinistro" @keyup="(event) => {formData.numeroSinistro = UtilsCampos.removeAlfaNumericos(event.target.value)}" v-model="formData.numeroSinistro" maxlength="15">
+                            <input id="numeroSinistro" type="text" name="numeroSinistro" @keyup="(event) => {formData.numeroSinistro = UtilsCampos.removeAlfaNumericos(event.target.value)}" v-model="formData.numeroSinistro" maxlength="15">
                         </div>
                         <div style="width: 48%">
                             <label>Número da apólice <strong>*</strong></label>
-                            <input id="numeroApolice" :disabled="isVisualizar" name="apolice" placeholder="" type="text" v-model="formData.numeroApolice" maxlength="15"/>
+                            <input id="numeroApolice" name="apolice" placeholder="" type="text" v-model="formData.numeroApolice" maxlength="15"/>
                         </div>
                     </div>
                     <div class="linha d-flex">
                         <div style="width: 50%; margin-right: 25px;">
                             <label>Data da ocorrência</label>
-                            <input id="dataOcorrencia" :disabled="isVisualizar" type="date" v-model="formData.dataOcorrencia">
+                            <input id="dataOcorrencia" type="date" v-model="formData.dataOcorrencia">
                         </div>
                         <div style="width: 25%;  position: relative;">
                             <label>Seguradora</label>                            
-                            <select name="seguradora" id="seguradoras" v-model="formData.seguradoraId">
+                            <select name="seguradora" id="seguradoras" @change="buscarClientes()" v-model="formData.seguradoraId">
                                 <option selected value="">Selecione</option>
-                                <option v-for="(oSeguradora, iIndex) of aSeguradoras?.rows" :value="oSeguradora.id">{{ oSeguradora.nome }}</option>
+                                <option v-for="(oSeguradora, iIndex) of aSeguradoras?.rows" v-bind:key="iIndex" :value="oSeguradora.id">{{ oSeguradora.nome }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="linha d-flex">
                         <div style="width: 20%; margin-right: 25px;">
                             <label>Tipo <strong>*</strong></label>
-                            <select id="tipoSinistro" :disabled="isVisualizar" name="tipo" v-model="formData.tipo">
+                            <select id="tipoSinistro" name="tipo" v-model="formData.tipo">
                                 <option value="">Selecione</option>
                                 <option value="VEICULAR">Veicular</option>
                                 <option value="VIAGEM">Viagem</option>
@@ -41,13 +41,13 @@
                         <div style="width: 28%">                                    
                             <label for="terceiro" class="switch">
                                 <h1>Terceiros Envolvidos</h1>
-                                <input :disabled="isVisualizar" type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
+                                <input type="checkbox" v-model="formData.terceiro" name="terceiro" id="terceiro">
                                 <span class="slider"></span>
                             </label>
                         </div>
                         <div v-if="formData.terceiro" id="nomeTerceiroContainer">
                             <label>Nome do Terceiro <strong>*</strong></label>
-                            <input :disabled="isVisualizar" type="text" v-model="formData.nomeTerceiro" name="nomeTerceiro" id="nomeTerceiro">
+                            <input type="text" v-model="formData.nomeTerceiro" name="nomeTerceiro" id="nomeTerceiro">
                         </div>
                     </div>
                     <div class="linha d-flex">
@@ -55,27 +55,27 @@
                             <label>Cliente <strong>*</strong></label>
                             <select name="cliente" id="cliente" v-model="formData.clienteId">
                                 <option value="undefined">Selecione</option>
-                                <option v-for="(oCliente, iIndex) of aClientes?.rows" :value="oCliente.id">{{ oCliente.name }}</option>
+                                <option v-for="(oCliente, iIndex) of aClientes?.rows" v-bind:key="iIndex" :value="oCliente.id">{{ oCliente.name }}</option>
                             </select>                            
                         </div>
                         <div v-if="formData.tipo == 'VEICULAR'" style="width: 25%">
                             <label>Placa <strong>*</strong></label>
-                            <input id="placa" :disabled="isVisualizar" placeholder="" type="text" v-model="formData.placa"/>
+                            <input id="placa" placeholder="" type="text" v-model="formData.placa"/>
                         </div>
                     </div>     
                     <div class="linha d-flex">
                         <div id="observacoesContainer">
                             <label for="observacoes">Observações</label>
-                            <textarea :disabled="isVisualizar" id="observacoes" name="observacoes" v-model="formData.observacoes" placeHolder=""></textarea>
+                            <textarea id="observacoes" name="observacoes" v-model="formData.observacoes" placeHolder=""></textarea>
                         </div>
                         <div style="width: 25%">
                             <label for="evento">Evento</label>
-                            <input id="evento" :disabled="isVisualizar" type="text" name="evento" v-model="formData.evento">
+                            <input id="evento" type="text" name="evento" v-model="formData.evento">
                         </div>
                     </div>                    
                     <div class="actions">                                                    
-                        <button type="submit" id="confirmar" class="btn">Confirmar edições</button>                                                    
-                        <button type="button" class="btn btn-info" @click="back()">Cancelar</button>
+                        <button type="submit" id="confirmar" class="btn btn-success">Confirmar edições</button>                                                    
+                        <button type="button" class="btn btn-danger" @click="back()">Cancelar</button>
                     </div>
                 </Form>
             </div>
@@ -135,6 +135,7 @@ async function addComment() {
 }
 
 async function submit() {
+    console.log(formData.value);
     const sMensagem = Sinistros.getInstance().validaCamposConfirmar();    
 
     if(sMensagem) {
@@ -143,7 +144,7 @@ async function submit() {
     }
     
     return sinistroStore.editarDadosSinistro(+route.params.id, formData.value).then(() => {
-        openAlert('', 'Sinistro alterado com sucesso!', 'Alterado para o modo de visualização.');        
+        openAlert('', 'Sinistro alterado com sucesso!', 'Alterado para o modo de visualização.');
     })    
 }
 
@@ -159,22 +160,18 @@ onMounted(async () => {
     });
 })
 
-function openModal() {
-    showModal.value = true
-}
-
-function closeModal() {
-    showModal.value = false
-}
-
-function excluirSinistro() {
-    closeModal()
-    openAlert('buscarSinistros', 'Sinistro deletado com sucesso!', 'Voltando à lista de vizualização...');
-    return sinistroStore.excluirSinistro(+route.params.id)
-}
-
 function back() {
     router.back();
+}
+
+function buscarClientes() {
+    if(!formData.value.seguradoraId) {
+        return;
+    }
+
+    seguradoraStore.buscarClientesAtivosSeguradora(formData.value.seguradoraId).then((oClientes) => {
+        aClientes.value = oClientes;
+    });
 }
 
 </script>
@@ -332,12 +329,9 @@ function back() {
         margin-top: 9rem;
         display: flex;
         flex-direction: row;
+        justify-content: flex-end;
         align-items: center;
-        gap: 1em;        
-
-        #confirmar {
-            background-color: $secondary;                            
-        }
+        gap: 1em;               
         
         #confirmar:disabled, #confirmar:disabled:hover {
             background-color: #EEE;

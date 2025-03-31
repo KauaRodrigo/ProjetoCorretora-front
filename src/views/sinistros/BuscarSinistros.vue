@@ -69,7 +69,7 @@
                     <div id="orderBy">
                         <label for="orderBy">Ordenar por</label>
                         <select name="orderBy" @change="changeFilters" v-model="formData.orderBy">
-                            <option value="numeroApolice">Número da Apólice</option>
+                            <option value="numeroSinistro">Número do Sinistro</option>
                             <option value="cliente">Cliente</option>
                             <option value="seguradora">Seguradora</option>
                             <option value="tipo">Tipo</option>
@@ -91,7 +91,8 @@
                         <option value="10">10</option>
                         <option value="15">15</option>
                     </select>
-                    <div class="page d-flex">
+                    <div class="page justify-content-end d-flex align-items-center">
+                        <p class="m-0">{{ formData.page * formData.perPage + 1}} - {{ formData.perPage * (formData.page + 1) }} de {{ sinistros?.count }}</p>
                         <button :disabled="formData.page === 0" @click="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
                         <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
@@ -120,7 +121,7 @@ const formData = ref({
     tipo: '',
     page: 0,
     perPage: 5,
-    orderBy: 'numeroApolice',
+    orderBy: 'numeroSinistro',
     order: 'asc',
     searchFilter:{
         coluna: '',
@@ -250,9 +251,10 @@ onBeforeUnmount(() => {
             width: fit-content;
             cursor: pointer;
         }
-        .page {            
+        .page {
+            width: 20%;
             gap: 10%;
-            button {
+            button {                
                 padding: 5%;                
                 border: none;
                 width: 3rem;

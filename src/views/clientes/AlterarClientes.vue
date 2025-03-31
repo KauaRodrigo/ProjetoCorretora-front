@@ -14,7 +14,10 @@
                         </div>
                         <div style="width: 50%;  position: relative;">
                             <label>Seguradora</label>
-                            <input disabled class="w-100" placeholder="" type="text" v-model="formData.seguradora"/>
+                            <select v-if="aSeguradoras" name="seguradora" id="seguradoras" v-model="formData.seguradoraId">
+                                <option selected value="">Selecione</option>
+                                <option v-for="(oSeguradora, iIndex) of aSeguradoras.rows" v-bind:key="iIndex" :value="oSeguradora.id">{{ oSeguradora.nome }}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="d-flex p-2 w-50 flex-column">
@@ -39,10 +42,14 @@
 <script setup lang="ts">
 import Page from '@/components/baseComponents/Page.vue';
 import useClienteStore from '@/stores/ClienteStore';
+import useSinistroStore from '@/stores/SinistroStore';
 import { UtilsCampos } from '@/utils/UtilsCampos';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { inject, onBeforeMount, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 
+const sinistroStore = useSinistroStore();
+
+const aSeguradoras = ref([]);
 const route = useRoute();
 const router = useRouter();
 const formData = ref({
@@ -50,18 +57,22 @@ const formData = ref({
     telefone: '',
     dataNascimento: '',
     cpf: '',
+    seguradoraId: '',
     seguradora: ''
 });
+
+const openAlert = inject('openAlert');
 
 const clienteStore = useClienteStore();
 
 onBeforeMount(() => {
-    formData.value = getCliente(route.params.id);
+    formData.value = getCliente(+route.params.id);    
 })
 
-onMounted(() => {    
+onMounted(async () => {    
+    aSeguradoras.value = await sinistroStore.getSeguradoras(); 
     setActionsPosition();
-    $(window).on('resize', () => setActionsPosition());    
+    $(window).on('resize', () => setActionsPosition());       
 })
 
 function setActionsPosition() {    
@@ -83,6 +94,7 @@ async function getCliente(iId: number) {
 }
 
 async function submit() {
+    formData.value.seguradora = formData.value.seguradoraId ?? null;
     let payload = {
         ...formData.value
     }
@@ -90,11 +102,16 @@ async function submit() {
     payload.cpf      = UtilsCampos.removeAlfaNumericos(payload.cpf);
     payload.telefone = UtilsCampos.removeAlfaNumericos(payload.telefone);
 
-    return clienteStore.atualizarCliente(route.params.id, payload);
+    try{
+        await clienteStore.atualizarCliente(route.params.id, payload);
+        openAlert('buscarClientes', 'Cliente atualizado com sucesso', 'O registro do cliente foi atualizado com sucesso.');
+    } catch(error) {
+        openAlert('', 'Erro ao atualizar cliente', 'Ocorreu um erro ao atualizar o cliente. Tente novamente.');
+    }
 }
 
 function trataCampoCpf() {
-    formData.value.cpf = UtilsCampos.mascaraCpf(formData.value.sCpf);
+    formData.value.cpf = UtilsCampos.mascaraCpf(formData.value.cpf);
 }
 
 function trataCampoTelefone() {

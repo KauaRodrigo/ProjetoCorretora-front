@@ -14,7 +14,7 @@ export class UtilsCampos {
         return $('#'+sId);
     }
 
-    static mascaraCpf(sValor: string) {
+    static mascaraCpf(sValor: string) {        
         if(!sValor || (/(\d{0,3}).(\d{0,3}).(\d{0,3})-(\d{0,2})/).test(sValor)) {   
             return sValor;
         }
@@ -22,7 +22,7 @@ export class UtilsCampos {
         const sValorNew = sValor.replace(/(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})/, '$1.$2.$3-$4');
 
         if(sValorNew.length != 14) {
-            alert('O cpf informado é inválido.')
+            // alert('O cpf informado é inválido.')
             return '';
         }
 

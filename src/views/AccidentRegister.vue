@@ -490,4 +490,75 @@ function excluirSinistro() {
         }        
     }
 
+    #fotos {
+        display: flex;
+        margin: 2% 0;
+        padding: 2%;
+        gap: 2rem 2.9rem;
+        background-color: $primary;
+        justify-content: left;
+        border-radius: 10px;
+        max-width: 100%;
+        flex-wrap: wrap;
+
+        img {
+            display: block;            
+            width: 17%;
+            object-fit: cover;
+            background-color: #EEE;
+            height: 215px;
+            box-shadow: rgba(0,0,0,0.2) 0px 0px 10px;
+            border-radius: 5px;            
+        }        
+    }
+
+    #input-file{
+        width: 100px;
+	    height: 100px;
+        display: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .upload-wrapper {        
+        width: 17%;
+        min-width: 150px;
+        height: 214.42px;
+        display: flex;
+        
+    }
+
+    .upload-wrapper:hover {
+        i {
+            transition: all .3s;            
+            transition: all .5s;
+            transform: scale(1.5);
+        }        
+    }
+
+    .label-file { 
+        margin: 0;               
+        width: 100%;
+        background-color: rgba(100,100,100,0.7);
+        border-radius: 5px;
+        display: flex;              
+        align-items: center;
+        justify-content: center;        
+        box-shadow: rgba(0,0,0,0.5) 0px 2px 8px;
+        color: white;
+        font-weight: 100;                
+        transition: all .3s;   
+        cursor: pointer;    
+        i {
+            font-size: 3rem;
+            color: white;            
+            transition: all .3s;
+        }        
+    }
+
+    .span-file{
+        color: #717171;
+        font-size: 14px;
+    }
+
 </style>

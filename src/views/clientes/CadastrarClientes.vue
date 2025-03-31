@@ -14,20 +14,20 @@
                         </div>
                         <div style="width: 50%;  position: relative;">
                             <label>Seguradora</label>
-                            <input class="w-100" @keyup="buscaSeguradoras()" placeholder="" type="text" v-model="formData.seguradora"/>
-                            <div v-if="aSeguradoras && aSeguradoras.length > 0 && !oSeguradoraSelecionada" class="resultadosSeguradora">
-                                <span @click="selecionarSeguradora(oSeguradora)" v-for="(oSeguradora, iIndex) of aSeguradoras" :cliente="oSeguradora.id">{{ oSeguradora.nome }}</span>
-                            </div>
+                            <select v-if="aSeguradoras" name="seguradora" id="seguradoras" v-model="formData.seguradoraId">
+                                <option selected value="">Selecione</option>
+                                <option v-for="(oSeguradora, iIndex) of aSeguradoras.rows" v-bind:key="iIndex" :value="oSeguradora.id">{{ oSeguradora.nome }}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="d-flex p-2 w-50 flex-column">
                         <div>
                             <label>CPF</label>
-                            <input v-model="formData.cpf" type="text">
+                            <input v-model="formData.cpf" @blur="trataCampoCpf()" type="text">
                         </div>
                         <div>
                             <label>Telefone/Celular</label>
-                            <input v-model="formData.telefone" type="text">
+                            <input v-model="formData.telefone" @blur="trataCampoTelefone()" type="text">
                         </div>
                     </div>
                 </div>
@@ -43,8 +43,11 @@
 import Page from '@/components/baseComponents/Page.vue';
 import useClienteStore from '@/stores/ClienteStore';
 import useSinistroStore from '@/stores/SinistroStore';
-import { onMounted, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { UtilsCampos } from '@/utils/UtilsCampos';
+
+const openAlert = inject('openAlert');
 
 const router = useRouter();
 const aSeguradoras = ref();
@@ -53,15 +56,18 @@ const formData = ref({
     name: '',
     telefone: '',
     dataNascimento: '',
-    cpf: ''
+    cpf: '',
+    seguradoraId: ''
 });
 
 const sinistroStore = useSinistroStore();
 const clienteStore = useClienteStore();
 
-onMounted(() => {    
+onMounted(async () => {    
     setActionsPosition();
     $(window).on('resize', () => setActionsPosition());
+
+    aSeguradoras.value = await sinistroStore.getSeguradoras();
 })
 
 function setActionsPosition() {    
@@ -77,24 +83,23 @@ function back() {
 }
 
 async function submit() {
-    return clienteStore.cadastrarClientes(formData.value);
+    formData.value.cpf      = UtilsCampos.removeAlfaNumericos(formData.value.cpf);
+    formData.value.telefone = UtilsCampos.removeAlfaNumericos(formData.value.telefone);
+    try {
+        await clienteStore.cadastrarClientes(formData.value);
+        openAlert('buscarClientes', 'Cliente cadastrado com sucesso', 'O registro do cliente foi salvo com sucesso.');
+    } catch (error) {
+        console.error(error);
+        return openAlert('', 'Erro ao cadastrar cliente', 'Ocorreu um erro ao cadastrar o cliente. Tente novamente.');
+    }    
 }
 
-async function buscaSeguradoras() {
-    oSeguradoraSelecionada.value = false;
-
-    if(formData.value.seguradora.length >= 3) {
-        aSeguradoras.value = await sinistroStore.getSeguradorasPorNome(formData.value.seguradora);        
-        return;  
-    }
-
-    aSeguradoras.value = [];
+function trataCampoCpf() {
+    formData.value.cpf = UtilsCampos.mascaraCpf(formData.value.cpf);
 }
 
-function selecionarSeguradora(oSeguradora) {    
-    formData.value.seguradora = oSeguradora.nome
-
-    oSeguradoraSelecionada.value = true;
+function trataCampoTelefone() {
+    formData.value.telefone = UtilsCampos.mascaraTelefone(formData.value.telefone)
 }
 
 </script>

@@ -105,7 +105,7 @@ const useSinistroStore = defineStore('sinistro', {
             try {
                 const { data } = await api.post('sinistros', {
                     ...oFiltros
-                })                            
+                })                          
                 return data;
             } catch (error) {
                 throw(error)
@@ -141,15 +141,6 @@ const useSinistroStore = defineStore('sinistro', {
                 throw(error);
             }
         },
-
-/*        atualizarDadosSinistro: async (id:number): Promise<boolean> => {            
-            try {
-                const { data } = await api.post('sinistros/editar/'+id);
-                return true;
-            }catch (error) {
-                throw(error);
-            }
-        },*/
 
         editarDadosSinistro: async (id:number, payload:any): Promise<any> => {
             try {

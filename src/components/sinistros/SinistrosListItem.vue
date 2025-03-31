@@ -1,10 +1,10 @@
 <template>
     <div class="item" v-if="row">
-        <span :title="row.numeroSinistro.toString()">{{ row.numeroSinistro || 'Não informado'}}</span>
-        <span :title="row.client">{{ row.client || 'Não informado'}}</span>
-        <span :title="row.company">{{ row.company.toLowerCase() || 'Não informado'}}</span>
-        <span :title="row.event">{{ row.event || 'Não informado' }}</span>
-        <span :title="row.type">{{ row.type.toLowerCase() || 'Não informado'}}</span>
+        <span :style="{ 'font-style': !row.numeroSinistro ? 'italic' : 'normal' }" :title="row.numeroSinistro.toString()">{{ row.numeroSinistro || 'Sem Informação'}}</span>
+        <span :title="row.client">{{ row.client }}</span>
+        <span :style="{ 'font-style': !row.company ? 'italic' : 'normal'}" :title="row.company">{{ row.company.toLowerCase() || 'Sem Informação'}}</span>
+        <span :style="{ 'font-style': !row.event ? 'italic' : 'normal'}" :title="row.event">{{ row.event || 'Sem Informação' }}</span>
+        <span :style="{ 'font-style': !row.type ? 'italic' : 'normal'}" :title="row.type">{{ row.type.toLowerCase() || 'Sem Informação'}}</span>
         <span :title="row.status">
             <div class="tag" :class="{
             'closed': row.status == 'FECHADO' || row.status == 'CANCELADO',
@@ -14,8 +14,8 @@
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <RouterLink title="Visualizar sinistro" :to="{ name: 'visualizarSinistro', params: { id: row.id }}" class="btn edit" @click="viewRegister(row.id)"><i class="fa-solid fa-search"></i></RouterLink>
-            <RouterLink title="Alterar sinistro" :to="{ name: 'editarSinistro', params: { id: row.id}}" class="btn btn-info"><i class="fa fa-pencil"></i></RouterLink>            
+            <button title="Visualizar sinistro" class="btn edit" @click="visualizarSinistro(row.id)"><i class="fa-solid fa-search"></i></button>
+            <button title="Alterar sinistro" :disabled="!validaPermiteAtualizar(row.status)" @click="editarSinistro(row.id)" class="btn btn-info"><i class="fa fa-pencil"></i></button>            
             <button title="Atualizar status do sinistro" @click="atualizaSinistro" :disabled="!validaPermiteAtualizar(row.status)" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
             <button title="Cancelar sinistro" :disabled="!mostraBotaoCancelar(row.status)" @click="cancelarSinistro()" class="btn bg-danger"><i class="fa-solid fa-xmark"></i></button>
             <button title="Excluir sinistro" @click="deleteSinistro()" class="btn btn-danger-dark"><i class="fa-solid fa-trash"></i></button>
@@ -83,7 +83,7 @@ function visualizarSinistro(id: number) {
  * @return {void}
  */
 function validaPermiteAtualizar(status: string) {
-    return status != 'CANCELADO';
+    return status.toLocaleUpperCase() != 'CANCELADO';
 }
 
 /**
@@ -111,19 +111,10 @@ function mostraBotaoCancelar(status: string): boolean {
  * 
  * @param {number} id 
  */
-function editRegister(id: number) {    
+function editarSinistro(id: number) {    
     router.push({
-        name: 'accidentEdit',
+        name: 'editarSinistro',
         params: {
-            id
-        }
-    })
-}
-
-function viewRegister(id:number){
-    router.push({
-        name:'visualizarSinistro',
-        params:{
             id
         }
     })

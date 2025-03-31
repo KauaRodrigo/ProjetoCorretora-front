@@ -44,7 +44,8 @@
                     <option value="10">10</option>
                     <option value="15">15</option>
                 </select>
-                <div class="page d-flex">
+                <div class="page justify-content-end d-flex align-items-center">
+                    <p class="m-0">{{ formData.page * formData.perPage + 1 }} - {{ formData.perPage * (formData.page + 1) }} de {{ aClientes?.count }}</p>
                     <button :disabled="formData.page === 0" @click="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
                     <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
@@ -163,7 +164,8 @@ function trataCampoTelefone() {
         width: fit-content;
         cursor: pointer;
     }
-    .page {            
+    .page {      
+        width: 20%;      
         gap: 10%;
         button {
             padding: 5%;                

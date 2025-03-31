@@ -68,9 +68,8 @@ function destoyAlert() {
         font-size: 1rem;
     }
 
-    .fadeOut {
-        transition: all 1s;
-        opacity: 0;
+    .fadeOut {        
+        display: none;
     }
 
     .loaderBar {

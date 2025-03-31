@@ -61,6 +61,7 @@ function fechar() {
     if(modal) {
         document.getElementById('mensagem_erro').innerText = '';
         modal.style.display = 'none';
+        props.sinistro.descricao = '';
     }
 }
  

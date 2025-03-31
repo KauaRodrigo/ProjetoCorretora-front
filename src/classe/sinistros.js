@@ -43,9 +43,8 @@ export class Sinistros {
         }
     }
     
-    validaCamposConfirmar() {        
+    validaCamposConfirmar() {         
         // this.oBotoes.oConfirmar.prop('disabled', true);
-
         if(UtilsData.isDataMaior(this.oCampos.oDataOcorrencia.val(), new Date())) {
             this.oBotoes.oConfirmar.removeProp('disabled');
             return 'A Data da ocorrência não pode ser maior que a data atual!';
@@ -70,14 +69,6 @@ export class Sinistros {
         if(this.oCampos.oTipo.val() === 'VEICULAR' && !this.oCampos.oPlaca.val()) {            
             return 'O campo Placa é obrigatório';
         }
-    }   
-
-    buscaSeguradoras() {
-
-    }
-
-    buscaClientes() {
-
-    }
+    }       
 
 }

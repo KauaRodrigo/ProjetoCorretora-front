@@ -22,7 +22,7 @@
                             <label>Seguradora</label>                            
                             <select v-if="aSeguradoras" @change="buscarClientes" name="seguradora" id="seguradoras" v-model="formData.seguradoraId">
                                 <option selected value="">Selecione</option>
-                                <option v-for="(oSeguradora, iIndex) of aSeguradoras.rows" :value="oSeguradora.id">{{ oSeguradora.nome }}</option>
+                                <option v-for="(oSeguradora, iIndex) of aSeguradoras.rows" v-bind:key="iIndex" :value="oSeguradora.id">{{ oSeguradora.nome }}</option>
                             </select>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                             <label>Cliente <strong>*</strong></label>
                             <select :disabled="!formData.seguradoraId" name="cliente" id="cliente" v-model="formData.clienteId">
                                 <option value="undefined">Selecione</option>
-                                <option v-for="(oCliente, iIndex) of aClientes?.rows" :value="oCliente.id">{{ oCliente.name }}</option>
+                                <option v-for="(oCliente, iIndex) of aClientes?.rows" v-bind:key="iIndex" :value="oCliente.id">{{ oCliente.name }}</option>
                             </select>                            
                         </div>
                         <div v-show="formData.tipo == 'VEICULAR'" style="width: 25%">
@@ -271,9 +271,8 @@ function buscarClientes() {
         }
 
         button {
-            border-radius: 5px;        
-            transition: 0.1s;        
-            font-weight: 600;
+            border-radius: 5px;
+            transition: 0.1s;
             font-size: 1rem;
         }        
     }
@@ -287,20 +286,20 @@ function buscarClientes() {
         position: absolute;
         top: 100%;
         max-height: 150px;
-        overflow: auto;        
-        margin-top: 5px;        
+        overflow: auto;
+        margin-top: 5px;
         width: 100%;
         background-color: rgb(240, 240, 240);
         border-radius: 10px;
-        padding: 1%;    
+        padding: 1%;
         span {
             padding: 0 2%;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            font-weight: bold;            
-            height: 40px;    
-            border-radius: 5px;        
+            font-weight: bold;
+            height: 40px;
+            border-radius: 5px;
             color: black;
             text-transform: capitalize;
             cursor: pointer;
@@ -308,28 +307,28 @@ function buscarClientes() {
                 background-color: white;
                 transition: background-color 0.5s;
             }
-        }      
+        }
     }
 
     .resultadosClientes {
         position: absolute;
         top: 100%;
         max-height: 150px;
-        overflow: auto;        
-        margin-top: 5px;        
+        overflow: auto;
+        margin-top: 5px;
         width: 100%;
         background-color: rgb(240, 240, 240);
         border-radius: 10px;
-        padding: 1%;        
+        padding: 1%;
 
         span {
             padding: 0 2%;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            font-weight: bold;            
-            height: 40px;    
-            border-radius: 5px;        
+            font-weight: bold;
+            height: 40px;
+            border-radius: 5px;
             color: black;
             text-transform: capitalize;
             cursor: pointer;
@@ -337,7 +336,7 @@ function buscarClientes() {
                 background-color: white;
                 transition: background-color 0.5s;
             }
-        }        
+        }
     }
 
 </style>

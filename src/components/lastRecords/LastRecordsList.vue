@@ -9,13 +9,14 @@
             <Loader class="align-self-center" v-if="loading" text="Carregando..." big/>
             <AccidentEmpty v-if="!lastRecordsRows?.rows?.length && !loading" />            
         </div>
-        <div v-if="lastRecordsRows?.count >= formData.perPage" class="d-flex pagination justify-content-between">            
+        <div class="d-flex pagination justify-content-between">            
             <select class="perPage" name="perPage" id="perPage" @change="changePerPage()" v-model="formData.perPage">
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
             </select>
-            <div class="page d-flex">
+            <div class="page justify-content-end d-flex align-items-center">
+                <p class="m-0 text-black fst-normal">{{ formData.page * formData.perPage + 1}} - {{ formData.perPage * (formData.page + 1) }} de {{ lastRecordsRows?.count }}</p>                
                 <button :disabled="formData.page === 0" @click="prevPage()"><i class="fa-solid fa-chevron-left"></i></button>
                 <button :disabled="formData.page === (maxPage - 1)" @click="nextPage()"><i class="fa-solid fa-chevron-right"></i></button>            
             </div>
@@ -167,7 +168,8 @@ input, select{
         width: fit-content;
         cursor: pointer;
     }
-    .page {            
+    .page {      
+        width: 20%;      
         gap: 10%;
         button {
             padding: 5%;                

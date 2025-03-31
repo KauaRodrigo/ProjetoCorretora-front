@@ -14,8 +14,8 @@
             </div>
         </span>
         <span class="d-flex justify-content-end actions">            
-            <RouterLink title="Visualizar sinistro" :to="{ name: 'visualizarSinistro', params: { id: row.id }}" class="btn edit" @click="viewRegister(row.id)"><i class="fa-solid fa-search"></i></RouterLink>
-            <RouterLink title="Alterar sinistro" :to="{ name: 'editarSinistro', params: { id: row.id}}" class="btn btn-info"><i class="fa fa-pencil"></i></RouterLink>            
+            <button title="Visualizar sinistro" class="btn edit" @click="visualizarSinistro(row.id)"><i class="fa-solid fa-search"></i></button>
+            <button title="Alterar sinistro" :disabled="!validaPermiteAtualizar(row.status)" @click="editRegister(row.id)" class="btn btn-info"><i class="fa fa-pencil"></i></button>            
             <button title="Atualizar status do sinistro" @click="atualizaSinistro" :disabled="!validaPermiteAtualizar(row.status)" class="btn bg-warning"><i class="fa-solid fa-arrows-rotate"></i></button>
             <button title="Cancelar sinistro" :disabled="!mostraBotaoCancelar(row.status)" @click="cancelarSinistro()" class="btn bg-danger"><i class="fa-solid fa-xmark"></i></button>
             <button title="Excluir sinistro" @click="deleteSinistro()" class="btn btn-danger-dark"><i class="fa-solid fa-trash"></i></button>
@@ -96,7 +96,7 @@ function mostraBotaoCancelar(status: string): boolean {
  */
 function editRegister(id: number) {    
     router.push({
-        name: 'accidentEdit',
+        name: 'editarSinistro',
         params: {
             id
         }

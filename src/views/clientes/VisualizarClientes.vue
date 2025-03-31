@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="actions" id="actions">                    
-                <button class="btn btn-primary" @click="back">Voltar</button>
+                <button class="btn btn-danger" @click="back">Voltar</button>
             </div>            
         </div>
     </Page>
