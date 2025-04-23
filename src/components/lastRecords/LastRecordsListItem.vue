@@ -183,6 +183,7 @@ span {
     padding: 2% 5%;
     border-radius: 5px;
     background-color: #e5c122;
+    font-weight: bold;
     color: white;
     
     &.closed {

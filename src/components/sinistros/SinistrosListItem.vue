@@ -203,6 +203,8 @@ span {
     border-radius: 5px;
     background-color: #e5c122;
     color: white;
+    font-weight: 600;
+    font-style: italic;
     
     &.closed {
         background-color: #C00000;    
