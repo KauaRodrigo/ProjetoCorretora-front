@@ -221,9 +221,8 @@ const useSinistroStore = defineStore('sinistro', {
                     ...oFiltros,
                     headers: {
                         "Content-Type": "text/csv"
-                    },                    
-                });
-                
+                    }                    
+                });                                
                 
                 const url = window.URL.createObjectURL(new Blob([data]));                
                 const link = document.createElement('a');
@@ -234,8 +233,11 @@ const useSinistroStore = defineStore('sinistro', {
                 document.body.removeChild(link);
 
                 return data;
-            } catch (error) {
-                throw(error);
+            } catch (error) {                
+                return {
+                    message: error.response.data.message,
+                    code: error.response.data.statusCode
+                }
             }
         }
     }
